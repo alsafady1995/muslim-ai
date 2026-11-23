@@ -48,7 +48,7 @@ AI recitation in hifz mode grades each ayah automatically (score → SM-2 grade 
 | Feature | Free | Premium (fair use) |
 |---|---|---|
 | Recitation analysis | 3 | 100 |
-| Ask the Quran + assistant (shared) | 5 | 50 |
+| Ask the Quran + assistant (shared) | 5 | 20 |
 | Semantic search | 10 | 200 |
 
 Keyword search is free and unlimited. Quota is refunded when the AI call fails on our side.

@@ -37,12 +37,20 @@ the "Where it goes" column says where to paste the result. Order = fastest path 
 | 18 | **Content licences** | Confirm terms for: Saheeh International translation and Tafsir Ibn Kathir (abridged) via Quran.com API (Quran Foundation may require API client credentials, so register at quran.foundation), EveryAyah audio (reciter permissions), hadith-api dataset, `tarteel-ai/whisper-base-ar-quran` model licence. Swap any source that does not allow commercial use. |
 | 19 | **Privacy for voice data** | Recordings are deleted right after analysis (code does this). Declare microphone + voice processing in App Privacy (Apple) and Data safety (Google). Saudi PDPL applies to KSA users. |
 
-## 4. AI model routing (decided)
+## 4. AI model routing and cost (decided)
 
-Free users get **Claude Haiku 5.5** (≈ $0.001 per answer); premium users get **Claude Opus 5.5** (≈ $0.04 per answer,
-capped at 50/day by fair use). A free user maxing out 5 questions/day costs ≈ $0.15/month. Before launch, run the
-answer-quality eval described in `docs/` on Haiku; if it fails, raise the free model to `claude-sonnet-5-5` with
-`supabase secrets set CLAUDE_MODEL=claude-sonnet-5-5` (no app release needed).
+| Tier | Model | Cost per answer* | Daily cap | Worst case / month |
+|---|---|---|---|---|
+| Free | Claude Haiku 5.5 | ≈ $0.001 | 5 questions | ≈ $0.15 |
+| Premium | Claude Sonnet 5.5 | ≈ $0.02 | 20 questions (fair use) | ≈ $12 |
+
+\* About 5.5k input tokens (question + retrieved sources) and 1k output. Premium nets about $0.84 after the store's
+15%, so a premium user breaks even at roughly 40 questions a month. Most users ask far less; watch answer events in
+PostHog split by `premium`. If heavy users push premium below break-even, set `CLAUDE_MODEL_PREMIUM=claude-haiku-5-5`
+or lower `plan_limits.premium_daily` for `ask`. Both are server settings; no app release needed.
+
+Before launch, run the answer-quality eval described in `docs/` on Haiku. If it fails, raise the free model with
+`supabase secrets set CLAUDE_MODEL=claude-sonnet-5-5` and re-check this table.
 
 ## 5. Not verified in this build environment
 

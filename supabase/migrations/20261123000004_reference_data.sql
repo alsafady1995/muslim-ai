@@ -17,7 +17,7 @@ on conflict (kind) do update set xp_per_unit = excluded.xp_per_unit, daily_unit_
 -- that keep worst-case AI cost per subscriber below the $0.99 price.
 insert into public.plan_limits (feature, free_daily, premium_daily) values
   ('recitation', 3, 100),
-  ('ask',        5,  50),
+  ('ask',        5,  20),
   ('search',    10, 200)
 on conflict (feature) do update set free_daily = excluded.free_daily, premium_daily = excluded.premium_daily;
 
