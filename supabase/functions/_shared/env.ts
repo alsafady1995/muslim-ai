@@ -10,11 +10,11 @@ export const env = {
   serviceRoleKey: () => required("SUPABASE_SERVICE_ROLE_KEY"),
   anonKey: () => required("SUPABASE_ANON_KEY"),
   anthropicKey: () => required("ANTHROPIC_API_KEY"),
-  // Owner decision: default is Claude Opus 5.5. Set CLAUDE_MODEL to trade quality for cost.
-  claudeModel: () => Deno.env.get("CLAUDE_MODEL") ?? "claude-opus-5-5",
+  // Unit economics at $0.99/month: free users on Haiku 5.5, premium on Sonnet 5.5 (see BLOCKERS.md §4).
+  claudeModel: () => Deno.env.get("CLAUDE_MODEL") ?? "claude-haiku-5-5",
   // Optional split: a different model for premium users (defaults to CLAUDE_MODEL).
   claudeModelPremium: () =>
-    Deno.env.get("CLAUDE_MODEL_PREMIUM") ?? Deno.env.get("CLAUDE_MODEL") ?? "claude-opus-5-5",
+    Deno.env.get("CLAUDE_MODEL_PREMIUM") ?? Deno.env.get("CLAUDE_MODEL") ?? "claude-haiku-5-5",
   claudeEffort: () => (Deno.env.get("CLAUDE_EFFORT") ?? "low") as "low" | "medium" | "high",
   voyageKey: () => required("VOYAGE_API_KEY"),
   voyageModel: () => Deno.env.get("VOYAGE_MODEL") ?? "voyage-3.5",
