@@ -1,0 +1,11 @@
+{
+  "imports": {
+    "@supabase/supabase-js": "npm:@supabase/supabase-js@2.119.2"
+  },
+  "tasks": {
+    "quran": "deno run -A quran.ts",
+    "hadith": "deno run -A hadith.ts",
+    "embed": "deno run -A embed.ts",
+    "all": "deno run -A quran.ts && deno run -A hadith.ts && deno run -A embed.ts"
+  }
+}
