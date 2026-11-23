@@ -62,4 +62,5 @@ cd services/asr && python -m pytest -q tests                    # 3 tests
 - **Server-owned gamification.** XP, streaks, levels, achievements and subscription state are written only by SECURITY DEFINER functions or the service role. Daily XP caps per activity are in `xp_rules`.
 - **Grounded AI.** Claude may cite only retrieved verse keys / hadith ids; anything else is dropped server-side, and Quran/Hadith text shown to users always comes verbatim from the database.
 - **Honest recitation analysis.** Whisper runs without the expected text as a prompt (so mistakes are not hidden), then Needleman-Wunsch alignment classifies each word. Tajweed in MVP is a "possible short madd" heuristic only; full tajweed rules are Phase 2.
+- **Model routing.** Free users on Claude Haiku 5.5, premium on Claude Opus 5.5 (`CLAUDE_MODEL` / `CLAUDE_MODEL_PREMIUM`).
 - **Payments behind an interface.** `PaymentProvider` (app) and `mapRevenueCatEvent` (server) isolate RevenueCat, so Stripe/Moyasar/HyperPay can be added later without touching features.

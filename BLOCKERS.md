@@ -37,14 +37,12 @@ the "Where it goes" column says where to paste the result. Order = fastest path 
 | 18 | **Content licences** | Confirm terms for: Saheeh International translation and Tafsir Ibn Kathir (abridged) via Quran.com API (Quran Foundation may require API client credentials, so register at quran.foundation), EveryAyah audio (reciter permissions), hadith-api dataset, `tarteel-ai/whisper-base-ar-quran` model licence. Swap any source that does not allow commercial use. |
 | 19 | **Privacy for voice data** | Recordings are deleted right after analysis (code does this). Declare microphone + voice processing in App Privacy (Apple) and Data safety (Google). Saudi PDPL applies to KSA users. |
 
-## 4. One owner decision: AI model cost
+## 4. AI model routing (decided)
 
-The code defaults to **Claude Opus 5.5** (`CLAUDE_MODEL`). Rough cost per Ask-the-Quran answer
-(~5.5k input tokens with sources, ~1k output): **Opus 5.5 ≈ $0.04**, **Haiku 5.5 ≈ $0.001**.
-A free user using all 5 daily questions costs ~$6/month on Opus vs ~$0.15 on Haiku; a premium user pays $0.99
-(≈ $0.84 after Apple/Google 15%). Changing it is one command, no app release:
-`supabase secrets set CLAUDE_MODEL=claude-haiku-5-5` (optionally `CLAUDE_MODEL_PREMIUM=claude-opus-5-5`).
-Run a quality check on ~50 real questions before switching.
+Free users get **Claude Haiku 5.5** (≈ $0.001 per answer); premium users get **Claude Opus 5.5** (≈ $0.04 per answer,
+capped at 50/day by fair use). A free user maxing out 5 questions/day costs ≈ $0.15/month. Before launch, run the
+answer-quality eval described in `docs/` on Haiku; if it fails, raise the free model to `claude-sonnet-5-5` with
+`supabase secrets set CLAUDE_MODEL=claude-sonnet-5-5` (no app release needed).
 
 ## 5. Not verified in this build environment
 
