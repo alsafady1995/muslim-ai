@@ -1,0 +1,68 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  flutter:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: app } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with: { flutter-version: "3.35.7", channel: stable, cache: true }
+      - run: flutter pub get
+      - run: flutter gen-l10n
+      - name: ARB files are generated from tools/gen_arb.py
+        run: python3 ../tools/gen_arb.py && git diff --exit-code lib/l10n/*.arb
+      - run: flutter analyze
+      - run: flutter test
+
+  edge-functions:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: supabase/functions } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with: { deno-version: v2.x }
+      - run: deno fmt --check .
+      - run: deno lint
+      - run: deno check */index.ts
+      - run: deno test tests/
+      - run: deno check ../../scripts/ingest/*.ts
+
+  database:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env: { POSTGRES_PASSWORD: postgres }
+        ports: ["5432:5432"]
+        options: --health-cmd pg_isready --health-interval 5s --health-retries 10
+    env:
+      PGHOST: localhost
+      PGUSER: postgres
+      PGPASSWORD: postgres
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply migrations to a plain Postgres with Supabase stubs
+        run: |
+          psql -v ON_ERROR_STOP=1 -q -f supabase/tests/00_supabase_stubs.sql
+          for f in supabase/migrations/*.sql; do psql -v ON_ERROR_STOP=1 -q -f "$f"; done
+      - name: Behaviour tests (RLS, XP, streaks, SM-2, quotas, referrals)
+        run: psql -v ON_ERROR_STOP=1 -q -f supabase/tests/10_behaviour.sql
+
+  asr-service:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: services/asr } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install fastapi==0.115.6 httpx==0.28.1 pydantic==2.10.4 pytest
+      - run: python -m pytest -q tests

@@ -53,7 +53,7 @@ export async function runAsk(user: AuthedUser, body: AskRequest, kind: "ask_qura
       maxAyahs: kind === "ask_quran" ? 8 : 6,
       maxHadiths: 5,
     });
-    const answer = await groundedAnswer({ question, locale, sources, history });
+    const answer = await groundedAnswer({ question, locale, sources, history, premium: quota.premium });
 
     if (!conversationId) {
       const { data: conv, error } = await db.from("ai_conversations").insert({

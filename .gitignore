@@ -5,3 +5,6 @@ app/env/*.json
 node_modules/
 .DS_Store
 __pycache__/
+app/android/key.properties
+app/android/*.jks
+app/android/play-service-account.json

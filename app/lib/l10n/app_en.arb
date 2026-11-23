@@ -1,0 +1,386 @@
+{
+  "@@locale": "en",
+  "appName": "Muslim AI",
+  "tabHome": "Home",
+  "tabQuran": "Quran",
+  "tabLearn": "Learn",
+  "tabAsk": "Ask",
+  "tabMe": "Me",
+  "errorGeneric": "Something went wrong. Please try again.",
+  "retry": "Retry",
+  "cancel": "Cancel",
+  "apply": "Apply",
+  "done": "Done",
+  "delete": "Delete",
+  "or": "or",
+  "continueLabel": "Continue",
+  "copy": "Copy",
+  "share": "Share",
+  "xpEarned": "+{xp} XP",
+  "@xpEarned": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
+  "achievementUnlocked": "Achievement: {names}",
+  "@achievementUnlocked": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "onboardingTitle": "Your daily Quran companion",
+  "onboardingSubtitle": "Recite with an AI coach, memorize with a smart plan, and grow every day.",
+  "getStarted": "Get started",
+  "haveAccount": "I already have an account",
+  "pickDailyGoal": "How much Quran a day?",
+  "goalCasual": "Casual",
+  "goalRegular": "Regular",
+  "goalSerious": "Serious",
+  "goalIntense": "Intense",
+  "ayahsPerDay": "{n} ayahs/day",
+  "@ayahsPerDay": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "remindersTitle": "Gentle reminders",
+  "remindersBody": "We'll remind you of morning and evening adhkar and to keep your streak.",
+  "enableReminders": "Enable reminders",
+  "notNow": "Not now",
+  "reminderMorningTitle": "Morning adhkar",
+  "reminderMorningBody": "Start your day with the remembrance of Allah.",
+  "reminderEveningTitle": "Evening adhkar",
+  "reminderEveningBody": "A few minutes of evening adhkar.",
+  "reminderStreakTitle": "Keep your streak",
+  "reminderStreakBody": "Read a few ayahs to keep your streak alive.",
+  "reminderHifzTitle": "Hifz review",
+  "reminderHifzBody": "Your review session is ready.",
+  "signIn": "Sign in",
+  "signInBody": "Sign in to restore your progress on this device.",
+  "saveProgress": "Save your progress",
+  "saveProgressBody": "Link an account so your streak, XP and hifz are safe if you change phones.",
+  "saveProgressHint": "You're using a guest account",
+  "continueWithApple": "Continue with Apple",
+  "continueWithGoogle": "Continue with Google",
+  "email": "Email",
+  "sendCode": "Send code",
+  "verificationCode": "6-digit code",
+  "verify": "Verify",
+  "invalidEmail": "Enter a valid email",
+  "prayersToday": "Today's prayers",
+  "continueJourney": "Continue your journey",
+  "goPremium": "Go Premium",
+  "premiumPitchShort": "Unlimited AI coaching for $0.99/month",
+  "last7Days": "Last 7 days",
+  "dayStreak": "day streak",
+  "levelN": "Level {n}",
+  "@levelN": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "xpToNext": "{xp} / {next} XP",
+  "@xpToNext": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      },
+      "next": {
+        "type": "int"
+      }
+    }
+  },
+  "streakFreezes": "{n} streak freezes",
+  "@streakFreezes": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "todaysGoals": "Today's goals",
+  "goalQuran": "Reading",
+  "goalMemorize": "Hifz",
+  "goalAdhkar": "Adhkar",
+  "goalPrayer": "Prayer",
+  "goalListen": "Listening",
+  "fajr": "Fajr",
+  "dhuhr": "Dhuhr",
+  "asr": "Asr",
+  "maghrib": "Maghrib",
+  "isha": "Isha",
+  "continueReading": "Continue reading",
+  "startWithFatihah": "Start with Al-Fatihah",
+  "pickUpWhereLeft": "Pick up where you left",
+  "hifzReview": "Hifz review",
+  "dueCount": "{n} due",
+  "@dueCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "reciteWithAi": "Recite with AI",
+  "aiCoachHint": "Get instant feedback",
+  "adhkar": "Adhkar",
+  "morningAdhkar": "Morning adhkar",
+  "eveningAdhkar": "Evening adhkar",
+  "sleepAdhkar": "Sleep adhkar",
+  "askTheQuran": "Ask the Quran",
+  "askHint": "Guidance for life",
+  "searchQuran": "Search the Quran",
+  "searchHint": "Search by meaning",
+  "findSurah": "Find a surah",
+  "ayahCount": "{n} ayahs",
+  "@ayahCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "makki": "Makki",
+  "madani": "Madani",
+  "ayahN": "Ayah {key}",
+  "@ayahN": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "speed": "Speed",
+  "repeatRange": "Repeat",
+  "playFromHere": "Play from here",
+  "repeatAyah3": "Repeat this ayah (memorization)",
+  "quranRef": "Quran {key}",
+  "@quranRef": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedFromApp": "Shared from Muslim AI",
+  "memorizationMode": "Memorization mode",
+  "playSurah": "Play surah",
+  "aiCoach": "AI Quran Coach",
+  "hifzTest": "Hifz test",
+  "aiCoachPitch": "Recite aloud and get word-by-word feedback",
+  "micPermissionNeeded": "Microphone access is needed to listen to your recitation.",
+  "analysisFailed": "We couldn't analyse this recording. Please try again.",
+  "analysing": "Listening to your recitation…",
+  "chooseWhatToRecite": "What will you recite?",
+  "surah": "Surah",
+  "fromAyah": "From ayah",
+  "toAyah": "To ayah",
+  "coachRangeHint": "Tip: 1–5 ayahs give the most precise feedback.",
+  "reciteFromMemory": "Recite from memory. The text is hidden.",
+  "tapToRecite": "Tap to start reciting",
+  "excellent": "Excellent! ما شاء الله",
+  "goodJob": "Good job, keep going",
+  "keepPracticing": "Keep practicing, you're improving",
+  "notCompleted": "You stopped before the end of the selection.",
+  "accuracy": "Accuracy",
+  "fluency": "Fluency",
+  "tajweed": "Tajweed",
+  "yourRecitation": "Your recitation",
+  "legendCorrect": "Correct",
+  "legendCheck": "Check",
+  "legendMistake": "Mistake",
+  "corrections": "Corrections",
+  "expected": "Expected",
+  "heard": "Heard",
+  "mistakeMispronounced": "Pronunciation",
+  "mistakeWrongWord": "Wrong word",
+  "mistakeSkipped": "Skipped word",
+  "mistakeAdded": "Extra word",
+  "mistakeRepetition": "Repetition",
+  "mistakeUnclear": "Unclear, please check",
+  "mistakeShortMadd": "Possible short madd (check the elongation)",
+  "mistakeLongPause": "Long pause",
+  "coachDisclaimer": "AI feedback can be wrong. For tajweed certification, learn with a qualified teacher.",
+  "listenCorrect": "Listen to the correct recitation",
+  "tryAgain": "Try again",
+  "hifzCoach": "Hifz coach",
+  "todaysSession": "Today's session",
+  "queueSummary": "{reviews} reviews · {fresh} new ayahs",
+  "@queueSummary": {
+    "placeholders": {
+      "reviews": {
+        "type": "int"
+      },
+      "fresh": {
+        "type": "int"
+      }
+    }
+  },
+  "allDoneToday": "All done for today",
+  "startSession": "Start session",
+  "myPlans": "My plans",
+  "newPlan": "New plan",
+  "noPlansYet": "Create a plan to start memorizing.",
+  "hifzPlan": "Hifz plan",
+  "newPerDay": "{n} new ayahs per day",
+  "@newPerDay": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "newAyahsPerDay": "New ayahs per day: {n}",
+  "@newAyahsPerDay": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "createPlan": "Create plan",
+  "memorized": "Memorized",
+  "retention": "Retention",
+  "atRisk": "At risk",
+  "sessionComplete": "Session complete",
+  "newAyah": "New",
+  "review": "Review",
+  "predictedRecall": "Predicted recall: {n}%",
+  "@predictedRecall": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "reciteThenReveal": "Recite this ayah from memory, then reveal to check.",
+  "listen": "Listen",
+  "testWithAi": "Test with AI",
+  "reveal": "Reveal",
+  "gradeAgain": "Again",
+  "gradeHard": "Hard",
+  "gradeGood": "Good",
+  "gradeEasy": "Easy",
+  "crisisHelp": "If you are in danger or thinking of harming yourself, please contact local emergency services or a crisis line now, and reach out to someone you trust. You are not alone.",
+  "consultScholar": "This needs a personal ruling. Please consult a qualified scholar.",
+  "fromQuran": "From the Quran",
+  "fromHadith": "From the Hadith",
+  "explanation": "Explanation",
+  "scholarlyViews": "Scholarly views",
+  "reportAnswer": "Report a problem",
+  "tafsir": "Tafsir",
+  "assistant": "Islamic assistant",
+  "thanksForReport": "Thank you. We'll review this answer.",
+  "suggestStress": "How do I deal with stress?",
+  "suggestForgiveness": "What does Islam say about forgiveness?",
+  "suggestAnger": "How can I control anger?",
+  "suggestGratitude": "Verses about gratitude",
+  "assistantIntro": "Ask anything about Islam. Answers cite the Quran and Hadith.",
+  "askIntro": "Ask a question and get related verses, hadith and an explanation.",
+  "searchingSources": "Searching the sources…",
+  "askPlaceholder": "Type your question…",
+  "topicPatience": "Patience",
+  "topicAnxiety": "Anxiety",
+  "topicGratitude": "Gratitude",
+  "topicFamily": "Family",
+  "topicSuccess": "Success",
+  "topicKindness": "Kindness",
+  "topicBusiness": "Business",
+  "searchPlaceholder": "e.g. verses about patience",
+  "byMeaning": "By meaning",
+  "byWords": "By words",
+  "tryTopics": "Try a topic",
+  "noResults": "No results",
+  "dailyGoals": "Daily goals",
+  "goalsIntro": "Choose small, steady goals. The most beloved deeds are the consistent ones, even if small.",
+  "unitAyahs": "ayahs",
+  "unitSets": "sets",
+  "unitPrayers": "prayers",
+  "unitMinutes": "minutes",
+  "guest": "Guest",
+  "member": "Member",
+  "statistics": "Statistics",
+  "currentStreak": "Current streak",
+  "bestStreak": "Best streak",
+  "ayahs30d": "Ayahs (30d)",
+  "goalDays30d": "Goal days (30d)",
+  "achievements": "Achievements",
+  "coachingHistory": "AI coaching history",
+  "noRecitationsYet": "No recitations yet.",
+  "scoreN": "Score {n}",
+  "@scoreN": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "reading": "Reading",
+  "inviteFriends": "Invite friends",
+  "inviteBody": "Share your code. You both get bonus XP, and you get a streak freeze.",
+  "shareInvite": "Share invite",
+  "haveInviteCode": "I have an invite code",
+  "inviteCode": "Invite code",
+  "inviteMessage": "Join me on Muslim AI, my daily Quran companion. Use my code {code} for bonus XP.",
+  "@inviteMessage": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "inviteApplied": "Invite code applied!",
+  "inviteInvalid": "That code isn't valid.",
+  "settings": "Settings",
+  "general": "General",
+  "language": "Language",
+  "reciter": "Reciter",
+  "showTranslation": "Show translation",
+  "reminders": "Reminders",
+  "streakReminder": "Streak reminder",
+  "subscription": "Subscription",
+  "manageSubscription": "Manage subscription",
+  "restorePurchases": "Restore purchases",
+  "restored": "Premium restored",
+  "nothingToRestore": "No purchases to restore",
+  "account": "Account",
+  "privacyPolicy": "Privacy policy",
+  "terms": "Terms",
+  "signOut": "Sign out",
+  "deleteAccount": "Delete account",
+  "deleteAccountWarning": "This permanently deletes your progress and data. Cancel any subscription in your store account separately.",
+  "premiumTitle": "Muslim AI Premium",
+  "premiumSubtitle": "Less than a coffee a month, for your Quran every day.",
+  "benefitRecitation": "Unlimited AI recitation analysis",
+  "benefitHifz": "Unlimited AI memorization coaching",
+  "benefitAsk": "More questions to Ask the Quran and the assistant",
+  "benefitAnalytics": "Personalized plans and advanced progress analytics",
+  "benefitReciters": "All premium reciters",
+  "benefitSupport": "Support continued development",
+  "storeUnavailable": "Subscriptions aren't available right now.",
+  "yearly": "Yearly",
+  "monthly": "Monthly",
+  "freeTrialDays": "{n}-day free trial",
+  "@freeTrialDays": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "perYear": "year",
+  "perMonth": "month",
+  "subscribe": "Subscribe",
+  "subscriptionTerms": "Auto-renews until cancelled. Cancel anytime in your App Store or Google Play account settings.",
+  "welcomePremium": "Welcome to Premium!",
+  "purchasePending": "Your purchase is pending.",
+  "purchaseFailed": "Purchase failed."
+}

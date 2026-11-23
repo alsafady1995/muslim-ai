@@ -1,0 +1,837 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for English (`en`).
+class AppLocalizationsEn extends AppLocalizations {
+  AppLocalizationsEn([String locale = 'en']) : super(locale);
+
+  @override
+  String get appName => 'Muslim AI';
+
+  @override
+  String get tabHome => 'Home';
+
+  @override
+  String get tabQuran => 'Quran';
+
+  @override
+  String get tabLearn => 'Learn';
+
+  @override
+  String get tabAsk => 'Ask';
+
+  @override
+  String get tabMe => 'Me';
+
+  @override
+  String get errorGeneric => 'Something went wrong. Please try again.';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get apply => 'Apply';
+
+  @override
+  String get done => 'Done';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get or => 'or';
+
+  @override
+  String get continueLabel => 'Continue';
+
+  @override
+  String get copy => 'Copy';
+
+  @override
+  String get share => 'Share';
+
+  @override
+  String xpEarned(int xp) {
+    return '+$xp XP';
+  }
+
+  @override
+  String achievementUnlocked(String names) {
+    return 'Achievement: $names';
+  }
+
+  @override
+  String get onboardingTitle => 'Your daily Quran companion';
+
+  @override
+  String get onboardingSubtitle =>
+      'Recite with an AI coach, memorize with a smart plan, and grow every day.';
+
+  @override
+  String get getStarted => 'Get started';
+
+  @override
+  String get haveAccount => 'I already have an account';
+
+  @override
+  String get pickDailyGoal => 'How much Quran a day?';
+
+  @override
+  String get goalCasual => 'Casual';
+
+  @override
+  String get goalRegular => 'Regular';
+
+  @override
+  String get goalSerious => 'Serious';
+
+  @override
+  String get goalIntense => 'Intense';
+
+  @override
+  String ayahsPerDay(int n) {
+    return '$n ayahs/day';
+  }
+
+  @override
+  String get remindersTitle => 'Gentle reminders';
+
+  @override
+  String get remindersBody =>
+      'We\'ll remind you of morning and evening adhkar and to keep your streak.';
+
+  @override
+  String get enableReminders => 'Enable reminders';
+
+  @override
+  String get notNow => 'Not now';
+
+  @override
+  String get reminderMorningTitle => 'Morning adhkar';
+
+  @override
+  String get reminderMorningBody =>
+      'Start your day with the remembrance of Allah.';
+
+  @override
+  String get reminderEveningTitle => 'Evening adhkar';
+
+  @override
+  String get reminderEveningBody => 'A few minutes of evening adhkar.';
+
+  @override
+  String get reminderStreakTitle => 'Keep your streak';
+
+  @override
+  String get reminderStreakBody =>
+      'Read a few ayahs to keep your streak alive.';
+
+  @override
+  String get reminderHifzTitle => 'Hifz review';
+
+  @override
+  String get reminderHifzBody => 'Your review session is ready.';
+
+  @override
+  String get signIn => 'Sign in';
+
+  @override
+  String get signInBody => 'Sign in to restore your progress on this device.';
+
+  @override
+  String get saveProgress => 'Save your progress';
+
+  @override
+  String get saveProgressBody =>
+      'Link an account so your streak, XP and hifz are safe if you change phones.';
+
+  @override
+  String get saveProgressHint => 'You\'re using a guest account';
+
+  @override
+  String get continueWithApple => 'Continue with Apple';
+
+  @override
+  String get continueWithGoogle => 'Continue with Google';
+
+  @override
+  String get email => 'Email';
+
+  @override
+  String get sendCode => 'Send code';
+
+  @override
+  String get verificationCode => '6-digit code';
+
+  @override
+  String get verify => 'Verify';
+
+  @override
+  String get invalidEmail => 'Enter a valid email';
+
+  @override
+  String get prayersToday => 'Today\'s prayers';
+
+  @override
+  String get continueJourney => 'Continue your journey';
+
+  @override
+  String get goPremium => 'Go Premium';
+
+  @override
+  String get premiumPitchShort => 'Unlimited AI coaching for \$0.99/month';
+
+  @override
+  String get last7Days => 'Last 7 days';
+
+  @override
+  String get dayStreak => 'day streak';
+
+  @override
+  String levelN(int n) {
+    return 'Level $n';
+  }
+
+  @override
+  String xpToNext(int xp, int next) {
+    return '$xp / $next XP';
+  }
+
+  @override
+  String streakFreezes(int n) {
+    return '$n streak freezes';
+  }
+
+  @override
+  String get todaysGoals => 'Today\'s goals';
+
+  @override
+  String get goalQuran => 'Reading';
+
+  @override
+  String get goalMemorize => 'Hifz';
+
+  @override
+  String get goalAdhkar => 'Adhkar';
+
+  @override
+  String get goalPrayer => 'Prayer';
+
+  @override
+  String get goalListen => 'Listening';
+
+  @override
+  String get fajr => 'Fajr';
+
+  @override
+  String get dhuhr => 'Dhuhr';
+
+  @override
+  String get asr => 'Asr';
+
+  @override
+  String get maghrib => 'Maghrib';
+
+  @override
+  String get isha => 'Isha';
+
+  @override
+  String get continueReading => 'Continue reading';
+
+  @override
+  String get startWithFatihah => 'Start with Al-Fatihah';
+
+  @override
+  String get pickUpWhereLeft => 'Pick up where you left';
+
+  @override
+  String get hifzReview => 'Hifz review';
+
+  @override
+  String dueCount(int n) {
+    return '$n due';
+  }
+
+  @override
+  String get reciteWithAi => 'Recite with AI';
+
+  @override
+  String get aiCoachHint => 'Get instant feedback';
+
+  @override
+  String get adhkar => 'Adhkar';
+
+  @override
+  String get morningAdhkar => 'Morning adhkar';
+
+  @override
+  String get eveningAdhkar => 'Evening adhkar';
+
+  @override
+  String get sleepAdhkar => 'Sleep adhkar';
+
+  @override
+  String get askTheQuran => 'Ask the Quran';
+
+  @override
+  String get askHint => 'Guidance for life';
+
+  @override
+  String get searchQuran => 'Search the Quran';
+
+  @override
+  String get searchHint => 'Search by meaning';
+
+  @override
+  String get findSurah => 'Find a surah';
+
+  @override
+  String ayahCount(int n) {
+    return '$n ayahs';
+  }
+
+  @override
+  String get makki => 'Makki';
+
+  @override
+  String get madani => 'Madani';
+
+  @override
+  String ayahN(String key) {
+    return 'Ayah $key';
+  }
+
+  @override
+  String get speed => 'Speed';
+
+  @override
+  String get repeatRange => 'Repeat';
+
+  @override
+  String get playFromHere => 'Play from here';
+
+  @override
+  String get repeatAyah3 => 'Repeat this ayah (memorization)';
+
+  @override
+  String quranRef(String key) {
+    return 'Quran $key';
+  }
+
+  @override
+  String get sharedFromApp => 'Shared from Muslim AI';
+
+  @override
+  String get memorizationMode => 'Memorization mode';
+
+  @override
+  String get playSurah => 'Play surah';
+
+  @override
+  String get aiCoach => 'AI Quran Coach';
+
+  @override
+  String get hifzTest => 'Hifz test';
+
+  @override
+  String get aiCoachPitch => 'Recite aloud and get word-by-word feedback';
+
+  @override
+  String get micPermissionNeeded =>
+      'Microphone access is needed to listen to your recitation.';
+
+  @override
+  String get analysisFailed =>
+      'We couldn\'t analyse this recording. Please try again.';
+
+  @override
+  String get analysing => 'Listening to your recitation…';
+
+  @override
+  String get chooseWhatToRecite => 'What will you recite?';
+
+  @override
+  String get surah => 'Surah';
+
+  @override
+  String get fromAyah => 'From ayah';
+
+  @override
+  String get toAyah => 'To ayah';
+
+  @override
+  String get coachRangeHint => 'Tip: 1–5 ayahs give the most precise feedback.';
+
+  @override
+  String get reciteFromMemory => 'Recite from memory. The text is hidden.';
+
+  @override
+  String get tapToRecite => 'Tap to start reciting';
+
+  @override
+  String get excellent => 'Excellent! ما شاء الله';
+
+  @override
+  String get goodJob => 'Good job, keep going';
+
+  @override
+  String get keepPracticing => 'Keep practicing, you\'re improving';
+
+  @override
+  String get notCompleted => 'You stopped before the end of the selection.';
+
+  @override
+  String get accuracy => 'Accuracy';
+
+  @override
+  String get fluency => 'Fluency';
+
+  @override
+  String get tajweed => 'Tajweed';
+
+  @override
+  String get yourRecitation => 'Your recitation';
+
+  @override
+  String get legendCorrect => 'Correct';
+
+  @override
+  String get legendCheck => 'Check';
+
+  @override
+  String get legendMistake => 'Mistake';
+
+  @override
+  String get corrections => 'Corrections';
+
+  @override
+  String get expected => 'Expected';
+
+  @override
+  String get heard => 'Heard';
+
+  @override
+  String get mistakeMispronounced => 'Pronunciation';
+
+  @override
+  String get mistakeWrongWord => 'Wrong word';
+
+  @override
+  String get mistakeSkipped => 'Skipped word';
+
+  @override
+  String get mistakeAdded => 'Extra word';
+
+  @override
+  String get mistakeRepetition => 'Repetition';
+
+  @override
+  String get mistakeUnclear => 'Unclear, please check';
+
+  @override
+  String get mistakeShortMadd => 'Possible short madd (check the elongation)';
+
+  @override
+  String get mistakeLongPause => 'Long pause';
+
+  @override
+  String get coachDisclaimer =>
+      'AI feedback can be wrong. For tajweed certification, learn with a qualified teacher.';
+
+  @override
+  String get listenCorrect => 'Listen to the correct recitation';
+
+  @override
+  String get tryAgain => 'Try again';
+
+  @override
+  String get hifzCoach => 'Hifz coach';
+
+  @override
+  String get todaysSession => 'Today\'s session';
+
+  @override
+  String queueSummary(int reviews, int fresh) {
+    return '$reviews reviews · $fresh new ayahs';
+  }
+
+  @override
+  String get allDoneToday => 'All done for today';
+
+  @override
+  String get startSession => 'Start session';
+
+  @override
+  String get myPlans => 'My plans';
+
+  @override
+  String get newPlan => 'New plan';
+
+  @override
+  String get noPlansYet => 'Create a plan to start memorizing.';
+
+  @override
+  String get hifzPlan => 'Hifz plan';
+
+  @override
+  String newPerDay(int n) {
+    return '$n new ayahs per day';
+  }
+
+  @override
+  String newAyahsPerDay(int n) {
+    return 'New ayahs per day: $n';
+  }
+
+  @override
+  String get createPlan => 'Create plan';
+
+  @override
+  String get memorized => 'Memorized';
+
+  @override
+  String get retention => 'Retention';
+
+  @override
+  String get atRisk => 'At risk';
+
+  @override
+  String get sessionComplete => 'Session complete';
+
+  @override
+  String get newAyah => 'New';
+
+  @override
+  String get review => 'Review';
+
+  @override
+  String predictedRecall(int n) {
+    return 'Predicted recall: $n%';
+  }
+
+  @override
+  String get reciteThenReveal =>
+      'Recite this ayah from memory, then reveal to check.';
+
+  @override
+  String get listen => 'Listen';
+
+  @override
+  String get testWithAi => 'Test with AI';
+
+  @override
+  String get reveal => 'Reveal';
+
+  @override
+  String get gradeAgain => 'Again';
+
+  @override
+  String get gradeHard => 'Hard';
+
+  @override
+  String get gradeGood => 'Good';
+
+  @override
+  String get gradeEasy => 'Easy';
+
+  @override
+  String get crisisHelp =>
+      'If you are in danger or thinking of harming yourself, please contact local emergency services or a crisis line now, and reach out to someone you trust. You are not alone.';
+
+  @override
+  String get consultScholar =>
+      'This needs a personal ruling. Please consult a qualified scholar.';
+
+  @override
+  String get fromQuran => 'From the Quran';
+
+  @override
+  String get fromHadith => 'From the Hadith';
+
+  @override
+  String get explanation => 'Explanation';
+
+  @override
+  String get scholarlyViews => 'Scholarly views';
+
+  @override
+  String get reportAnswer => 'Report a problem';
+
+  @override
+  String get tafsir => 'Tafsir';
+
+  @override
+  String get assistant => 'Islamic assistant';
+
+  @override
+  String get thanksForReport => 'Thank you. We\'ll review this answer.';
+
+  @override
+  String get suggestStress => 'How do I deal with stress?';
+
+  @override
+  String get suggestForgiveness => 'What does Islam say about forgiveness?';
+
+  @override
+  String get suggestAnger => 'How can I control anger?';
+
+  @override
+  String get suggestGratitude => 'Verses about gratitude';
+
+  @override
+  String get assistantIntro =>
+      'Ask anything about Islam. Answers cite the Quran and Hadith.';
+
+  @override
+  String get askIntro =>
+      'Ask a question and get related verses, hadith and an explanation.';
+
+  @override
+  String get searchingSources => 'Searching the sources…';
+
+  @override
+  String get askPlaceholder => 'Type your question…';
+
+  @override
+  String get topicPatience => 'Patience';
+
+  @override
+  String get topicAnxiety => 'Anxiety';
+
+  @override
+  String get topicGratitude => 'Gratitude';
+
+  @override
+  String get topicFamily => 'Family';
+
+  @override
+  String get topicSuccess => 'Success';
+
+  @override
+  String get topicKindness => 'Kindness';
+
+  @override
+  String get topicBusiness => 'Business';
+
+  @override
+  String get searchPlaceholder => 'e.g. verses about patience';
+
+  @override
+  String get byMeaning => 'By meaning';
+
+  @override
+  String get byWords => 'By words';
+
+  @override
+  String get tryTopics => 'Try a topic';
+
+  @override
+  String get noResults => 'No results';
+
+  @override
+  String get dailyGoals => 'Daily goals';
+
+  @override
+  String get goalsIntro =>
+      'Choose small, steady goals. The most beloved deeds are the consistent ones, even if small.';
+
+  @override
+  String get unitAyahs => 'ayahs';
+
+  @override
+  String get unitSets => 'sets';
+
+  @override
+  String get unitPrayers => 'prayers';
+
+  @override
+  String get unitMinutes => 'minutes';
+
+  @override
+  String get guest => 'Guest';
+
+  @override
+  String get member => 'Member';
+
+  @override
+  String get statistics => 'Statistics';
+
+  @override
+  String get currentStreak => 'Current streak';
+
+  @override
+  String get bestStreak => 'Best streak';
+
+  @override
+  String get ayahs30d => 'Ayahs (30d)';
+
+  @override
+  String get goalDays30d => 'Goal days (30d)';
+
+  @override
+  String get achievements => 'Achievements';
+
+  @override
+  String get coachingHistory => 'AI coaching history';
+
+  @override
+  String get noRecitationsYet => 'No recitations yet.';
+
+  @override
+  String scoreN(int n) {
+    return 'Score $n';
+  }
+
+  @override
+  String get reading => 'Reading';
+
+  @override
+  String get inviteFriends => 'Invite friends';
+
+  @override
+  String get inviteBody =>
+      'Share your code. You both get bonus XP, and you get a streak freeze.';
+
+  @override
+  String get shareInvite => 'Share invite';
+
+  @override
+  String get haveInviteCode => 'I have an invite code';
+
+  @override
+  String get inviteCode => 'Invite code';
+
+  @override
+  String inviteMessage(String code) {
+    return 'Join me on Muslim AI, my daily Quran companion. Use my code $code for bonus XP.';
+  }
+
+  @override
+  String get inviteApplied => 'Invite code applied!';
+
+  @override
+  String get inviteInvalid => 'That code isn\'t valid.';
+
+  @override
+  String get settings => 'Settings';
+
+  @override
+  String get general => 'General';
+
+  @override
+  String get language => 'Language';
+
+  @override
+  String get reciter => 'Reciter';
+
+  @override
+  String get showTranslation => 'Show translation';
+
+  @override
+  String get reminders => 'Reminders';
+
+  @override
+  String get streakReminder => 'Streak reminder';
+
+  @override
+  String get subscription => 'Subscription';
+
+  @override
+  String get manageSubscription => 'Manage subscription';
+
+  @override
+  String get restorePurchases => 'Restore purchases';
+
+  @override
+  String get restored => 'Premium restored';
+
+  @override
+  String get nothingToRestore => 'No purchases to restore';
+
+  @override
+  String get account => 'Account';
+
+  @override
+  String get privacyPolicy => 'Privacy policy';
+
+  @override
+  String get terms => 'Terms';
+
+  @override
+  String get signOut => 'Sign out';
+
+  @override
+  String get deleteAccount => 'Delete account';
+
+  @override
+  String get deleteAccountWarning =>
+      'This permanently deletes your progress and data. Cancel any subscription in your store account separately.';
+
+  @override
+  String get premiumTitle => 'Muslim AI Premium';
+
+  @override
+  String get premiumSubtitle =>
+      'Less than a coffee a month, for your Quran every day.';
+
+  @override
+  String get benefitRecitation => 'Unlimited AI recitation analysis';
+
+  @override
+  String get benefitHifz => 'Unlimited AI memorization coaching';
+
+  @override
+  String get benefitAsk => 'More questions to Ask the Quran and the assistant';
+
+  @override
+  String get benefitAnalytics =>
+      'Personalized plans and advanced progress analytics';
+
+  @override
+  String get benefitReciters => 'All premium reciters';
+
+  @override
+  String get benefitSupport => 'Support continued development';
+
+  @override
+  String get storeUnavailable => 'Subscriptions aren\'t available right now.';
+
+  @override
+  String get yearly => 'Yearly';
+
+  @override
+  String get monthly => 'Monthly';
+
+  @override
+  String freeTrialDays(int n) {
+    return '$n-day free trial';
+  }
+
+  @override
+  String get perYear => 'year';
+
+  @override
+  String get perMonth => 'month';
+
+  @override
+  String get subscribe => 'Subscribe';
+
+  @override
+  String get subscriptionTerms =>
+      'Auto-renews until cancelled. Cancel anytime in your App Store or Google Play account settings.';
+
+  @override
+  String get welcomePremium => 'Welcome to Premium!';
+
+  @override
+  String get purchasePending => 'Your purchase is pending.';
+
+  @override
+  String get purchaseFailed => 'Purchase failed.';
+}

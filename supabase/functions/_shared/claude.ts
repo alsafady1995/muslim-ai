@@ -10,3 +10,15 @@ export function claude(): Anthropic {
 
 /** Beta flag for server-side refusal fallbacks (see `fallbacks: "default"` on requests). */
 export const FALLBACK_BETA = "server-side-fallback-2026-07-01";
+
+/** Models that accept the server-side `fallbacks` parameter (others reject it). */
+const FALLBACK_MODELS = new Set([
+  "claude-opus-5-5",
+  "claude-opus-5",
+  "claude-sonnet-5-5",
+  "claude-fable-5-2",
+  "claude-fable-5-1",
+]);
+export function supportsFallbacks(model: string): boolean {
+  return FALLBACK_MODELS.has(model);
+}

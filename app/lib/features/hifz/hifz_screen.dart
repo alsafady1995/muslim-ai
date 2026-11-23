@@ -162,12 +162,13 @@ class _CreatePlanSheetState extends ConsumerState<_CreatePlanSheet> {
 
   Future<void> _save() async {
     setState(() => _busy = true);
+    final arabic = context.isArabic;
     try {
       final repo = ref.read(quranRepoProvider);
       final surah = await repo.surah(_surah);
       final from = await repo.ayahId(_surah, 1);
       final to = await repo.ayahId(_surah, surah.ayahCount);
-      await ref.read(userRepoProvider).createHifzPlan(from, to, _daily, context.isArabic ? surah.nameAr : surah.transliteration);
+      await ref.read(userRepoProvider).createHifzPlan(from, to, _daily, arabic ? surah.nameAr : surah.transliteration);
       Analytics.track(Events.hifzPlanCreated, {'surah': _surah, 'daily_new': _daily});
       if (mounted) Navigator.pop(context, true);
     } catch (_) {

@@ -1,0 +1,2 @@
+app_identifier("app.muslimai.mobile")
+team_id(ENV["APPLE_TEAM_ID"])

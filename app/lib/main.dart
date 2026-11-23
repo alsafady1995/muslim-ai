@@ -18,7 +18,8 @@ Future<void> main() async {
   Future<void> start() async {
     await Supabase.initialize(
       url: AppConfig.supabaseUrl,
-      anonKey: AppConfig.supabaseAnonKey,
+      // Accepts the legacy anon key or the new sb_publishable_ key.
+      publishableKey: AppConfig.supabaseAnonKey,
       authOptions: const FlutterAuthClientOptions(authFlowType: AuthFlowType.pkce),
     );
     await Analytics.init();

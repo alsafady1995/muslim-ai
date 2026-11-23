@@ -33,6 +33,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
   GoTrueClient get _auth => ref.read(supabaseProvider).auth;
 
   Future<void> _run(String method, Future<void> Function() action) async {
+    final genericError = context.l10n.errorGeneric;
     setState(() => _busy = true);
     try {
       await action();
@@ -43,7 +44,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     } catch (e) {
       if (e is SignInWithAppleAuthorizationException && e.code == AuthorizationErrorCode.canceled) return;
       if (e is GoogleSignInException && e.code == GoogleSignInExceptionCode.canceled) return;
-      _toast(context.l10n.errorGeneric);
+      _toast(genericError);
     } finally {
       if (mounted) setState(() => _busy = false);
     }

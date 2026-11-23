@@ -1,0 +1,29 @@
+default_platform(:ios)
+
+platform :ios do
+  def asc_key
+    app_store_connect_api_key(
+      key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
+      issuer_id: ENV["APP_STORE_CONNECT_API_ISSUER_ID"],
+      key_content: ENV["APP_STORE_CONNECT_API_KEY_CONTENT"],
+      is_key_content_base64: false
+    )
+  end
+
+  desc "Build, sign with match and upload to TestFlight"
+  lane :beta do
+    setup_ci
+    api_key = asc_key
+    match(type: "appstore", api_key: api_key)
+    update_code_signing_settings(use_automatic_signing: false, path: "Runner.xcodeproj",
+                                 team_id: ENV["APPLE_TEAM_ID"], code_sign_identity: "iPhone Distribution",
+                                 profile_name: "match AppStore app.muslimai.mobile")
+    build_app(workspace: "Runner.xcworkspace", scheme: "Runner", export_method: "app-store")
+    upload_to_testflight(api_key: api_key, skip_waiting_for_build_processing: true)
+  end
+
+  desc "One-time: create certificates and profiles in the match repo (run locally)"
+  lane :certs do
+    match(type: "appstore", readonly: false, api_key: asc_key)
+  end
+end

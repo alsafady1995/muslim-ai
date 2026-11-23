@@ -5,7 +5,7 @@
 import type Anthropic from "@anthropic-ai/sdk";
 import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
 import { z } from "zod";
-import { claude, FALLBACK_BETA } from "./claude.ts";
+import { claude, FALLBACK_BETA, supportsFallbacks } from "./claude.ts";
 import { env } from "./env.ts";
 import type { RetrievalResult, RetrievedAyah, RetrievedHadith } from "./retrieval.ts";
 
@@ -107,9 +107,10 @@ export async function groundedAnswer(params: {
   locale: string;
   sources: RetrievalResult;
   history?: HistoryTurn[];
+  premium?: boolean;
 }): Promise<GroundedAnswer> {
   const { question, locale, sources } = params;
-  const model = env.claudeModel();
+  const model = params.premium ? env.claudeModelPremium() : env.claudeModel();
   const history: Anthropic.Beta.BetaMessageParam[] = (params.history ?? []).slice(-6).map((t) => ({
     role: t.role,
     content: t.content,
@@ -118,8 +119,7 @@ export async function groundedAnswer(params: {
   const response = await claude().beta.messages.parse({
     model,
     max_tokens: 4096,
-    betas: [FALLBACK_BETA],
-    fallbacks: "default",
+    ...(supportsFallbacks(model) ? { betas: [FALLBACK_BETA], fallbacks: "default" as const } : {}),
     system: [{ type: "text", text: SYSTEM_PROMPT, cache_control: { type: "ephemeral" } }],
     output_config: { effort: env.claudeEffort(), format: betaZodOutputFormat(AnswerSchema) },
     messages: [
