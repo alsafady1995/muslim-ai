@@ -23,10 +23,21 @@ class _HifzReviewScreenState extends ConsumerState<HifzReviewScreen> {
   int _index = 0;
   bool _revealed = false;
   int _xp = 0;
+  bool _grading = false; // ignore extra taps while a grade is being saved
 
   HifzCard get _card => _cards[_index];
 
   Future<void> _grade(int score) async {
+    if (_grading) return;
+    _grading = true;
+    try {
+      await _gradeCard(score);
+    } finally {
+      _grading = false;
+    }
+  }
+
+  Future<void> _gradeCard(int score) async {
     final r = await ref.read(userRepoProvider).recordHifzReview(_card.itemId, score);
     _xp += r.xpAwarded;
     Analytics.track(Events.hifzReviewed, {'score': score, 'new': _card.isNew});
@@ -35,10 +46,12 @@ class _HifzReviewScreenState extends ConsumerState<HifzReviewScreen> {
     if (_index + 1 >= _cards.length) {
       await showDialog<void>(
         context: context,
-        builder: (_) => AlertDialog(
+        // Close with the dialog's own context: the dialog lives on the root navigator,
+        // while this screen's context points at the tab's nested navigator.
+        builder: (dialogContext) => AlertDialog(
           title: Text(context.l10n.sessionComplete),
           content: Text(context.l10n.xpEarned(_xp)),
-          actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text(context.l10n.done))],
+          actions: [TextButton(onPressed: () => Navigator.pop(dialogContext), child: Text(context.l10n.done))],
         ),
       );
       if (mounted) Navigator.pop(context);

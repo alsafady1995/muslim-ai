@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'dart:io' show Platform;
 import 'dart:math';
 
 import 'package:crypto/crypto.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -32,6 +32,20 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
 
   GoTrueClient get _auth => ref.read(supabaseProvider).auth;
 
+  static bool get _isIOS => !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
+
+  /// Web preview: Apple/Google need real developer accounts, so the button only
+  /// continues as the local guest and says so.
+  Future<void> _simulated(String method) {
+    final msg = Localizations.localeOf(context).languageCode == 'ar'
+        ? 'محاكاة: تسجيل الدخول الحقيقي يعمل بعد إنشاء الحسابات'
+        : 'Simulated: real sign-in works once accounts are set up';
+    return _run(method, () async {
+      if (_auth.currentUser == null) await _auth.signInAnonymously();
+      _toast(msg);
+    });
+  }
+
   Future<void> _run(String method, Future<void> Function() action) async {
     final genericError = context.l10n.errorGeneric;
     setState(() => _busy = true);
@@ -59,7 +73,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     return base64Url.encode(List<int>.generate(32, (_) => r.nextInt(256)));
   }
 
-  Future<void> _apple() => _run('apple', () async {
+  Future<void> _apple() => AppConfig.demoMode ? _simulated('apple') : _run('apple', () async {
         final rawNonce = _nonce();
         final cred = await SignInWithApple.getAppleIDCredential(
           scopes: [AppleIDAuthorizationScopes.email, AppleIDAuthorizationScopes.fullName],
@@ -75,10 +89,10 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
         if (name.isNotEmpty) await ref.read(userRepoProvider).updateProfile({'display_name': name});
       });
 
-  Future<void> _google() => _run('google', () async {
+  Future<void> _google() => AppConfig.demoMode ? _simulated('google') : _run('google', () async {
         final google = GoogleSignIn.instance;
         await google.initialize(
-          clientId: Platform.isIOS ? AppConfig.googleIosClientId : null,
+          clientId: _isIOS ? AppConfig.googleIosClientId : null,
           serverClientId: AppConfig.googleWebClientId,
         );
         final account = await google.authenticate();
@@ -128,7 +142,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
         child: ListView(padding: const EdgeInsets.all(24), children: [
           Text(widget.linkMode ? l10n.saveProgressBody : l10n.signInBody, textAlign: TextAlign.center),
           const SizedBox(height: 24),
-          if (Platform.isIOS) ...[
+          if (_isIOS || AppConfig.demoMode) ...[
             FilledButton.icon(onPressed: _busy ? null : _apple, icon: const Icon(Icons.apple), label: Text(l10n.continueWithApple)),
             const SizedBox(height: 12),
           ],
