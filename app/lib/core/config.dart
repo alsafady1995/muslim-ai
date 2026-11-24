@@ -13,8 +13,8 @@ class AppConfig {
   static const googleWebClientId = String.fromEnvironment('GOOGLE_WEB_CLIENT_ID');
   static const googleIosClientId = String.fromEnvironment('GOOGLE_IOS_CLIENT_ID');
   static const environment = String.fromEnvironment('APP_ENV', defaultValue: 'dev');
-  static const privacyUrl = String.fromEnvironment('PRIVACY_URL', defaultValue: 'https://muslimai.app/privacy');
-  static const termsUrl = String.fromEnvironment('TERMS_URL', defaultValue: 'https://muslimai.app/terms');
+  static const privacyUrl = String.fromEnvironment('PRIVACY_URL', defaultValue: 'https://asmi3ni.com/privacy/');
+  static const termsUrl = String.fromEnvironment('TERMS_URL', defaultValue: 'https://asmi3ni.com/terms/');
 
   /// Web preview with no backend: auth, AI and payments are simulated (lib/demo/).
   static const demoMode = bool.fromEnvironment('DEMO_MODE');
