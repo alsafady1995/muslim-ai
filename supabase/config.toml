@@ -26,7 +26,7 @@ enable_anonymous_sign_ins = true
 enable_manual_linking = true
 
 [auth.email]
-enable_signup = true
+enabled = true
 enable_confirmations = true
 otp_length = 6
 otp_expiry = 600
