@@ -62,6 +62,14 @@ class HifzScreen extends ConsumerWidget {
                   const SizedBox(height: 8),
                   Text(l10n.queueSummary(q.reviews.length, q.fresh.length)),
                   const SizedBox(height: 12),
+                  // No plan yet: the empty queue means "nothing set up", not "all done".
+                  if (q.isEmpty && (plans.value?.isEmpty ?? false))
+                    FilledButton.icon(
+                      onPressed: () => _createPlan(context, ref),
+                      icon: const Icon(Icons.add),
+                      label: Text(l10n.newPlan),
+                    )
+                  else
                   FilledButton(
                     onPressed: q.isEmpty
                         ? null

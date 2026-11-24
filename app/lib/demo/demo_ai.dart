@@ -23,12 +23,21 @@ abstract final class DemoAi {
     ['نجاح', 'فلاح', 'success']: ['23:1', '87:14', '91:9'],
     ['احسان', 'لطف', 'kindness', 'kind']: ['16:90', '2:83', '4:36'],
     ['تجاره', 'بيع', 'business', 'trade']: ['2:275', '4:29', '83:1'],
+    ['صدقه', 'انفاق', 'زكاه', 'charity', 'zakat', 'spend']: ['2:261', '2:271', '2:274'],
+    ['صلاه', 'prayer', 'salah', 'pray']: ['2:45', '29:45', '2:238'],
+    ['دعاء', 'ادعو', 'dua', 'supplication']: ['2:186', '40:60', '7:55'],
   };
 
+  /// Question words, diacritics-free, without common Arabic prefixes (و ف ب ل ال).
+  static List<String> _words(String text) => [
+        for (final w in DemoStore.simplify(text.toLowerCase()).split(RegExp(r'[\s،,.?؟!:;]+')))
+          if (w.isNotEmpty) w.replaceFirst(RegExp('^(و|ف|ب|ل)?(ال)'), ''),
+      ];
+
   static List<int> _topicAyahs(DemoStore s, String text) {
-    final q = DemoStore.simplify(text.toLowerCase());
+    final words = _words(text);
     for (final e in _topics.entries) {
-      if (e.key.any(q.contains)) {
+      if (e.key.any((k) => words.any((w) => k.length >= 3 ? w.contains(k) : w == k))) {
         return [for (final k in e.value) s.ayahId(int.parse(k.split(':')[0]), int.parse(k.split(':')[1]))];
       }
     }
@@ -39,11 +48,14 @@ abstract final class DemoAi {
     final topic = _topicAyahs(s, text);
     if (topic.isNotEmpty) return topic.take(limit).toList();
     // fall back to the longest words of the question as keywords
-    final words = text.split(RegExp(r'[\s،,.?؟!]+')).where((w) => w.length >= 4).toList()
-      ..sort((a, b) => b.length.compareTo(a.length));
+    // (without the definite article, and without a final ه/ة so plural and
+    // construct forms still match: الصدقة -> صدق).
+    final words = _words(text).where((w) => w.length >= 4).toList()..sort((a, b) => b.length.compareTo(a.length));
     for (final w in words) {
-      final hits = s.keywordSearch(w, limit: limit);
-      if (hits.isNotEmpty) return hits;
+      for (final term in {w, if (w.endsWith('ه') && w.length >= 4) w.substring(0, w.length - 1)}) {
+        final hits = s.keywordSearch(term, limit: limit);
+        if (hits.isNotEmpty) return hits;
+      }
     }
     return [];
   }

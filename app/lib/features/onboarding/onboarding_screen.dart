@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -99,7 +100,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             ),
           ),
         const Spacer(),
-        FilledButton(onPressed: _next, child: Text(l10n.continueLabel)),
+        // Web has no local notifications, so the reminders step is skipped there.
+        FilledButton(
+          onPressed: _busy ? null : (kIsWeb ? () => _finish(reminders: false) : _next),
+          child: Text(l10n.continueLabel),
+        ),
       ]),
       // 3. Reminders
       Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [

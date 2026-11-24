@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -117,6 +118,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           onChanged: (v) => ref.read(prefsProvider.notifier).setValue('show_translation', v),
         ),
         SectionTitle(l10n.reminders),
+        // Local notifications have no web implementation (web preview build).
+        if (kIsWeb)
+          ListTile(
+            leading: const Icon(Icons.notifications_off_outlined),
+            title: Text(context.isArabic ? 'التذكيرات متاحة في تطبيق الجوال فقط' : 'Reminders are available in the mobile app only'),
+          )
+        else ...[
         SwitchListTile(
           title: Text(l10n.morningAdhkar),
           subtitle: const Text('06:30'),
@@ -141,6 +149,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           value: _reminder('streak'),
           onChanged: (v) => _setReminder('streak', v, Reminders.streakSaver, l10n.reminderStreakTitle, l10n.reminderStreakBody, 21, 0),
         ),
+        ],
         SectionTitle(l10n.subscription),
         if (premium)
           ListTile(
