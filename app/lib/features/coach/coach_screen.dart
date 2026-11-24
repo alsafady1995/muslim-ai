@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -11,6 +12,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../core/analytics.dart';
 import '../../core/api.dart';
+import '../../core/config.dart';
 import '../../core/providers.dart';
 import '../../core/theme.dart';
 import '../../core/widgets.dart';
@@ -78,10 +80,19 @@ class _CoachScreenState extends ConsumerState<CoachScreen> {
       return;
     }
     await ref.read(audioProvider.notifier).stop();
-    final dir = await getTemporaryDirectory();
-    _path = '${dir.path}/recitation_${DateTime.now().millisecondsSinceEpoch}.m4a';
+    // On web the recorder keeps audio in memory (blob URL); there is no temp dir.
+    var encoder = AudioEncoder.aacLc;
+    if (kIsWeb) {
+      _path = '';
+      if (!await _recorder.isEncoderSupported(encoder)) {
+        encoder = AudioEncoder.opus;
+      }
+    } else {
+      final dir = await getTemporaryDirectory();
+      _path = '${dir.path}/recitation_${DateTime.now().millisecondsSinceEpoch}.m4a';
+    }
     await _recorder.start(
-      const RecordConfig(encoder: AudioEncoder.aacLc, sampleRate: 16000, numChannels: 1, bitRate: 48000),
+      RecordConfig(encoder: encoder, sampleRate: 16000, numChannels: 1, bitRate: 48000),
       path: _path!,
     );
     Analytics.track(Events.recitationStarted, {'ayahs': _ayahs.length, 'mode': widget.hifzMode ? 'hifz' : 'read'});
@@ -109,6 +120,16 @@ class _CoachScreenState extends ConsumerState<CoachScreen> {
     final id = const Uuid().v4();
     final storagePath = '$uid/$id.m4a';
     try {
+      if (AppConfig.demoMode) {
+        // Preview: nothing is uploaded; the simulated analysis only needs the range.
+        final res = await ref.read(edgeApiProvider).call('recitation-analyze', {
+          'start_ayah_id': _ayahs.first.id,
+          'end_ayah_id': _ayahs.last.id,
+          'mode': widget.hifzMode ? 'hifz' : 'read',
+        });
+        _showResult(RecitationResult(res));
+        return;
+      }
       await db.storage.from('recitations').upload(storagePath, File(path),
           fileOptions: const FileOptions(contentType: 'audio/mp4'));
       await db.from('recitation_sessions').insert({
@@ -121,14 +142,7 @@ class _CoachScreenState extends ConsumerState<CoachScreen> {
       });
       Analytics.track(Events.recitationSubmitted, {'seconds': _elapsed.inSeconds});
       final res = await ref.read(edgeApiProvider).call('recitation-analyze', {'session_id': id});
-      final result = RecitationResult(res);
-      ref.invalidate(dashboardProvider);
-      Analytics.track(Events.recitationResultViewed, {'overall': result.overall});
-      setState(() {
-        _result = result;
-        _phase = _Phase.result;
-      });
-      if (mounted) showXpToast(context, result.activity?.xpAwarded ?? 0, achievements: result.activity?.newAchievements ?? []);
+      _showResult(RecitationResult(res));
     } on QuotaExceeded {
       Analytics.track(Events.quotaHit, {'feature': 'recitation'});
       setState(() => _phase = _Phase.ready);
@@ -137,8 +151,20 @@ class _CoachScreenState extends ConsumerState<CoachScreen> {
       setState(() => _phase = _Phase.ready);
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(context.l10n.analysisFailed)));
     } finally {
-      File(path).delete().ignore();
+      if (!kIsWeb) {
+        File(path).delete().ignore();
+      }
     }
+  }
+
+  void _showResult(RecitationResult result) {
+    ref.invalidate(dashboardProvider);
+    Analytics.track(Events.recitationResultViewed, {'overall': result.overall});
+    setState(() {
+      _result = result;
+      _phase = _Phase.result;
+    });
+    if (mounted) showXpToast(context, result.activity?.xpAwarded ?? 0, achievements: result.activity?.newAchievements ?? []);
   }
 
   @override

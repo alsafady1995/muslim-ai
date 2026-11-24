@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/data/latest_all.dart' as tzdata;
@@ -14,7 +15,7 @@ class Reminders {
   static const streakSaver = 4;
 
   static Future<void> init() async {
-    if (_ready) return;
+    if (_ready || kIsWeb) return; // no local notifications on web
     tzdata.initializeTimeZones();
     try {
       final info = await FlutterTimezone.getLocalTimezone();
@@ -36,6 +37,7 @@ class Reminders {
   }
 
   static Future<bool> requestPermission() async {
+    if (kIsWeb) return false;
     await init();
     final ios = _plugin.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
     final android = _plugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
@@ -47,6 +49,7 @@ class Reminders {
 
   /// Schedules (or replaces) a daily reminder at [hour]:[minute] local time.
   static Future<void> scheduleDaily(int id, String title, String body, int hour, int minute) async {
+    if (kIsWeb) return;
     await init();
     final now = tz.TZDateTime.now(tz.local);
     var at = tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minute);
@@ -66,6 +69,7 @@ class Reminders {
   }
 
   static Future<void> cancel(int id) async {
+    if (kIsWeb) return;
     await init();
     await _plugin.cancel(id: id);
   }

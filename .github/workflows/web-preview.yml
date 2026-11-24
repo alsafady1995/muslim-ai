@@ -1,0 +1,40 @@
+name: Web preview
+# Builds the Flutter app for the web in demo mode (no backend, simulated AI and
+# payments) and publishes it to GitHub Pages: https://<owner>.github.io/muslim-ai/
+on:
+  push:
+    branches: [main, claude/project-thread-a7leia]
+    paths: ["app/**", "tools/**", ".github/workflows/web-preview.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: write # push the built site to the gh-pages branch
+
+concurrency:
+  group: web-preview
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with: { flutter-version: "3.35.7", channel: stable, cache: true }
+      - name: Download Quran text and translation for the demo
+        run: python3 tools/fetch_demo_quran.py app/web/demo-data/quran.json
+      - name: Build web (demo mode)
+        working-directory: app
+        run: |
+          flutter pub get
+          flutter build web --release --dart-define=DEMO_MODE=true \
+            --base-href "/${{ github.event.repository.name }}/" --pwa-strategy=none --no-web-resources-cdn
+          touch build/web/.nojekyll
+      - name: Publish to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: app/build/web
+          publish_branch: gh-pages
+          force_orphan: true
+          commit_message: "Web preview from ${{ github.sha }}"

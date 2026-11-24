@@ -47,6 +47,22 @@ cp env/example.json env/dev.json                 # fill in values
 flutter run --dart-define-from-file=env/dev.json
 ```
 
+## Web preview (no accounts needed)
+
+A demo build of the app runs in any browser, including iPhone Safari, with no backend or API keys:
+**https://alsafady1995.github.io/muslim-ai/** (built by `.github/workflows/web-preview.yml` on every push).
+
+`--dart-define=DEMO_MODE=true` swaps the Supabase repositories, edge functions and RevenueCat for local fakes in
+`app/lib/demo/`. Real: Quran text and translation, reciter audio, adhkar, every screen, XP/levels/streaks/goals and
+SM-2 hifz scheduling (computed in the browser). Simulated: guest account and sign-in, AI answers (real verses,
+placeholder explanation), semantic search (keyword match), recitation analysis (random result), subscription
+(no payment). A banner on every screen says so. Progress is stored in the browser's local storage.
+
+```bash
+python3 tools/fetch_demo_quran.py app/web/demo-data/quran.json   # Quran text for the demo (not committed)
+cd app && flutter run -d chrome --dart-define=DEMO_MODE=true
+```
+
 ## Tests
 
 ```bash

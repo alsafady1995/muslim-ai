@@ -1,6 +1,5 @@
 import 'dart:async';
-import 'dart:io' show Platform;
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
@@ -11,7 +10,9 @@ class RevenueCatProvider implements PaymentProvider {
   final _premium = StreamController<bool>.broadcast();
   bool _configured = false;
 
-  String get _apiKey => Platform.isIOS ? AppConfig.revenueCatAppleKey : AppConfig.revenueCatGoogleKey;
+  static bool get _ios => defaultTargetPlatform == TargetPlatform.iOS;
+
+  String get _apiKey => kIsWeb ? '' : _ios ? AppConfig.revenueCatAppleKey : AppConfig.revenueCatGoogleKey;
 
   bool _hasEntitlement(CustomerInfo info) => info.entitlements.active.containsKey(AppConfig.premiumEntitlement);
 
@@ -97,7 +98,7 @@ class RevenueCatProvider implements PaymentProvider {
   Stream<bool> get premiumChanges => _premium.stream;
 
   @override
-  Uri? get manageSubscriptionsUrl => Platform.isIOS
+  Uri? get manageSubscriptionsUrl => _ios
       ? Uri.parse('https://apps.apple.com/account/subscriptions')
       : Uri.parse('https://play.google.com/store/account/subscriptions');
 }
