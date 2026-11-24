@@ -183,7 +183,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get goPremium => 'اشترك في بريميوم';
 
   @override
-  String get premiumPitchShort => 'تدريب ذكي غير محدود مقابل ٠٫٩٩\$ شهريًا';
+  String get premiumPitchShort => 'مدرّبك القرآني الذكي. جرّبه مجانًا ٧ أيام';
 
   @override
   String get last7Days => 'آخر ٧ أيام';
@@ -775,10 +775,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get premiumSubtitle => 'أقل من ثمن فنجان قهوة شهريًا، لقرآنك كل يوم.';
 
   @override
-  String get benefitRecitation => 'تحليل غير محدود لتلاوتك';
+  String get benefitRecitation => 'تحليل تلاوتك بالذكاء الاصطناعي كل يوم';
 
   @override
-  String get benefitHifz => 'تدريب حفظ ذكي غير محدود';
+  String get benefitHifz => 'تدريب حفظ ذكي';
 
   @override
   String get benefitAsk => 'أسئلة أكثر في اسأل القرآن والمساعد';
@@ -827,4 +827,45 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get purchaseFailed => 'فشلت عملية الشراء.';
+
+  @override
+  String get bestValue => 'الأفضل قيمة';
+
+  @override
+  String savePercent(int pct) {
+    return 'وفّر $pct٪';
+  }
+
+  @override
+  String startFreeTrial(int n) {
+    return 'ابدأ تجربة مجانية لمدة $n أيام';
+  }
+
+  @override
+  String trialThenPrice(int n, String price, String period) {
+    return '$n أيام مجانًا، ثم $price / $period';
+  }
+
+  @override
+  String get aiBudgetTitle => 'انتهى رصيد الذكاء الاصطناعي لهذه الفترة';
+
+  @override
+  String aiBudgetPremium(String date) {
+    return 'حتى يبقى بريميوم بسعر في متناول الجميع، تتوقف ميزات الذكاء الاصطناعي حتى $date. القراءة والاستماع والبحث بالكلمات والأذكار ومراجعة الحفظ تعمل كالمعتاد.';
+  }
+
+  @override
+  String aiBudgetFree(String date) {
+    return 'تتجدد ميزات الذكاء الاصطناعي المجانية في $date. يتضمن بريميوم رصيدًا أكبر بكثير. وحتى ذلك الحين تعمل القراءة والاستماع ومراجعة الحفظ كالمعتاد.';
+  }
+
+  @override
+  String aiBudgetTrial(String date) {
+    return 'استهلكت رصيد الذكاء الاصطناعي المضمَّن في الفترة التجريبية. يتجدد عند بدء اشتراكك في $date.';
+  }
+
+  @override
+  String aiLighterMode(String date) {
+    return 'اقتربت من رصيد الذكاء الاصطناعي لهذه الفترة، لذا تُستخدم إجابات أخف حتى $date.';
+  }
 }

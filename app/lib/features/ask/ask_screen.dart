@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/ai_budget.dart';
 import '../../core/analytics.dart';
 import '../../core/api.dart';
 import '../../core/providers.dart';
@@ -52,6 +53,13 @@ class _AskScreenState extends ConsumerState<AskScreen> {
       });
       turn.answer = GroundedAnswer(res);
       _conversationId = turn.answer!.conversationId;
+      final quota = res['quota'];
+      if (quota is Map && quota['degraded'] == true && mounted) {
+        showLighterModeNote(context, DateTime.tryParse('${quota['resets_at'] ?? ''}'));
+      }
+    } on AiBudgetExhausted catch (e) {
+      _turns.remove(turn);
+      if (mounted) showAiBudgetExhausted(context, e);
     } on QuotaExceeded {
       _turns.remove(turn);
       Analytics.track(Events.quotaHit, {'feature': 'ask'});

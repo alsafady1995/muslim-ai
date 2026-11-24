@@ -13,6 +13,72 @@ export interface SubscriptionRow {
   original_transaction_id: string | null;
   environment: string | null;
   updated_at: string;
+  // What the user paid for the current period. Only present on events that charge (or refund)
+  // the user, so other events never overwrite it. Drives the AI cost cap.
+  price_usd?: number | null;
+  net_revenue_usd?: number | null;
+  period_start?: string | null;
+  period_months?: number;
+  country_code?: string | null;
+  currency?: string | null;
+}
+
+/** Used when the store reports a price but not its fees: 15% commission + ~15% VAT. */
+export const FALLBACK_TAKEHOME = 0.70;
+
+const CHARGE_EVENTS = new Set(["INITIAL_PURCHASE", "RENEWAL", "NON_RENEWING_PURCHASE"]);
+
+function fraction(v: unknown): number | null {
+  const n = typeof v === "number" ? v : typeof v === "string" && v.trim() ? Number(v) : NaN;
+  return Number.isFinite(n) && n >= 0 && n <= 1 ? n : null;
+}
+
+/**
+ * Net revenue (USD) of a RevenueCat transaction after store commission and tax.
+ * `price` is the USD price the user paid (local price converted by RevenueCat), so
+ * regional price tiers are reflected automatically. Returns null when unknown.
+ */
+export function netRevenueUsd(event: any): number | null {
+  const price = typeof event.price === "number" ? event.price : null;
+  if (price === null) return null;
+  if (price <= 0) return 0;
+  const tax = fraction(event.tax_percentage);
+  const commission = fraction(event.commission_percentage);
+  let net: number;
+  if (tax !== null && commission !== null) net = price * (1 - tax - commission);
+  else if (fraction(event.takehome_percentage) !== null) net = price * fraction(event.takehome_percentage)!;
+  else net = price * FALLBACK_TAKEHOME;
+  return Math.max(0, Math.round(net * 10_000) / 10_000);
+}
+
+/** Billing period length in months (1 monthly, 12 annual), from the transaction dates or product id. */
+export function periodMonths(event: any): number {
+  const start = Number(event.purchased_at_ms);
+  const end = Number(event.expiration_at_ms);
+  if (start > 0 && end > start) {
+    const days = (end - start) / 86_400_000;
+    if (days >= 20) return Math.max(1, Math.round(days / 30.44));
+  }
+  return /annual|year/i.test(String(event.product_id ?? event.new_product_id ?? "")) ? 12 : 1;
+}
+
+/** Revenue fields for events that charge or refund the user; empty for all other events. */
+export function revenueFields(event: any): Partial<SubscriptionRow> {
+  const refunded = event.type === "CANCELLATION" &&
+    (event.cancel_reason === "CUSTOMER_SUPPORT" || (typeof event.price === "number" && event.price < 0));
+  if (refunded) return { net_revenue_usd: 0 };
+  if (!CHARGE_EVENTS.has(event.type)) return {};
+  const net = netRevenueUsd(event);
+  const fields: Partial<SubscriptionRow> = {
+    price_usd: typeof event.price === "number" ? event.price : null,
+    period_start: event.purchased_at_ms ? new Date(event.purchased_at_ms).toISOString() : null,
+    period_months: periodMonths(event),
+    country_code: event.country_code ?? null,
+    currency: event.currency ?? null,
+  };
+  // Unknown price: null makes the server use the conservative fallback (lowest regional tier).
+  fields.net_revenue_usd = net;
+  return fields;
 }
 
 const STORE_MAP: Record<string, SubscriptionRow["store"]> = {
@@ -79,5 +145,6 @@ export function mapRevenueCatEvent(event: any, entitlementId: string): Subscript
     original_transaction_id: event.original_transaction_id ?? null,
     environment: event.environment ? String(event.environment).toLowerCase() : null,
     updated_at: new Date().toISOString(),
+    ...revenueFields(event),
   };
 }

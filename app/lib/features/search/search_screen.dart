@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/ai_budget.dart';
 import '../../core/analytics.dart';
 import '../../core/api.dart';
 import '../../core/providers.dart';
@@ -55,6 +56,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         });
       }).toList();
       setState(() => _results = rows);
+    } on AiBudgetExhausted catch (e) {
+      if (mounted) showAiBudgetExhausted(context, e);
     } on QuotaExceeded {
       Analytics.track(Events.quotaHit, {'feature': 'search'});
       if (mounted) context.push('/paywall?source=search_quota');

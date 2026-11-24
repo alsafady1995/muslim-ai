@@ -48,6 +48,7 @@ class RevenueCatProvider implements PaymentProvider {
       return PlanOffer(
         id: p.identifier,
         priceString: product.priceString,
+        price: product.price,
         period: p.packageType == PackageType.annual ? 'year' : 'month',
         trialDays: intro != null && intro.price == 0 ? intro.periodNumberOfUnits * _days(intro.periodUnit) : null,
         native: p,

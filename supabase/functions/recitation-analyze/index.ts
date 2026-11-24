@@ -5,7 +5,8 @@
 // hifz scheduling when mode = "hifz", award XP, and delete the audio.
 import { handler, HttpError, json } from "../_shared/http.ts";
 import { admin, requireUser } from "../_shared/supabase.ts";
-import { consumeQuota, refundQuota } from "../_shared/quota.ts";
+import { beginAiCall, cancelAiCall, finishAiCall, quotaInfo } from "../_shared/quota.ts";
+import { ASR_MAX_MINUTES, asrCostPerMinuteUsd, roundUsd } from "../_shared/ai_cost.ts";
 import { analyzeRecitation, type ExpectedWord, type HeardWord, scoreToGrade } from "../_shared/alignment.ts";
 import { env } from "../_shared/env.ts";
 import { track } from "../_shared/analytics.ts";
@@ -42,7 +43,9 @@ Deno.serve(handler(async (req, body) => {
   if (session.status !== "pending") throw new HttpError(409, "already_processed");
   if (!String(session.audio_path).startsWith(`${user.id}/`)) throw new HttpError(403, "forbidden");
 
-  const quota = await consumeQuota(user.id, "recitation");
+  // Reserve the longest recording we accept; settled with the real duration below.
+  const ai = await beginAiCall(user.id, "recitation", ASR_MAX_MINUTES * asrCostPerMinuteUsd());
+  let asrCost = 0;
   await db.from("recitation_sessions").update({ status: "processing" }).eq("id", sessionId);
 
   try {
@@ -67,6 +70,7 @@ Deno.serve(handler(async (req, body) => {
     }));
     if (!expected.length) throw new Error("no expected words for range");
 
+    asrCost = roundUsd((Math.min(asr.duration ?? 0, ASR_MAX_MINUTES * 60) / 60) * asrCostPerMinuteUsd());
     const result = analyzeRecitation(expected, asr.words);
 
     const { error: updErr } = await db.from("recitation_sessions").update({
@@ -124,8 +128,9 @@ Deno.serve(handler(async (req, body) => {
       overall: result.overall,
       words: result.wordsTotal,
       mistakes: result.mistakes.length,
-      premium: quota.premium,
+      premium: ai.premium,
     });
+    await finishAiCall(ai, asrCost, "asr", { seconds: asr.duration });
 
     return json({
       session_id: sessionId,
@@ -143,7 +148,7 @@ Deno.serve(handler(async (req, body) => {
       mistakes: result.mistakes,
       activity,
       hifz: hifzUpdates,
-      quota: { remaining: quota.remaining, limit: quota.limit, premium: quota.premium },
+      quota: quotaInfo(ai),
     });
   } catch (e) {
     console.error("recitation analysis failed", e);
@@ -151,7 +156,7 @@ Deno.serve(handler(async (req, body) => {
       "id",
       sessionId,
     );
-    await refundQuota(user.id, "recitation");
+    await cancelAiCall(ai, asrCost);
     throw new HttpError(502, "analysis_failed", "We couldn't analyse this recording. Please try again.");
   }
 }));

@@ -431,7 +431,7 @@ abstract class AppLocalizations {
   /// No description provided for @premiumPitchShort.
   ///
   /// In en, this message translates to:
-  /// **'Unlimited AI coaching for \$0.99/month'**
+  /// **'Your AI Quran coach. Try it free for 7 days'**
   String get premiumPitchShort;
 
   /// No description provided for @last7Days.
@@ -1547,13 +1547,13 @@ abstract class AppLocalizations {
   /// No description provided for @benefitRecitation.
   ///
   /// In en, this message translates to:
-  /// **'Unlimited AI recitation analysis'**
+  /// **'AI recitation analysis every day'**
   String get benefitRecitation;
 
   /// No description provided for @benefitHifz.
   ///
   /// In en, this message translates to:
-  /// **'Unlimited AI memorization coaching'**
+  /// **'AI memorization coaching'**
   String get benefitHifz;
 
   /// No description provided for @benefitAsk.
@@ -1645,6 +1645,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Purchase failed.'**
   String get purchaseFailed;
+
+  /// No description provided for @bestValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Best value'**
+  String get bestValue;
+
+  /// No description provided for @savePercent.
+  ///
+  /// In en, this message translates to:
+  /// **'Save {pct}%'**
+  String savePercent(int pct);
+
+  /// No description provided for @startFreeTrial.
+  ///
+  /// In en, this message translates to:
+  /// **'Start {n}-day free trial'**
+  String startFreeTrial(int n);
+
+  /// No description provided for @trialThenPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} days free, then {price} / {period}'**
+  String trialThenPrice(int n, String price, String period);
+
+  /// No description provided for @aiBudgetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This month\'s AI allowance is used up'**
+  String get aiBudgetTitle;
+
+  /// No description provided for @aiBudgetPremium.
+  ///
+  /// In en, this message translates to:
+  /// **'To keep Premium affordable for everyone, AI features pause until {date}. Reading, listening, keyword search, adhkar and your hifz reviews keep working as usual.'**
+  String aiBudgetPremium(String date);
+
+  /// No description provided for @aiBudgetFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Free AI features renew on {date}. Premium includes a much larger allowance. Meanwhile, reading, listening and your hifz reviews keep working.'**
+  String aiBudgetFree(String date);
+
+  /// No description provided for @aiBudgetTrial.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve used the AI allowance included in your free trial. It renews when your subscription starts on {date}.'**
+  String aiBudgetTrial(String date);
+
+  /// No description provided for @aiLighterMode.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re near this month\'s AI allowance, so answers use a lighter model until {date}.'**
+  String aiLighterMode(String date);
 }
 
 class _AppLocalizationsDelegate

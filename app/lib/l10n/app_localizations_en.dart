@@ -185,7 +185,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get goPremium => 'Go Premium';
 
   @override
-  String get premiumPitchShort => 'Unlimited AI coaching for \$0.99/month';
+  String get premiumPitchShort => 'Your AI Quran coach. Try it free for 7 days';
 
   @override
   String get last7Days => 'Last 7 days';
@@ -781,10 +781,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Less than a coffee a month, for your Quran every day.';
 
   @override
-  String get benefitRecitation => 'Unlimited AI recitation analysis';
+  String get benefitRecitation => 'AI recitation analysis every day';
 
   @override
-  String get benefitHifz => 'Unlimited AI memorization coaching';
+  String get benefitHifz => 'AI memorization coaching';
 
   @override
   String get benefitAsk => 'More questions to Ask the Quran and the assistant';
@@ -834,4 +834,45 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get purchaseFailed => 'Purchase failed.';
+
+  @override
+  String get bestValue => 'Best value';
+
+  @override
+  String savePercent(int pct) {
+    return 'Save $pct%';
+  }
+
+  @override
+  String startFreeTrial(int n) {
+    return 'Start $n-day free trial';
+  }
+
+  @override
+  String trialThenPrice(int n, String price, String period) {
+    return '$n days free, then $price / $period';
+  }
+
+  @override
+  String get aiBudgetTitle => 'This month\'s AI allowance is used up';
+
+  @override
+  String aiBudgetPremium(String date) {
+    return 'To keep Premium affordable for everyone, AI features pause until $date. Reading, listening, keyword search, adhkar and your hifz reviews keep working as usual.';
+  }
+
+  @override
+  String aiBudgetFree(String date) {
+    return 'Free AI features renew on $date. Premium includes a much larger allowance. Meanwhile, reading, listening and your hifz reviews keep working.';
+  }
+
+  @override
+  String aiBudgetTrial(String date) {
+    return 'You\'ve used the AI allowance included in your free trial. It renews when your subscription starts on $date.';
+  }
+
+  @override
+  String aiLighterMode(String date) {
+    return 'You\'re near this month\'s AI allowance, so answers use a lighter model until $date.';
+  }
 }

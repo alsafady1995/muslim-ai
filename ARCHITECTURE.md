@@ -53,6 +53,32 @@ AI recitation in hifz mode grades each ayah automatically (score → SM-2 grade 
 
 Keyword search is free and unlimited. Quota is refunded when the AI call fails on our side.
 
+## AI cost cap (per user, server-enforced)
+
+Rule: no user may cost more in AI than half of what they pay. Daily counts above are fair-use limits; this is the money limit.
+
+| Tier | AI budget | Window |
+|---|---|---|
+| Premium | 50% of the user's net payment (after store commission and tax) per month | Monthly from the purchase date; annual plans are split into 12 monthly windows |
+| Free trial (7 days) | $0.25 for the whole trial | Trial period |
+| Promotional grant | $0.15 | Calendar month |
+| Free | $0.15 | Calendar month (UTC) |
+
+```
+edge function ──begin_ai_call(user, feature, worst-case cost [, cheaper-model cost])──▶ Postgres
+                 · locks ai_spend row, checks budget, then daily count, reserves cost
+             ◀── allowed / degraded / 429 ai_budget_exhausted (resets_at)
+   …AI work (Claude / ASR / embeddings)…
+edge function ──finish_ai_call(call, measured cost) or cancel_ai_call(call)──▶ Postgres
+```
+
+- Net payment comes from the RevenueCat webhook (`price`, `tax_percentage`, `commission_percentage`), so regional price tiers are reflected automatically. If the store sent no price, the lowest regional tier is assumed.
+- Claude cost is computed from the response's token usage (incl. cache reads/writes) and the model that actually answered. ASR and embeddings use per-unit rates from env.
+- Reserving the worst case first means concurrent requests can never push spend over the budget. Reservations left open by a crashed function count as spent after 15 minutes.
+- Premium drops to the cheaper model when the full one no longer fits, then AI pauses. The app shows a friendly sheet with the reset date; reading, audio, keyword search, adhkar and hifz reviews keep working.
+- A refund sets net payment to 0, which stops AI for that user immediately.
+- Tune budgets with SQL in `ai_budget_settings` (no deploy). Ledger: `ai_calls`; per-window totals: `ai_spend`.
+
 ## Scaling notes
 
 - Content queries are cacheable and read-only; move them behind a CDN or ship an offline bundle in Phase 2.

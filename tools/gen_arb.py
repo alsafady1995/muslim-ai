@@ -35,7 +35,7 @@ t("email", "Email", "البريد الإلكتروني"); t("sendCode", "Send co
 t("invalidEmail", "Enter a valid email", "أدخل بريدًا صحيحًا")
 # home
 t("prayersToday", "Today's prayers", "صلوات اليوم"); t("continueJourney", "Continue your journey", "تابع رحلتك"); t("goPremium", "Go Premium", "اشترك في بريميوم")
-t("premiumPitchShort", "Unlimited AI coaching for $0.99/month", "تدريب ذكي غير محدود مقابل ٠٫٩٩$ شهريًا")
+t("premiumPitchShort", "Your AI Quran coach. Try it free for 7 days", "مدرّبك القرآني الذكي. جرّبه مجانًا ٧ أيام")
 t("last7Days", "Last 7 days", "آخر ٧ أيام"); t("dayStreak", "day streak", "يوم متتالي")
 t("levelN", "Level {n}", "المستوى {n}", n="int"); t("xpToNext", "{xp} / {next} XP", "{xp} / {next} نقطة", xp="int", next="int")
 t("streakFreezes", "{n} streak freezes", "{n} حماية للسلسلة", n="int"); t("todaysGoals", "Today's goals", "أهداف اليوم")
@@ -123,13 +123,23 @@ t("deleteAccount", "Delete account", "حذف الحساب")
 t("deleteAccountWarning", "This permanently deletes your progress and data. Cancel any subscription in your store account separately.", "سيُحذف تقدمك وبياناتك نهائيًا. ألغِ أي اشتراك من حساب المتجر بشكل منفصل.")
 # paywall
 t("premiumTitle", "Muslim AI Premium", "مسلم AI بريميوم"); t("premiumSubtitle", "Less than a coffee a month, for your Quran every day.", "أقل من ثمن فنجان قهوة شهريًا، لقرآنك كل يوم.")
-t("benefitRecitation", "Unlimited AI recitation analysis", "تحليل غير محدود لتلاوتك"); t("benefitHifz", "Unlimited AI memorization coaching", "تدريب حفظ ذكي غير محدود")
+t("benefitRecitation", "AI recitation analysis every day", "تحليل تلاوتك بالذكاء الاصطناعي كل يوم"); t("benefitHifz", "AI memorization coaching", "تدريب حفظ ذكي")
 t("benefitAsk", "More questions to Ask the Quran and the assistant", "أسئلة أكثر في اسأل القرآن والمساعد"); t("benefitAnalytics", "Personalized plans and advanced progress analytics", "خطط مخصصة وتحليلات تقدم متقدمة")
 t("benefitReciters", "All premium reciters", "جميع القرّاء المميزين"); t("benefitSupport", "Support continued development", "ادعم استمرار تطوير التطبيق")
 t("storeUnavailable", "Subscriptions aren't available right now.", "الاشتراكات غير متاحة حاليًا."); t("yearly", "Yearly", "سنوي"); t("monthly", "Monthly", "شهري")
 t("freeTrialDays", "{n}-day free trial", "تجربة مجانية {n} أيام", n="int"); t("perYear", "year", "سنة"); t("perMonth", "month", "شهر"); t("subscribe", "Subscribe", "اشترك")
 t("subscriptionTerms", "Auto-renews until cancelled. Cancel anytime in your App Store or Google Play account settings.", "يتجدد تلقائيًا حتى الإلغاء. يمكنك الإلغاء في أي وقت من إعدادات حسابك في App Store أو Google Play.")
 t("welcomePremium", "Welcome to Premium!", "أهلًا بك في بريميوم!"); t("purchasePending", "Your purchase is pending.", "عملية الشراء قيد المعالجة."); t("purchaseFailed", "Purchase failed.", "فشلت عملية الشراء.")
+
+t("bestValue", "Best value", "الأفضل قيمة"); t("savePercent", "Save {pct}%", "وفّر {pct}٪", pct="int")
+t("startFreeTrial", "Start {n}-day free trial", "ابدأ تجربة مجانية لمدة {n} أيام", n="int")
+t("trialThenPrice", "{n} days free, then {price} / {period}", "{n} أيام مجانًا، ثم {price} / {period}", n="int", price="String", period="String")
+# AI allowance (server-enforced cost cap)
+t("aiBudgetTitle", "This month's AI allowance is used up", "انتهى رصيد الذكاء الاصطناعي لهذه الفترة")
+t("aiBudgetPremium", "To keep Premium affordable for everyone, AI features pause until {date}. Reading, listening, keyword search, adhkar and your hifz reviews keep working as usual.", "حتى يبقى بريميوم بسعر في متناول الجميع، تتوقف ميزات الذكاء الاصطناعي حتى {date}. القراءة والاستماع والبحث بالكلمات والأذكار ومراجعة الحفظ تعمل كالمعتاد.", date="String")
+t("aiBudgetFree", "Free AI features renew on {date}. Premium includes a much larger allowance. Meanwhile, reading, listening and your hifz reviews keep working.", "تتجدد ميزات الذكاء الاصطناعي المجانية في {date}. يتضمن بريميوم رصيدًا أكبر بكثير. وحتى ذلك الحين تعمل القراءة والاستماع ومراجعة الحفظ كالمعتاد.", date="String")
+t("aiBudgetTrial", "You've used the AI allowance included in your free trial. It renews when your subscription starts on {date}.", "استهلكت رصيد الذكاء الاصطناعي المضمَّن في الفترة التجريبية. يتجدد عند بدء اشتراكك في {date}.", date="String")
+t("aiLighterMode", "You're near this month's AI allowance, so answers use a lighter model until {date}.", "اقتربت من رصيد الذكاء الاصطناعي لهذه الفترة، لذا تُستخدم إجابات أخف حتى {date}.", date="String")
 
 out = pathlib.Path(__file__).resolve().parents[1] / "app/lib/l10n"
 for lang, idx in (("en", 0), ("ar", 1)):

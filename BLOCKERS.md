@@ -21,12 +21,21 @@ the "Where it goes" column says where to paste the result. Order = fastest path 
 |---|---|---|
 | 8 | **Apple Developer Program** ($99/yr) | developer.apple.com/programs/enroll → enroll **as an individual** (no company needed). Needs Apple ID with 2FA and government ID. Approval 1–2 days. |
 | 9 | **Apple: Paid Apps agreement + banking + tax** | App Store Connect → Business → accept Paid Apps Agreement, add bank account and W-8BEN tax form. Without this, in-app purchases do not work even in TestFlight. Also enrol in the **App Store Small Business Program** (15% commission instead of 30%). |
-| 10 | **App Store Connect app + subscription** | Create app with bundle ID `app.muslimai.mobile`. Subscriptions → group "Premium" → product `muslimai_premium_monthly` at $0.99 (tier 1), optional `muslimai_premium_annual` $7.99 with 7-day free trial. Create an **App Store Connect API key** (Users and Access → Integrations) → gives Key ID, Issuer ID, .p8 file. |
+| 10 | **App Store Connect app + subscription** | Create app with bundle ID `app.muslimai.mobile`. Subscriptions → group "Premium" → `muslimai_premium_annual` **$19.99/year** and `muslimai_premium_monthly` **$2.99/month**, each with a **7-day free trial** introductory offer (new subscribers only). Then set lower prices per storefront for Egypt, Pakistan and Indonesia (see "Regional prices" below). Create an **App Store Connect API key** (Users and Access → Integrations) → gives Key ID, Issuer ID, .p8 file. |
 | 11 | **Google Play Console** ($25 once) | play.google.com/console → personal account. New personal accounts must run a **closed test with 12+ testers for 14 days** before production access, so start this early. Identity verification required. |
-| 12 | **Play: payments profile + subscription** | Set up a merchant/payments profile (individual is fine) → create app `app.muslimai.mobile` → Monetize → Subscriptions → `muslimai_premium_monthly` $0.99 (+ annual). Create a service account with "Release manager" access → JSON key. |
-| 13 | **RevenueCat** (free under $2.5k MTR) | app.revenuecat.com → project → add iOS app (upload App Store Connect in-app purchase key) and Android app (upload Play service account JSON) → entitlement `premium` → offering `default` with monthly (and annual) packages → Integrations → Webhooks: URL `https://<project>.supabase.co/functions/v1/revenuecat-webhook`, Authorization header = a random 64-char string. | App: `REVENUECAT_APPLE_KEY`, `REVENUECAT_GOOGLE_KEY`. Secret: `REVENUECAT_WEBHOOK_AUTH` (same string). |
+| 12 | **Play: payments profile + subscription** | Set up a merchant/payments profile (individual is fine) → create app `app.muslimai.mobile` → Monetize → Subscriptions → `muslimai_premium_annual` $19.99 (base plan `annual`) and `muslimai_premium_monthly` $2.99 (base plan `monthly`), each with a 7-day free-trial offer; set regional prices as below. Create a service account with "Release manager" access → JSON key. |
+| 13 | **RevenueCat** (free under $2.5k MTR) | app.revenuecat.com → project → add iOS app (upload App Store Connect in-app purchase key) and Android app (upload Play service account JSON) → entitlement `premium` → offering `default` with `$rc_annual` first and `$rc_monthly` (the app pre-selects annual) → Integrations → Webhooks: URL `https://<project>.supabase.co/functions/v1/revenuecat-webhook`, Authorization header = a random 64-char string. | App: `REVENUECAT_APPLE_KEY`, `REVENUECAT_GOOGLE_KEY`. Secret: `REVENUECAT_WEBHOOK_AUTH` (same string). |
 | 14 | **Sign in with Apple + Google** | Apple: Identifiers → enable Sign in with Apple, create a Services ID and key. Google Cloud → OAuth consent screen + iOS, Android and Web client IDs (Android needs the Play app-signing SHA-1). Paste into Supabase → Auth → Providers. | App: `GOOGLE_WEB_CLIENT_ID`, `GOOGLE_IOS_CLIENT_ID` |
 | 15 | **Signing for CI** | iOS: create a private git repo for `fastlane match`, run `bundle exec fastlane certs` once locally in `app/ios`. Android: `keytool -genkey -v -keystore upload.jks -alias upload -keyalg RSA -keysize 2048 -validity 10000`, keep it backed up. | GitHub secrets listed in `.github/workflows/release-mobile.yml` |
+
+### Regional prices (decided)
+
+| Market | Monthly | Annual | Why |
+|---|---|---|---|
+| Default (all other storefronts, incl. GCC, Europe, US) | $2.99 (≈ SAR 10.99) | $19.99 (≈ SAR 74.99), shown as "save 44%" | Base price |
+| Egypt, Pakistan, Indonesia | ≈ $0.99 in local currency | ≈ $6.99 in local currency | Purchasing power; volume markets |
+
+Apple: Subscription → Subscription Prices → Add pricing → pick the storefront → choose the local tier. Google: base plan → Set prices → edit the country. Other low-income markets (e.g. Bangladesh, Nigeria, India) can follow the same row later. The AI cost cap uses what each user actually paid, so a lower regional price automatically means a smaller AI budget; no code change is needed when you add or change a price.
 
 ## 3. Legal and content (before public launch)
 
@@ -39,15 +48,28 @@ the "Where it goes" column says where to paste the result. Order = fastest path 
 
 ## 4. AI model routing and cost (decided)
 
-| Tier | Model | Cost per answer* | Daily cap | Worst case / month |
+| Tier | Model | Cost per answer* | Daily cap | Hard AI budget (all AI features) |
 |---|---|---|---|---|
-| Free | Claude Haiku 5.5 | ≈ $0.001 | 5 questions | ≈ $0.15 |
-| Premium | Claude Sonnet 5.5 | ≈ $0.02 | 20 questions (fair use) | ≈ $12 |
+| Free | Claude Haiku 5.5 | ≈ $0.001 | 5 questions | $0.15 / month |
+| Trial (7 days) | Claude Sonnet 5.5 | ≈ $0.02 | 20 questions | $0.25 for the trial |
+| Premium | Claude Sonnet 5.5, then Haiku near the limit | ≈ $0.02 | 20 questions (fair use) | 50% of what the user paid, per month |
 
-\* About 5.5k input tokens (question + retrieved sources) and 1k output. Premium nets about $0.84 after the store's
-15%, so a premium user breaks even at roughly 40 questions a month. Most users ask far less; watch answer events in
-PostHog split by `premium`. If heavy users push premium below break-even, set `CLAUDE_MODEL_PREMIUM=claude-haiku-5-5`
-or lower `plan_limits.premium_daily` for `ask`. Both are server settings; no app release needed.
+\* About 5.5k input tokens (question + retrieved sources) and 1k output.
+
+**Rule: no user costs more than half of what they pay.** The server enforces it per user (see `ARCHITECTURE.md`,
+"AI cost cap"). What that means per subscriber, per month, after the store's 15% and VAT where included:
+
+| Plan | Net per month | AI budget per month | ≈ Sonnet answers before switching to Haiku |
+|---|---|---|---|
+| $2.99 monthly | ≈ $2.20–$2.54 | ≈ $1.10–$1.27 | ≈ 50–60 |
+| $19.99 annual | ≈ $1.23–$1.42 | ≈ $0.62–$0.71 | ≈ 30 |
+| Regional $0.99 monthly | ≈ $0.73–$0.84 | ≈ $0.37–$0.42 | ≈ 18 |
+| Regional $6.99 annual | ≈ $0.43–$0.50 | ≈ $0.21–$0.25 | ≈ 10 |
+
+After that, premium answers continue on Haiku until the budget is fully used, then AI pauses with a friendly
+message until the next monthly window. Tune with SQL, no release needed:
+`update ai_budget_settings set value = 0.15 where key = 'free_monthly_usd';` (keys: `cost_share`, `free_monthly_usd`,
+`trial_budget_usd`, `promo_monthly_usd`, `fallback_net_monthly_usd`). Watch `ai_spend` for how many users hit the cap.
 
 Before launch, run the answer-quality eval described in `docs/` on Haiku. If it fails, raise the free model with
 `supabase secrets set CLAUDE_MODEL=claude-sonnet-5-5` and re-check this table.

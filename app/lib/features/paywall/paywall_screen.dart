@@ -81,7 +81,9 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
             error: (e, _) => ErrorView(error: e, onRetry: () => ref.invalidate(_offersProvider)),
             data: (list) {
               if (list.isEmpty) return Text(l10n.storeUnavailable, textAlign: TextAlign.center);
-              final selected = _selected ?? list.firstWhere((o) => o.period == 'month', orElse: () => list.first);
+              // Annual is the default and highlighted; monthly stays one tap away.
+              final selected = _selected ?? list.firstWhere((o) => o.period == 'year', orElse: () => list.first);
+              final savePct = _annualSavingsPercent(list);
               return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
                 for (final o in list)
                   Card(
@@ -93,14 +95,36 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                     child: ListTile(
                       onTap: () => setState(() => _selected = o),
                       leading: Icon(o == selected ? Icons.radio_button_checked : Icons.radio_button_off),
-                      title: Text(o.period == 'year' ? l10n.yearly : l10n.monthly),
+                      title: Row(children: [
+                        Text(o.period == 'year' ? l10n.yearly : l10n.monthly),
+                        if (o.period == 'year') ...[
+                          const SizedBox(width: 8),
+                          Flexible(child: _Badge(savePct != null ? '${l10n.bestValue} · ${l10n.savePercent(savePct)}' : l10n.bestValue)),
+                        ],
+                      ]),
                       subtitle: o.trialDays != null ? Text(l10n.freeTrialDays(o.trialDays!)) : null,
                       trailing: Text('${o.priceString} / ${o.period == 'year' ? l10n.perYear : l10n.perMonth}',
                           style: const TextStyle(fontWeight: FontWeight.w700)),
                     ),
                   ),
                 const SizedBox(height: 8),
-                FilledButton(onPressed: _busy ? null : () => _buy(selected), child: Text(_busy ? '…' : l10n.subscribe)),
+                FilledButton(
+                  onPressed: _busy ? null : () => _buy(selected),
+                  child: Text(_busy
+                      ? '…'
+                      : selected.trialDays != null
+                          ? l10n.startFreeTrial(selected.trialDays!)
+                          : l10n.subscribe),
+                ),
+                if (selected.trialDays != null) ...[
+                  const SizedBox(height: 6),
+                  Text(
+                    l10n.trialThenPrice(selected.trialDays!, selected.priceString,
+                        selected.period == 'year' ? l10n.perYear : l10n.perMonth),
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
                 const SizedBox(height: 8),
                 Text(l10n.subscriptionTerms, textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodySmall),
               ]);
@@ -127,4 +151,29 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
       ),
     );
   }
+}
+
+/// Savings of annual vs 12 x monthly, e.g. 44 for $19.99/yr vs $2.99/mo. Null if prices are unknown.
+int? _annualSavingsPercent(List<PlanOffer> offers) {
+  double? year, month;
+  for (final o in offers) {
+    if (o.period == 'year') year ??= o.price;
+    if (o.period == 'month') month ??= o.price;
+  }
+  if (year == null || month == null || month <= 0) return null;
+  final pct = ((1 - year / (month * 12)) * 100).floor();
+  return pct >= 5 ? pct : null;
+}
+
+class _Badge extends StatelessWidget {
+  const _Badge(this.text);
+  final String text;
+  @override
+  Widget build(BuildContext context) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+        decoration: BoxDecoration(color: AppColors.gold, borderRadius: BorderRadius.circular(12)),
+        child: Text(text,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(color: Colors.black, fontWeight: FontWeight.w700)),
+      );
 }

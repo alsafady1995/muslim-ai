@@ -173,5 +173,110 @@ do $$ begin
 end $$;
 reset role;
 
+-- AI cost cap: free users have a small fixed monthly budget
+do $$
+declare r jsonb; i int;
+begin
+  insert into auth.users (id, raw_user_meta_data) values ('00000000-0000-0000-0000-000000000003', '{"timezone":"UTC"}');
+  -- budget 0.15: a 0.04 reservation fits three times, the fourth is refused
+  for i in 1..3 loop
+    r := public.begin_ai_call('00000000-0000-0000-0000-000000000003', 'search', 0.04);
+    assert (r ->> 'allowed')::boolean, 'free call within budget ' || r::text;
+    assert r ->> 'tier' = 'free', 'free tier';
+  end loop;
+  r := public.begin_ai_call('00000000-0000-0000-0000-000000000003', 'search', 0.04);
+  assert not (r ->> 'allowed')::boolean and r ->> 'reason' = 'budget', 'free budget enforced ' || r::text;
+  -- settling at the real (lower) cost frees the rest of the budget
+  perform public.finish_ai_call((select id from public.ai_calls where user_id = '00000000-0000-0000-0000-000000000003' order by id limit 1), 0.001, 'test');
+  r := public.begin_ai_call('00000000-0000-0000-0000-000000000003', 'search', 0.04);
+  assert (r ->> 'allowed')::boolean, 'settled cost releases reservation ' || r::text;
+  -- cancelling refunds the reservation and the daily count
+  perform public.cancel_ai_call((r ->> 'call_id')::bigint);
+  assert (select count from public.ai_usage where user_id = '00000000-0000-0000-0000-000000000003' and feature = 'search') = 3,
+    'daily count refunded on cancel';
+  -- free users always reserve with the cheap model (fallback) and are not "degraded"
+  r := public.begin_ai_call('00000000-0000-0000-0000-000000000003', 'ask', 10, 0.001);
+  assert (r ->> 'allowed')::boolean and not (r ->> 'degraded')::boolean, 'free uses cheap model ' || r::text;
+end $$;
+
+-- Premium: budget = 50% of net revenue per month; degrade, then stop
+do $$
+declare r jsonb; v_spent numeric;
+begin
+  insert into auth.users (id, raw_user_meta_data) values ('00000000-0000-0000-0000-000000000004', '{"timezone":"UTC"}');
+  insert into public.subscriptions (user_id, status, store, period_type, current_period_end, net_revenue_usd, period_start, period_months)
+  values ('00000000-0000-0000-0000-000000000004', 'active', 'play_store', 'normal', now() + interval '20 days', 2.00, now() - interval '10 days', 1);
+  r := public.begin_ai_call('00000000-0000-0000-0000-000000000004', 'ask', 0.60, 0.05);
+  assert (r ->> 'allowed')::boolean and not (r ->> 'degraded')::boolean and (r ->> 'budget_usd')::numeric = 1.00,
+    'premium budget is half of net ' || r::text;
+  perform public.finish_ai_call((r ->> 'call_id')::bigint, 0.60);
+  r := public.begin_ai_call('00000000-0000-0000-0000-000000000004', 'ask', 0.60, 0.05);
+  assert (r ->> 'allowed')::boolean and (r ->> 'degraded')::boolean, 'premium degrades to cheaper model ' || r::text;
+  perform public.finish_ai_call((r ->> 'call_id')::bigint, 0.38);
+  r := public.begin_ai_call('00000000-0000-0000-0000-000000000004', 'ask', 0.60, 0.05);
+  assert not (r ->> 'allowed')::boolean and r ->> 'reason' = 'budget', 'premium stops at half of payment ' || r::text;
+  assert (r ->> 'resets_at')::timestamptz between now() + interval '19 days' and now() + interval '21 days', 'resets at renewal ' || r::text;
+  select spent_usd + reserved_usd into v_spent from public.ai_spend where user_id = '00000000-0000-0000-0000-000000000004';
+  assert v_spent <= 1.00, 'never above budget';
+
+  -- annual plan: 12 monthly windows of net/12
+  update public.subscriptions set net_revenue_usd = 16.80, period_months = 12, period_start = now() - interval '40 days',
+         current_period_end = now() + interval '325 days'
+   where user_id = '00000000-0000-0000-0000-000000000004';
+  r := public.begin_ai_call('00000000-0000-0000-0000-000000000004', 'ask', 0.10);
+  assert (r ->> 'budget_usd')::numeric = 0.70, 'annual budget per month ' || r::text;
+  assert (r ->> 'resets_at')::timestamptz < now() + interval '31 days', 'annual resets monthly ' || r::text;
+
+  -- refund: net revenue 0 means no AI budget
+  update public.subscriptions set net_revenue_usd = 0 where user_id = '00000000-0000-0000-0000-000000000004';
+  r := public.begin_ai_call('00000000-0000-0000-0000-000000000004', 'search', 0.0001);
+  assert not (r ->> 'allowed')::boolean, 'refunded subscriber has no budget ' || r::text;
+
+  -- unknown price falls back to the lowest regional tier
+  update public.subscriptions set net_revenue_usd = null, period_months = 1, period_start = now()
+   where user_id = '00000000-0000-0000-0000-000000000004';
+  r := public.begin_ai_call('00000000-0000-0000-0000-000000000004', 'search', 0.0001);
+  assert (r ->> 'budget_usd')::numeric = 0.20, 'fallback budget ' || r::text;
+
+  -- trial: small fixed budget
+  update public.subscriptions set period_type = 'trial', current_period_end = now() + interval '7 days'
+   where user_id = '00000000-0000-0000-0000-000000000004';
+  r := public.begin_ai_call('00000000-0000-0000-0000-000000000004', 'search', 0.0001);
+  assert r ->> 'tier' = 'trial' and (r ->> 'budget_usd')::numeric = 0.25, 'trial budget ' || r::text;
+end $$;
+
+-- Stale reservations (crashed function) are counted as spent
+do $$
+declare r jsonb;
+begin
+  update public.ai_calls set created_at = now() - interval '1 hour'
+   where user_id = '00000000-0000-0000-0000-000000000003' and status = 'reserved';
+  r := public.begin_ai_call('00000000-0000-0000-0000-000000000003', 'search', 0.0001);
+  assert (select count(*) from public.ai_calls where user_id = '00000000-0000-0000-0000-000000000003' and status = 'expired') > 0,
+    'stale reservations expired';
+end $$;
+
+-- the app can read its own budget, not other users' internals
+set local role authenticated;
+set local request.jwt.claim.sub = '00000000-0000-0000-0000-000000000003';
+do $$
+declare r jsonb;
+begin
+  r := public.get_my_ai_budget();
+  assert r ->> 'tier' = 'free' and (r ->> 'used_percent')::numeric > 0, 'own budget visible ' || r::text;
+  assert (select count(*) from public.ai_spend) = 1, 'ai_spend rls';
+  begin
+    perform public.begin_ai_call('00000000-0000-0000-0000-000000000003', 'ask', 0);
+    raise exception 'begin_ai_call should be service-only';
+  exception when insufficient_privilege then null;
+  end;
+  begin
+    perform count(*) from public.ai_calls;
+    raise exception 'ai_calls should be hidden';
+  exception when insufficient_privilege then null;
+  end;
+end $$;
+reset role;
+
 rollback;
 \echo 'ALL DB TESTS PASSED'

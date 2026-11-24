@@ -13,8 +13,8 @@ insert into public.xp_rules (kind, xp_per_unit, daily_unit_cap, activity_column)
 on conflict (kind) do update set xp_per_unit = excluded.xp_per_unit, daily_unit_cap = excluded.daily_unit_cap,
                                  activity_column = excluded.activity_column;
 
--- Free tier is generous enough to build the habit; premium caps are fair-use limits
--- that keep worst-case AI cost per subscriber below the $0.99 price.
+-- Free tier is generous enough to build the habit; premium caps are daily fair-use limits.
+-- The hard money limit is the per-user AI budget (20261124000001_ai_cost_cap.sql).
 insert into public.plan_limits (feature, free_daily, premium_daily) values
   ('recitation', 3, 100),
   ('ask',        5,  20),

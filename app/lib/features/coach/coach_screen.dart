@@ -9,6 +9,7 @@ import 'package:record/record.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../core/ai_budget.dart';
 import '../../core/analytics.dart';
 import '../../core/api.dart';
 import '../../core/providers.dart';
@@ -129,6 +130,9 @@ class _CoachScreenState extends ConsumerState<CoachScreen> {
         _phase = _Phase.result;
       });
       if (mounted) showXpToast(context, result.activity?.xpAwarded ?? 0, achievements: result.activity?.newAchievements ?? []);
+    } on AiBudgetExhausted catch (e) {
+      setState(() => _phase = _Phase.ready);
+      if (mounted) showAiBudgetExhausted(context, e);
     } on QuotaExceeded {
       Analytics.track(Events.quotaHit, {'feature': 'recitation'});
       setState(() => _phase = _Phase.ready);
