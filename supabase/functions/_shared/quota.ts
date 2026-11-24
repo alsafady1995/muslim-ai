@@ -1,7 +1,7 @@
 import { admin } from "./supabase.ts";
 import { HttpError } from "./http.ts";
 
-export type AiFeature = "recitation" | "ask" | "search";
+export type AiFeature = "recitation" | "hifz" | "ask" | "search";
 
 export interface AiCall {
   id: number;
@@ -11,13 +11,21 @@ export interface AiCall {
   degraded: boolean;
   limit: number;
   remaining: number;
+  /** When this period's AI budget renews (or, for annual plans, this month's pace). */
   resetsAt: string;
+  /** When the weekly fair-use count renews (Friday 00:00 local time). */
+  usageResetsAt: string | null;
+}
+
+export interface BeginOptions {
+  /** False for the free onboarding check: reserved against the budget, not counted in the weekly limit. */
+  countUsage?: boolean;
 }
 
 /**
- * Starts a paid AI call: checks the daily fair-use count and reserves the worst-case cost
+ * Starts a paid AI call: checks the weekly fair-use count and reserves the worst-case cost
  * against the user's AI budget (server-side, atomic). Throws 402 `quota_exceeded` when the
- * daily count is used up and 429 `ai_budget_exhausted` when the budget is.
+ * weekly count is used up and 429 `ai_budget_exhausted` when the budget is.
  *
  * `fallbackReserveUsd` is the worst case with a cheaper model; when the normal model no
  * longer fits but the cheaper one does, the call is allowed with `degraded: true`.
@@ -27,12 +35,14 @@ export async function beginAiCall(
   feature: AiFeature,
   reserveUsd: number,
   fallbackReserveUsd?: number,
+  opts: BeginOptions = {},
 ): Promise<AiCall> {
   const { data, error } = await admin().rpc("begin_ai_call", {
     p_user: userId,
     p_feature: feature,
     p_reserve_usd: reserveUsd,
     p_fallback_reserve_usd: fallbackReserveUsd ?? null,
+    p_count_usage: opts.countUsage ?? true,
   });
   if (error) throw error;
   const r = data as Record<string, any>;
@@ -45,10 +55,12 @@ export async function beginAiCall(
         resets_at: r.resets_at,
       });
     }
-    throw new HttpError(402, "quota_exceeded", `Daily ${feature} limit reached`, {
+    throw new HttpError(402, "quota_exceeded", `Weekly ${feature} limit reached`, {
       feature,
       premium: r.premium,
       limit: r.limit,
+      period: r.period ?? "week",
+      resets_at: r.resets_at ?? null,
     });
   }
   return {
@@ -59,6 +71,7 @@ export async function beginAiCall(
     limit: r.limit,
     remaining: r.remaining,
     resetsAt: r.resets_at,
+    usageResetsAt: r.usage_resets_at ?? null,
   };
 }
 
@@ -78,7 +91,7 @@ export async function finishAiCall(
   if (error) console.error("finish_ai_call failed", error);
 }
 
-/** The call failed on our side: release the reservation and refund the daily count. */
+/** The call failed on our side: release the reservation and refund the weekly count. */
 export async function cancelAiCall(call: AiCall, alreadySpentUsd = 0): Promise<void> {
   const { error } = await admin().rpc("cancel_ai_call", { p_call: call.id, p_cost_usd: alreadySpentUsd });
   if (error) console.error("cancel_ai_call failed", error);
@@ -92,5 +105,7 @@ export function quotaInfo(call: AiCall) {
     premium: call.premium,
     degraded: call.degraded,
     resets_at: call.resetsAt,
+    period: "week",
+    usage_resets_at: call.usageResetsAt,
   };
 }

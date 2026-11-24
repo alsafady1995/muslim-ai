@@ -9,6 +9,7 @@ import { embeddingCostUsd } from "../_shared/ai_cost.ts";
 import { retrieve } from "../_shared/retrieval.ts";
 import { env } from "../_shared/env.ts";
 import { track } from "../_shared/analytics.ts";
+import { keywordQuery } from "../_shared/arabic.ts";
 
 Deno.serve(handler(async (req, body) => {
   const user = await requireUser(req);
@@ -22,7 +23,7 @@ Deno.serve(handler(async (req, body) => {
 
   if (body.mode === "keyword") {
     const { data, error } = await admin().rpc("search_ayahs_keyword", {
-      p_query: query,
+      p_query: keywordQuery(query),
       p_translation_id: translationId,
       p_limit: limit,
     });

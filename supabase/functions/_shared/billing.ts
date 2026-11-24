@@ -148,3 +148,13 @@ export function mapRevenueCatEvent(event: any, entitlementId: string): Subscript
     ...revenueFields(event),
   };
 }
+
+/**
+ * RevenueCat can deliver events out of order (retries). An event older than the one that
+ * last changed the subscription must not overwrite it, e.g. a late EXPIRATION after a RENEWAL.
+ */
+export function isStaleEvent(event: any, lastEventMs: number | null | undefined): boolean {
+  const ts = Number(event?.event_timestamp_ms);
+  if (!Number.isFinite(ts) || ts <= 0 || lastEventMs == null) return false;
+  return ts < Number(lastEventMs);
+}

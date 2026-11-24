@@ -51,3 +51,15 @@ export function wordSimilarity(a: string, b: string): number {
 export function hasMaddMark(uthmaniWord: string): boolean {
   return /[ٰٓ]/.test(uthmaniWord);
 }
+
+const HAS_ARABIC = /[\u0600-\u06FF]/;
+
+/**
+ * Keyword search input: Arabic is normalized exactly like ayahs.text_simple (diacritics,
+ * alif and ya forms), so "الرَّحْمَٰن" and "الرحمن" find the same ayahs. Other scripts
+ * (translation search) are only trimmed.
+ */
+export function keywordQuery(input: string): string {
+  const q = input.trim();
+  return HAS_ARABIC.test(q) ? normalizeArabic(q) || q : q;
+}

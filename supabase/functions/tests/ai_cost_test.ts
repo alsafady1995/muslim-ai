@@ -99,3 +99,18 @@ Deno.test("sources are trimmed to fit the reserved input", () => {
   assert(fitted.ayahs.length < 8 && fitted.ayahs.length > 0);
   assertEquals(fitSources(sources, 0, 1_000_000).ayahs.length, 8);
 });
+
+Deno.test("out-of-order webhook events are ignored", async () => {
+  const { isStaleEvent } = await import("../_shared/billing.ts");
+  assert(isStaleEvent({ event_timestamp_ms: 1000 }, 2000), "older than the last applied event");
+  assert(!isStaleEvent({ event_timestamp_ms: 3000 }, 2000));
+  assert(!isStaleEvent({ event_timestamp_ms: 1000 }, null), "first event for this user");
+  assert(!isStaleEvent({}, 2000), "no timestamp: apply");
+});
+
+Deno.test("keyword queries are normalized like the ingested text", async () => {
+  const { keywordQuery } = await import("../_shared/arabic.ts");
+  assertEquals(keywordQuery("  الرَّحْمَٰنِ "), "الرحمن");
+  assertEquals(keywordQuery("إِيَّاكَ"), "اياك");
+  assertEquals(keywordQuery(" patience "), "patience");
+});
