@@ -101,7 +101,7 @@ abstract class AppLocalizations {
   /// No description provided for @appName.
   ///
   /// In en, this message translates to:
-  /// **'Muslim AI'**
+  /// **'Asmi3ni'**
   String get appName;
 
   /// No description provided for @tabHome.
@@ -683,7 +683,7 @@ abstract class AppLocalizations {
   /// No description provided for @sharedFromApp.
   ///
   /// In en, this message translates to:
-  /// **'Shared from Muslim AI'**
+  /// **'Shared from Asmi3ni'**
   String get sharedFromApp;
 
   /// No description provided for @memorizationMode.
@@ -1409,7 +1409,7 @@ abstract class AppLocalizations {
   /// No description provided for @inviteMessage.
   ///
   /// In en, this message translates to:
-  /// **'Join me on Muslim AI, my daily Quran companion. Use my code {code} for bonus XP.'**
+  /// **'Join me on Asmi3ni, my daily Quran companion. Use my code {code} for bonus XP.'**
   String inviteMessage(String code);
 
   /// No description provided for @inviteApplied.
@@ -1535,7 +1535,7 @@ abstract class AppLocalizations {
   /// No description provided for @premiumTitle.
   ///
   /// In en, this message translates to:
-  /// **'Muslim AI Premium'**
+  /// **'Asmi3ni Premium'**
   String get premiumTitle;
 
   /// No description provided for @premiumSubtitle.
@@ -2027,7 +2027,7 @@ abstract class AppLocalizations {
   /// No description provided for @adFreePromise.
   ///
   /// In en, this message translates to:
-  /// **'Your subscription keeps Muslim AI free of ads, always.'**
+  /// **'Your subscription keeps Asmi3ni free of ads, always.'**
   String get adFreePromise;
 
   /// No description provided for @trialReminderTitle.
@@ -2201,7 +2201,7 @@ abstract class AppLocalizations {
   /// No description provided for @notificationsBlocked.
   ///
   /// In en, this message translates to:
-  /// **'Notifications are off for Muslim AI. Turn them on in your phone settings.'**
+  /// **'Notifications are off for Asmi3ni. Turn them on in your phone settings.'**
   String get notificationsBlocked;
 
   /// No description provided for @pausePlan.

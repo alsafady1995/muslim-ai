@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Muslim AI</string>
+	<string>Asmi3ni</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -46,7 +46,7 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Muslim AI listens to your recitation so the AI coach can give you feedback.</string>
+	<string>Asmi3ni listens to your recitation so the AI coach can give you feedback.</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>

@@ -6,6 +6,21 @@ needs an app release: the app reads products, prices and trials from the store t
 Product IDs (already used by the code): `muslimai_premium_annual`, `muslimai_premium_monthly`.
 RevenueCat entitlement: `premium`. Offering: `default`, with `$rc_annual` listed first.
 
+## 0. App name and store listing
+
+The app is called **Asmi3ni / أسمِعني** ("let me hear you", what a hifz teacher says to a student before the
+student recites). Two apps named "Muslim AI" already exist on the App Store, so the store name changed.
+Bundle and package IDs stay `app.muslimai.mobile`; product IDs stay as below. Users never see these.
+
+| Field | English | Arabic |
+|---|---|---|
+| App name (30 chars max) | Asmi3ni: AI Quran Coach | أسمِعني: مدرّب حفظ القرآن |
+| Home-screen name | Asmi3ni | Asmi3ni (an Arabic home-screen name needs localized `InfoPlist.strings` / `values-ar`, not done yet) |
+| Tagline | Recite. It listens. | سمّع حفظك، وهو يصحّح لك |
+
+Domains checked on 24 November 2026: `asmi3ni.com` and `asmi3ni.app` were unregistered. Once bought, set
+`PRIVACY_URL` and `TERMS_URL` (the code still defaults to `muslimai.app`).
+
 ## 1. Products, prices and the annual-only trial
 
 | Product | Base price (USD storefront) | Free trial | Egypt, Pakistan, Indonesia |
@@ -14,7 +29,7 @@ RevenueCat entitlement: `premium`. Offering: `default`, with `$rc_annual` listed
 | `muslimai_premium_monthly` | **$4.99 / month** (≈ SAR 18.99) | **None** | ≈ $0.99 in local currency |
 
 **App Store Connect**
-1. Apps → Muslim AI → Monetization → Subscriptions → create group **Premium**.
+1. Apps → Asmi3ni → Monetization → Subscriptions → create group **Premium**.
 2. Create `muslimai_premium_annual` (duration 1 year) and `muslimai_premium_monthly` (1 month), both in the same group
    so users can switch between them. The annual plan's group level should be 1 (top).
 3. Each product → Subscription Prices → set the USD price above; Apple fills the other storefronts. Then edit
@@ -44,7 +59,7 @@ Failed renewals cause a large share of churn. The app already shows an "update y
 reports a billing problem (`billing_issue` / `grace_period` from the RevenueCat webhook), and Premium stays on
 during grace.
 
-**App Store Connect:** Apps → Muslim AI → Monetization → Subscriptions → Billing Grace Period → turn on →
+**App Store Connect:** Apps → Asmi3ni → Monetization → Subscriptions → Billing Grace Period → turn on →
 **16 days** → eligible subscribers: all renewals → both production and sandbox.
 
 **Google Play Console:** each base plan → Grace period **7 days** → Account hold **30 days** (the remaining

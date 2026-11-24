@@ -26,7 +26,7 @@ COMPUTE_TYPE = os.environ.get("ASR_COMPUTE_TYPE", "int8")  # "float16" on GPU
 MAX_AUDIO_BYTES = int(os.environ.get("ASR_MAX_AUDIO_BYTES", str(10 * 1024 * 1024)))
 MAX_DURATION_SEC = float(os.environ.get("ASR_MAX_DURATION_SEC", "300"))
 
-app = FastAPI(title="Muslim AI ASR", version="1.0.0")
+app = FastAPI(title="Asmi3ni ASR", version="1.0.0")
 
 
 def require_token(authorization: str = Header(default="")) -> None:

@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appName => 'Muslim AI';
+  String get appName => 'Asmi3ni';
 
   @override
   String get tabHome => 'Home';
@@ -326,7 +326,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get sharedFromApp => 'Shared from Muslim AI';
+  String get sharedFromApp => 'Shared from Asmi3ni';
 
   @override
   String get memorizationMode => 'Memorization mode';
@@ -710,7 +710,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String inviteMessage(String code) {
-    return 'Join me on Muslim AI, my daily Quran companion. Use my code $code for bonus XP.';
+    return 'Join me on Asmi3ni, my daily Quran companion. Use my code $code for bonus XP.';
   }
 
   @override
@@ -775,7 +775,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'This permanently deletes your progress and data. Cancel any subscription in your store account separately.';
 
   @override
-  String get premiumTitle => 'Muslim AI Premium';
+  String get premiumTitle => 'Asmi3ni Premium';
 
   @override
   String get premiumSubtitle =>
@@ -1092,7 +1092,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get adFreePromise =>
-      'Your subscription keeps Muslim AI free of ads, always.';
+      'Your subscription keeps Asmi3ni free of ads, always.';
 
   @override
   String get trialReminderTitle => 'Your free trial ends in 2 days';
@@ -1196,7 +1196,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notificationsBlocked =>
-      'Notifications are off for Muslim AI. Turn them on in your phone settings.';
+      'Notifications are off for Asmi3ni. Turn them on in your phone settings.';
 
   @override
   String get pausePlan => 'Pause new ayahs';

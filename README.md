@@ -1,4 +1,4 @@
-# Muslim AI
+# Asmi3ni
 
 AI-powered Quran companion: AI recitation coach, hifz (memorization) coach with spaced repetition,
 semantic Quran search, Ask the Quran, Islamic assistant, daily adhkar, goals, streaks and XP.
