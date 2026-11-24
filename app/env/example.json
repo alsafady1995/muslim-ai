@@ -10,6 +10,6 @@
   "SENTRY_DSN": "https://XXXX@oXXXX.ingest.sentry.io/XXXX",
   "GOOGLE_WEB_CLIENT_ID": "XXXX.apps.googleusercontent.com",
   "GOOGLE_IOS_CLIENT_ID": "XXXX.apps.googleusercontent.com",
-  "PRIVACY_URL": "https://YOUR-DOMAIN/privacy",
-  "TERMS_URL": "https://YOUR-DOMAIN/terms"
+  "PRIVACY_URL": "https://asmi3ni.com/privacy/",
+  "TERMS_URL": "https://asmi3ni.com/terms/"
 }
