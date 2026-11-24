@@ -48,12 +48,13 @@ Apple: Subscription → Subscription Prices → Add pricing → pick the storefr
 
 ## 4. AI model routing and cost (decided)
 
-| Tier | Model | Cost per answer* | Daily cap | Hard AI budget (all AI features) |
+| Tier | Model | Cost per answer* | Weekly Ask limit | Hard AI budget (all AI features) |
 |---|---|---|---|---|
-| Free | Claude Haiku 5.5 | ≈ $0.001 | 5 questions | $0.15 / month |
-| Trial (7 days) | Claude Sonnet 5.5 | ≈ $0.02 | 20 questions | $0.25 for the trial |
-| Premium | Claude Sonnet 5.5, then Haiku near the limit | ≈ $0.02 | 20 questions (fair use) | 50% of what the user paid, per month |
+| Free | Claude Haiku 5.5 | ≈ $0.001 | 15 questions | $0.15 / month |
+| Trial (7 days) | Claude Sonnet 5.5 | ≈ $0.02 | 100 questions (fair use) | $0.25 for the trial |
+| Premium | Claude Sonnet 5.5, then Haiku near the limit | ≈ $0.02 | 100 questions (fair use) | 50% of what the user paid |
 
+All weekly limits are in `ARCHITECTURE.md` ("AI limits"); they renew every Friday and are tunable in `plan_limits`.
 \* About 5.5k input tokens (question + retrieved sources) and 1k output.
 
 **Rule: no user costs more than half of what they pay.** The server enforces it per user (see `ARCHITECTURE.md`,
@@ -69,12 +70,25 @@ Apple: Subscription → Subscription Prices → Add pricing → pick the storefr
 After that, premium answers continue on Haiku until the budget is fully used, then AI pauses with a friendly
 message until the next monthly window. Tune with SQL, no release needed:
 `update ai_budget_settings set value = 0.15 where key = 'free_monthly_usd';` (keys: `cost_share`, `free_monthly_usd`,
-`trial_budget_usd`, `promo_monthly_usd`, `fallback_net_monthly_usd`). Watch `ai_spend` for how many users hit the cap.
+`trial_budget_usd`, `promo_monthly_usd`, `fallback_net_monthly_usd`, `core_share`, `annual_pace_multiple`). Watch `ai_spend` for how many users hit the cap.
 
 Before launch, run the answer-quality eval described in `docs/` on Haiku. If it fails, raise the free model with
 `supabase secrets set CLAUDE_MODEL=claude-sonnet-5-5` and re-check this table.
 
-## 5. Not verified in this build environment
+## 5. From the full audit (docs/full-audit.md)
+
+| # | What | Why |
+|---|---|---|
+| 20 | **Merge PRs #1–#4, then the audit PR.** Merging to `main` runs `deploy-backend.yml`, which applies the 4 new migrations and redeploys the edge functions. Check the run is green. | The app and the server change together (weekly limits, `hifz` feature). Shipping the app without the backend breaks recitation. |
+| 21 | **Trial on the annual plan only.** In App Store Connect and Play Console remove the free-trial offer from `muslimai_premium_monthly`; keep it on annual. | Monthly trials mostly attract people who cancel; the paywall now leads with annual and its trial timeline. |
+| 22 | **Decide the GCC/EU/US price.** Recommended: $29.99/year and $4.99/month (Egypt, Pakistan, Indonesia unchanged). The app reads prices from the store, so no release is needed. | Current $19.99 / $2.99 leaves money on the table in the launch market and is below Tarteel and Quranly. Your call. |
+| 23 | **Billing grace period** on both stores (Apple: App Store Connect → Subscriptions → Billing Grace Period, 16 days; Google: base plan → grace period 7 days + account hold 30). | Failed renewals are 20–40% of churn. The app now shows an "update your payment" card. |
+| 24 | **Win-back offers** (Apple win-back offer, Google "developer-determined" offer for lapsed subscribers), e.g. 50% off the first year. | The cheapest subscriber to acquire is a former one. |
+| 25 | **RevenueCat offering:** make sure `default` lists `$rc_annual` first and both products are attached to entitlement `premium`. | The paywall shows whatever the offering returns. |
+| 26 | **PostHog dashboards** for the funnel in `docs/full-audit.md` §7 (onboarding → first recitation → day-3 value gate → paywall view → trial → paid). | All events are already sent; you only need to build the charts. |
+
+## 6. Not verified in this build environment
+
 
 - `scripts/ingest` was type-checked but not run: the build sandbox could not reach api.quran.com or jsDelivr. Run `deno task all` once keys exist; it logs counts (expect 114 surahs, 6,236 ayahs).
 - No Android/iOS native build was produced here (no Android SDK / macOS). CI builds both on the first tag.

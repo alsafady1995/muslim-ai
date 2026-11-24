@@ -27,8 +27,13 @@ Config: `xp_rules`, `achievements`, `plan_limits`. Audit: `billing_events`.
 ## RPCs (called by the app)
 
 `get_dashboard`, `log_activity` (ayah_read, listen_minute), `log_prayer`, `complete_dhikr`, `create_hifz_plan`,
-`get_hifz_queue`, `hifz_record_review`, `get_hifz_stats`, `get_my_quota`, `apply_referral`, `search_ayahs_keyword`.
-Service-role only: `consume_ai_quota`, `refund_ai_quota`, `match_content`, `_log_activity`, `_hifz_apply_review`.
+`seed_known_surahs`, `get_hifz_queue`, `hifz_record_review`, `get_hifz_stats`, `get_my_quota`, `get_my_ai_budget`,
+`get_weekly_summary`, `get_weak_words`, `apply_referral`.
+Service-role only: `begin_ai_call`, `finish_ai_call`, `cancel_ai_call`, `match_content`, `search_ayahs_keyword`,
+`_log_activity`, `_hifz_apply_review`.
+
+Profiles only accept IANA time zones (`Asia/Riyadh`); anything else (`AST`, `+03`) is replaced by a trigger, because
+Postgres reads those abbreviations with the wrong offset and every "today" would roll over hours early.
 
 ## Gamification rules
 
@@ -42,31 +47,38 @@ Service-role only: `consume_ai_quota`, `refund_ai_quota`, `match_content`, `_log
 SM-2 (ease factor ≥ 1.3, intervals 1 → 3 → interval × EF, capped at 180 days; ≥ 30 days = mastered).
 Forgetting prediction: recall ≈ 0.9^(days since review / interval). Items under 0.8 are "at risk" and reviewed first.
 AI recitation in hifz mode grades each ayah automatically (score → SM-2 grade 0–5).
+Surahs the user already knows (onboarding) are seeded as review-only items due over the next 6 days.
+When every ayah of a surah reaches "review" the user gets a one-time milestone (+100 XP, `hifz_milestones`).
+Paused plans add no new ayahs; their reviews continue.
 
-## AI limits (per day)
+## AI limits (per week)
+
+Weeks start **Friday 00:00 in the user's time zone.** `ai_usage.usage_date` holds the week start.
 
 | Feature | Free | Premium (fair use) |
 |---|---|---|
-| Recitation analysis | 3 | 100 |
-| Ask the Quran + assistant (shared) | 5 | 20 |
-| Semantic search | 10 | 200 |
+| Recitation check (up to 60 s free, 180 s Premium; longer audio is cut on the server) | 10 | 150 |
+| AI hifz test (recite from memory, auto-graded) | 5 | 150 |
+| Ask the Quran + assistant (shared) | 15 | 100 |
+| Semantic search | 30 | 300 |
 
-Keyword search is free and unlimited. Quota is refunded when the AI call fails on our side.
+The first Al-Fatiha check in onboarding is free and not counted. Keyword search is free and unlimited, and the app
+falls back to it when the semantic limit is hit. A count is refunded when the AI call fails on our side.
 
 ## AI cost cap (per user, server-enforced)
 
-Rule: no user may cost more in AI than half of what they pay. Daily counts above are fair-use limits; this is the money limit.
+Rule: no user may cost more in AI than half of what they pay. Weekly counts above are fair-use limits; this is the money limit.
 
 | Tier | AI budget | Window |
 |---|---|---|
-| Premium | 50% of the user's net payment (after store commission and tax) per month | Monthly from the purchase date; annual plans are split into 12 monthly windows |
+| Premium | 50% of the user's net payment (after store commission and tax) | Monthly from the purchase date. Annual plans pool the whole year, but any one month may spend at most 3× the monthly share |
 | Free trial (7 days) | $0.25 for the whole trial | Trial period |
 | Promotional grant | $0.15 | Calendar month |
 | Free | $0.15 | Calendar month (UTC) |
 
 ```
 edge function ──begin_ai_call(user, feature, worst-case cost [, cheaper-model cost])──▶ Postgres
-                 · locks ai_spend row, checks budget, then daily count, reserves cost
+                 · locks ai_spend row, checks budget and ring-fence, then weekly count, reserves cost
              ◀── allowed / degraded / 429 ai_budget_exhausted (resets_at)
    …AI work (Claude / ASR / embeddings)…
 edge function ──finish_ai_call(call, measured cost) or cancel_ai_call(call)──▶ Postgres
@@ -76,7 +88,10 @@ edge function ──finish_ai_call(call, measured cost) or cancel_ai_call(call)�
 - Claude cost is computed from the response's token usage (incl. cache reads/writes) and the model that actually answered. ASR and embeddings use per-unit rates from env.
 - Reserving the worst case first means concurrent requests can never push spend over the budget. Reservations left open by a crashed function count as spent after 15 minutes.
 - Premium drops to the cheaper model when the full one no longer fits, then AI pauses. The app shows a friendly sheet with the reset date; reading, audio, keyword search, adhkar and hifz reviews keep working.
+- **Core ring-fence:** 40% of every budget is kept for recitation and hifz. Ask and search can use at most 60%, so a
+  chatty user never loses the feature they pay for.
 - A refund sets net payment to 0, which stops AI for that user immediately.
+- Store webhooks can arrive out of order; `subscriptions.last_event_ms` makes an older event unable to overwrite a newer state.
 - Tune budgets with SQL in `ai_budget_settings` (no deploy). Ledger: `ai_calls`; per-window totals: `ai_spend`.
 
 ## Scaling notes
