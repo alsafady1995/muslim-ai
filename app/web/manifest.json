@@ -1,11 +1,11 @@
 {
-    "name": "Muslim AI (Preview)",
-    "short_name": "Muslim AI",
+    "name": "Asmi3ni (Preview)",
+    "short_name": "Asmi3ni",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0E7C66",
     "theme_color": "#0E7C66",
-    "description": "Muslim AI web preview: Quran companion (demo mode, simulated AI and payments).",
+    "description": "Asmi3ni web preview: Quran companion (demo mode, simulated AI and payments).",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

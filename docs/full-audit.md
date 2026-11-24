@@ -1,4 +1,4 @@
-# Muslim AI: Full Product Audit
+# Asmi3ni: Full Product Audit
 
 Product, UX, subscription, retention, technical, QA, growth, and an executive top 10, followed by implementation
 tickets. This document builds on `docs/subscription-growth-audit.md` (PR #3) and does not repeat it: where that
@@ -58,7 +58,7 @@ conversion or retention), **Medium** (friction or risk), **Low** (polish).
 
 ### 1.1 What the product is
 
-Muslim AI is a Quran companion with four layers:
+Asmi3ni is a Quran companion with four layers:
 
 | Layer | Features | Verdict |
 |---|---|---|

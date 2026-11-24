@@ -1,6 +1,6 @@
 # muslim_ai
 
-Muslim AI - Quran companion
+Asmi3ni - Quran companion
 
 ## Getting Started
 

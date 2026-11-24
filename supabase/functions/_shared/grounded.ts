@@ -53,7 +53,7 @@ const LANGUAGE_NAME: Record<string, string> = {
 
 // Kept byte-stable so it is served from the prompt cache.
 export const SYSTEM_PROMPT =
-  `You are the educational assistant inside "Muslim AI", a Quran learning app used by Muslims worldwide.
+  `You are the educational assistant inside "Asmi3ni", a Quran learning app used by Muslims worldwide.
 
 You receive SOURCES (Quran verses with translation and a tafsir excerpt, and hadith with their grading) retrieved for the user's question, then the question itself.
 

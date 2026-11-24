@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "appName": "Muslim AI",
+  "appName": "Asmi3ni",
   "tabHome": "Home",
   "tabQuran": "Quran",
   "tabLearn": "Learn",
@@ -170,7 +170,7 @@
       }
     }
   },
-  "sharedFromApp": "Shared from Muslim AI",
+  "sharedFromApp": "Shared from Asmi3ni",
   "memorizationMode": "Memorization mode",
   "playSurah": "Play surah",
   "aiCoach": "AI Quran Coach",
@@ -329,7 +329,7 @@
   "shareInvite": "Share invite",
   "haveInviteCode": "I have an invite code",
   "inviteCode": "Invite code",
-  "inviteMessage": "Join me on Muslim AI, my daily Quran companion. Use my code {code} for bonus XP.",
+  "inviteMessage": "Join me on Asmi3ni, my daily Quran companion. Use my code {code} for bonus XP.",
   "@inviteMessage": {
     "placeholders": {
       "code": {
@@ -357,7 +357,7 @@
   "signOut": "Sign out",
   "deleteAccount": "Delete account",
   "deleteAccountWarning": "This permanently deletes your progress and data. Cancel any subscription in your store account separately.",
-  "premiumTitle": "Muslim AI Premium",
+  "premiumTitle": "Asmi3ni Premium",
   "premiumSubtitle": "Your Hifz Coach listens, grades each review and schedules the next one, so nothing slips.",
   "storeUnavailable": "Subscriptions aren't available right now.",
   "yearly": "Yearly",
@@ -664,7 +664,7 @@
   "subscribeMonthly": "Subscribe monthly",
   "continueFree": "Continue free",
   "noChargeToday": "No charge today. Cancel anytime in your App Store or Google Play settings. Auto-renews until cancelled.",
-  "adFreePromise": "Your subscription keeps Muslim AI free of ads, always.",
+  "adFreePromise": "Your subscription keeps Asmi3ni free of ads, always.",
   "trialReminderTitle": "Your free trial ends in 2 days",
   "trialReminderBody": "Keep it and your plan continues. Cancel in your store settings and you won't be charged.",
   "todayReviewTitle": "Today's review",
@@ -744,7 +744,7 @@
   },
   "practise": "Practise",
   "knownSurahsPlan": "Already memorized",
-  "notificationsBlocked": "Notifications are off for Muslim AI. Turn them on in your phone settings.",
+  "notificationsBlocked": "Notifications are off for Asmi3ni. Turn them on in your phone settings.",
   "pausePlan": "Pause new ayahs",
   "resumePlan": "Resume",
   "planPaused": "Paused · reviews continue",

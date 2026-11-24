@@ -1,4 +1,4 @@
-# Muslim AI: Subscription and Growth Audit
+# Asmi3ni: Subscription and Growth Audit
 
 An independent audit of the subscription model **as it is built** (main + PR #2: Premium $2.99/month or $19.99/year,
 annual pre-selected, 7-day free trial on both plans, lower regional prices for Egypt, Pakistan and Indonesia, server-enforced
@@ -404,7 +404,7 @@ All copy is personalized by the intent chosen in onboarding. Default copy below 
 | CTA (monthly) | Subscribe monthly | اشترك شهريًا |
 | Secondary | Continue free | المتابعة مجانًا |
 | Small print | No charge today. Cancel anytime in your App Store or Google Play settings. Auto-renews until cancelled. | لا خصم اليوم. يمكنك الإلغاء في أي وقت من إعدادات App Store أو Google Play. يتجدد تلقائيًا حتى الإلغاء. |
-| Closing line | Your subscription keeps Muslim AI free of ads, always. | اشتراكك يُبقي التطبيق بلا إعلانات، دائمًا. |
+| Closing line | Your subscription keeps Asmi3ni free of ads, always. | اشتراكك يُبقي التطبيق بلا إعلانات، دائمًا. |
 
 Remove "Less than a coffee a month" and the "advanced analytics" bullet.
 
@@ -428,7 +428,7 @@ Remove "Less than a coffee a month" and the "advanced analytics" bullet.
 |---|---|---|
 | Trial day 5 (local notification + in-app card) | Your free trial ends in 2 days. Keep it and your plan continues; cancel in settings and you won't be charged. | تنتهي تجربتك المجانية بعد يومين. إن أبقيتها يستمر اشتراكك، وإن ألغيتها من الإعدادات فلن يُخصم منك شيء. |
 | First charge | Welcome to Premium. Your Hifz Coach is fully yours. | مرحبًا بك في المميز. مدرّب الحفظ أصبح لك بالكامل. |
-| 30 days before annual renewal | Your year with Muslim AI: {ayahs} ayahs memorized, {reviews} reviews. Your plan renews on {date}. | سنتك مع التطبيق: {ayahs} آية محفوظة و{reviews} مراجعة. يتجدد اشتراكك في {date}. |
+| 30 days before annual renewal | Your year with Asmi3ni: {ayahs} ayahs memorized, {reviews} reviews. Your plan renews on {date}. | سنتك مع التطبيق: {ayahs} آية محفوظة و{reviews} مراجعة. يتجدد اشتراكك في {date}. |
 
 ---
 
@@ -486,7 +486,7 @@ the rule per monthly window.
 | Billing failure | Enable **billing grace period** on both stores (Apple and Google); in-app banner "Update payment to keep your coach" | Recover ≥ 40% of involuntary churn |
 | Expired, day 7 | One win-back offer: first year at 50% off (Apple win-back offer / Google Play offer for lapsed users), once per user | Win-back |
 | Lapsed free user | Existing plan: one push at day 3 and day 7, then silence; "Welcome back" lightens the plan | No spam |
-| Annual, 30 days before renewal | "Your year with Muslim AI" summary (section 14.3) | Renewal ≥ 35% |
+| Annual, 30 days before renewal | "Your year with Asmi3ni" summary (section 14.3) | Renewal ≥ 35% |
 | Every Ramadan | Seasonal plan; lapsed users get the Ramadan offer | Annual reactivation |
 
 KPIs to watch weekly: trial start rate by source, trial-to-paid, refund rate (alert above 5%), annual mix (target ≥ 70%),

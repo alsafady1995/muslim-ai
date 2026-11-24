@@ -9,7 +9,7 @@ class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
   @override
-  String get appName => 'مسلم AI';
+  String get appName => 'أسمِعني';
 
   @override
   String get tabHome => 'الرئيسية';
@@ -323,7 +323,7 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get sharedFromApp => 'عبر تطبيق مسلم AI';
+  String get sharedFromApp => 'عبر تطبيق أسمِعني';
 
   @override
   String get memorizationMode => 'وضع الحفظ';
@@ -704,7 +704,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String inviteMessage(String code) {
-    return 'انضم إليّ في تطبيق مسلم AI، رفيقي اليومي مع القرآن. استخدم رمزي $code لتحصل على نقاط إضافية.';
+    return 'انضم إليّ في تطبيق أسمِعني، رفيقي اليومي مع القرآن. استخدم رمزي $code لتحصل على نقاط إضافية.';
   }
 
   @override
@@ -769,7 +769,7 @@ class AppLocalizationsAr extends AppLocalizations {
       'سيُحذف تقدمك وبياناتك نهائيًا. ألغِ أي اشتراك من حساب المتجر بشكل منفصل.';
 
   @override
-  String get premiumTitle => 'مسلم AI المميز';
+  String get premiumTitle => 'أسمِعني المميز';
 
   @override
   String get premiumSubtitle =>
@@ -1185,7 +1185,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get notificationsBlocked =>
-      'الإشعارات متوقفة لتطبيق Muslim AI. فعّلها من إعدادات الهاتف.';
+      'الإشعارات متوقفة لتطبيق أسمِعني. فعّلها من إعدادات الهاتف.';
 
   @override
   String get pausePlan => 'إيقاف الآيات الجديدة مؤقتًا';
