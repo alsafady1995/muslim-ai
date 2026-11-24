@@ -26,7 +26,7 @@ def get(edition):
     return data["data"]["surahs"]
 
 
-DIACRITICS = re.compile("[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED\u0640]")
+DIACRITICS = re.compile("[\u0610-\u061A\u064B-\u0652\u0656-\u065F\u0670\u06D6-\u06ED\u0640]")
 
 
 def plain(s):
