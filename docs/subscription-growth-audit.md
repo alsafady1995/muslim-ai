@@ -28,15 +28,22 @@ Section 15 shows the arithmetic.
 تصحيح التلاوة هو لحظة الإعجاب، لكن **مدرّب الحفظ هو ما يدفع الناس من أجله شهرًا بعد شهر.**
 
 **الاستراتيجية الواحدة التي أختارها:**
-"تلاوة أولًا، ثم تجربة سنوية صادقة، ومدرّب الحفظ هو المنتج المدفوع":
-- تسميع الفاتحة داخل التسجيل الأولي، ثم عرض تجربة ٧ أيام **على الخطة السنوية فقط** مرة واحدة، مع زر "المتابعة مجانًا" واضح، وتذكير قبل نهاية التجربة بيومين.
+"القيمة أولًا، ثم الطلب: تجربة سنوية صادقة، ومدرّب الحفظ هو المنتج المدفوع":
+- تسميع الفاتحة داخل التسجيل الأولي **بدون أي عرض اشتراك**. لا يرى المستخدم أي عرض للاشتراك قبل أن يحصل على قيمة حقيقية في ٣ أيام مختلفة على الأقل.
+- أول عرض لتجربة ٧ أيام **على الخطة السنوية فقط** يظهر عند أول لحظة قيمة حقيقية: الوصول إلى حد أسبوعي، أو إنجاز في الحفظ (مثل إتمام حفظ أول سورة)، أو ملخص الأسبوع الأول. مع زر "المتابعة مجانًا" واضح، وتذكير قبل نهاية التجربة بيومين.
 - حدود أسبوعية للخطة المجانية تتجدد كل جمعة: ١٠ تسميعات (حتى دقيقة)، ٥ اختبارات حفظ ذكية، ١٥ سؤالًا.
 - المميزة = مدرّب حفظ كامل: اختبارات حفظ بلا حدود عملية، تسميع صفحة كاملة (حتى ٣ دقائق)، تدريب على الكلمات التي تخطئ فيها.
 - حجز ٤٠٪ من ميزانية الذكاء الاصطناعي للتلاوة والحفظ، وتجميع ميزانية المشترك السنوي على مدار السنة (وكل ذلك ضمن قاعدة الـ٥٠٪).
 - فتح جميع القراء مجانًا. سعر الخليج: ٢٩٫٩٩$ سنويًا (≈ ١٠٩٫٩٩ ريال) و٤٫٩٩$ شهريًا بدون تجربة. الأسعار الإقليمية كما هي.
 
-**النتيجة المتوقعة:** تقريبًا ضعف نسبة التحويل من التثبيت إلى الدفع (من ~٢٫٥٪ إلى ~٥٪، تقديرات قبل الإطلاق وليست قياسًا)، مع ثقة أعلى
-لأن المستخدم يرى القيمة قبل أي طلب دفع، ولا يُفاجأ بخصم.
+**النتيجة المتوقعة:** تقريبًا ضعف نسبة التحويل من التثبيت إلى الدفع (من ~٢٫٥٪ إلى ~٤٫٥–٥٫٥٪، تقديرات قبل الإطلاق وليست قياسًا)، مع ثقة أعلى
+لأن المستخدم يعيش القيمة عدة أيام قبل أي طلب دفع، ولا يُفاجأ بخصم.
+
+**مسار التحويل المعدّل باختصار:**
+١. اليوم ٠: لغة ← هدف ← السور المحفوظة ← تسميع الفاتحة ← خطة الحفظ ← تذكير بمراجعة الغد. لا عرض اشتراك.
+٢. الأيام ١–٦: مراجعات يومية، اختبارات حفظ ذكية، سلسلة أيام. لا عرض اشتراك ولا شريط ترويجي.
+٣. أول عرض (بعد ٣ أيام نشاط على الأقل): عند الحد الأسبوعي، أو إنجاز حفظ، أو ملخص اليوم السابع (أيها أسبق).
+٤. تجربة ٧ أيام على السنوي، تذكير في اليوم الخامس، ثم الاشتراك.
 
 ---
 
@@ -84,11 +91,13 @@ then flat, because nothing pushes a satisfied free user toward a decision.
 
 With the funnel in this document, the ranking becomes:
 
-1. **End of onboarding, right after the first recitation result** (expected to produce about half of all trial starts).
-2. **Weekly hifz-test limit** during a review session (the highest-intent moment).
-3. **Weekly recitation limit / 60-second clip limit.**
-4. **Day 7 weekly summary** ("6 ayahs at risk").
+1. **Weekly hifz-test limit** during a review session (the highest-intent moment).
+2. **First hifz milestone** (first surah fully memorized, or first at-risk ayah recovered).
+3. **Day 7 weekly summary** ("6 ayahs at risk").
+4. **Weekly recitation limit / 60-second clip limit.**
 5. **Ramadan campaign** (pre-Ramadan and first 10 days).
+
+There is deliberately no offer in onboarding (owner's principle: show value first, ask for money second).
 
 ---
 
@@ -120,7 +129,7 @@ the review continues either way (section 7).
 | **Hifz AI tests share the recitation quota** | A memorizer and a casual reciter hit the same wall; the wall does not say "this is the hifz coach". | Split into its own quota: 5 AI hifz tests per week. Self-graded reviews stay unlimited and free. |
 | **3-minute recordings for free users** | A free user can check a full page in one go, which is the main thing a premium user would want more of. | Free clips stop at 60 seconds (≈ Al-Fatiha plus a short surah, or 3 to 5 ayahs of a long surah). Premium keeps 3 minutes. |
 | **5 Ask questions per day on Haiku** (≈ 150/month) | Not a conversion lever either way (Ask is a commodity), but it consumes almost the whole $0.15 free budget, leaving none for recitation in a worst case. | 15 per week. |
-| **Home Premium banner from day 0** | Not generous, but it is noise that burns the paywall's credibility before any value. | Show from day 3, after the first completed hifz review or 3rd recitation check. |
+| **Home Premium banner from day 0** | Not generous, but it is noise that burns the paywall's credibility before any value. | Show only after the value gate: real value on 3 different days (section 7). |
 
 What is **not** too generous and must stay free: Quran reader, audio, all reciters, downloads, adhkar, goals, streaks,
 keyword search, the full hifz plan and SM-2 schedule, self-graded reviews, the at-risk view. A Quran app that paywalls
@@ -182,26 +191,33 @@ already exist in the code; they need to be gated and surfaced, not invented:
 
 ## 7. Exactly when the paywall should appear
 
-Automatic paywalls (not the ones the user opens) follow a frequency cap: **at most 1 per day, at most 3 per week, never
-twice in one session**, and after two "Not now" taps, no automatic full-screen paywall for 7 days (limit sheets still
-show, since they explain a real limit).
+**Value gate (owner's principle: show value first, ask for money second).** No automatic Premium surface of any kind,
+including the Home banner, until the user has had real value on **at least 3 different days** (a recitation check, an AI
+hifz test or a completed review on each). The only exception is a real limit sheet: a user who used up a weekly limit has
+already had the value, and the sheet must explain the limit anyway. Settings keeps its "Go Premium" row, since the user
+opens it.
+
+The **first** trial offer is shown at whichever of these comes first after the value gate: a weekly limit, a hifz
+milestone, or the day-7 summary. After that, automatic paywalls follow a frequency cap: **at most 1 per day, at most 3 per
+week, never twice in one session**, and after two "Not now" taps, no automatic full-screen paywall for 7 days (limit
+sheets still show, since they explain a real limit).
 
 | # | Moment | Form | Who |
 |---|---|---|---|
-| 1 | **End of onboarding**, right after the first recitation result and the plan reveal | Full-screen trial offer, "Continue free" as a full-width secondary button | Everyone, once |
-| 2 | **Hifz AI tests used up**, inside a review session | Inline card under the current ayah; primary button continues the review | Free |
-| 3 | **Weekly recitation checks used up** | Bottom sheet with renewal date; two equal buttons | Free |
-| 4 | **60-second clip limit** reached | Recording stops and analyses normally; one line under the result links to Premium | Free |
-| 5 | **First weekly summary (day 7)** when at-risk ayahs > 0 | Card in the summary, opens paywall on tap | Free |
+| 1 | **Hifz AI tests used up**, inside a review session | Inline card under the current ayah; primary button continues the review | Free |
+| 2 | **Hifz milestone**: first surah fully memorized (all its ayahs reviewed at least twice with grade ≥ 4), or first at-risk ayah brought back to safe | Celebration first; the offer is a card below it, framed as "keep it for good" | Free, after value gate, once per milestone type |
+| 3 | **First weekly summary (day 7)** when at-risk ayahs > 0 | Card in the summary, opens paywall on tap | Free, after value gate |
+| 4 | **Weekly recitation checks used up** | Bottom sheet with renewal date; two equal buttons | Free |
+| 5 | **60-second clip limit** reached | Recording stops and analyses normally; one line under the result links to Premium | Free, after value gate |
 | 6 | **7-day streak** | Celebration first; small "Unlock your full coach" link below it | Free, once |
-| 7 | **Ramadan**: 15 Sha'ban and 1 Ramadan | Ramadan plan offer (same annual trial) | Free, once each |
-| 8 | Settings, Home banner (from day 3), Profile | User-initiated | Free |
+| 7 | **Ramadan**: 15 Sha'ban and 1 Ramadan | Ramadan plan offer (same annual trial) | Free, after value gate, once each |
+| 8 | Settings (always), Home banner (after value gate), Profile | User-initiated | Free |
 
 ---
 
 ## 8. Where the paywall must never appear
 
-- Before the first recitation result (onboarding steps 1 to 4).
+- Anywhere in onboarding, and anywhere before the value gate (3 active days), except a real limit sheet.
 - During a recitation, while recording, or while the result is loading.
 - Right after a low score. Never sell to someone who just struggled; it reads as shaming.
 - During or after adhkar, while reading or listening to the Quran, or from a prayer-time or adhkar notification.
@@ -218,7 +234,8 @@ show, since they explain a real limit).
 
 ## 9. Onboarding that maximizes conversion without hurting retention
 
-Seven screens, about 2 minutes, value before every ask.
+Six screens, about 2 minutes, **no ask for money.** Onboarding's job is to create the habit that later makes the
+subscription obvious.
 
 | Step | Screen | Purpose | Built today? |
 |---|---|---|---|
@@ -227,13 +244,20 @@ Seven screens, about 2 minutes, value before every ask.
 | 3 | **Level** (memorize and recitation only): tap the surahs you know (Juz Amma chips) | Seed hifz review items | No (exists in hifz screen) |
 | 4 | **First recitation: Al-Fatiha.** Record, see word-by-word result. Not counted against limits. | The aha | No |
 | 5 | **Plan reveal:** "5 ayahs a day. Your first review is tomorrow at 9:00 pm. 3 of your surahs are due this week." | Commitment, day-2 reason to return | No |
-| 6 | **Reminders:** "Remind me for tomorrow's review" (permission asked here, after value) | Opt-in rate | Yes, but asked before any value |
-| 7 | **Trial offer** (paywall #1): personalized headline, annual only, trial timeline, "Continue free" | Conversion | No |
+| 6 | **Reminders:** "Remind me for tomorrow's review" (permission asked here, after value), then straight to Home | Opt-in rate | Yes, but asked before any value |
 
-Why the trial offer goes at step 7 and not later: across mobile subscription apps, the post-onboarding offer is the
-single largest source of trial starts, because intent is at its peak. The original plan said "never in onboarding".
-I am changing that to "never **before value**". The Al-Fatiha result at step 4 is the value. Retention is protected
-because the free path is a full-width button, not a small "x" in a corner, and nothing on the free path is degraded.
+**Why there is no trial offer at the end of onboarding.** In many subscription apps the post-onboarding offer is the
+largest single source of trial starts, so this is a real trade-off, and an earlier draft of this audit recommended it.
+The owner rejected it, and I agree it is the right call for this product:
+
+- One Al-Fatiha result proves the technology works; it does not prove the app will change the user's relationship with
+  the Quran. Asking for money at that point sells a promise, not an experience.
+- Trials started on day 0 convert worse and refund more, because many users start them on impulse and forget.
+  Trials started after a limit or a milestone are fewer but convert at a higher rate and churn less.
+- In a Quran app, "asked me to pay before I'd even used it" is the review that hurts ratings and organic growth most.
+
+The cost is fewer trial starts in week 1. The gain is a higher trial-to-paid rate, fewer refunds, better ratings, and a
+paywall that arrives when the user can judge it (section 16).
 
 ---
 
@@ -272,7 +296,7 @@ These are estimates from typical subscription-app benchmarks, not measurements; 
 
 | Lever | Expected effect on install-to-paid | Satisfaction effect |
 |---|---|---|
-| Al-Fatiha aha + post-onboarding annual trial offer | Largest single lift; creates ~half of trial starts | Positive (value first, clear free path) |
+| Al-Fatiha aha in onboarding + first offer at a limit, milestone or day-7 summary after 3 active days | Largest single lift: more users reach a real decision moment, and they reach it convinced | Positive (value first, no ask in onboarding) |
 | Premium = hifz coach (unlimited AI tests, full-page checks, weak-words drill) | Raises paywall conversion because the offer is concrete | Positive |
 | Weekly limits instead of daily | More users reach a real decision moment | Neutral (casual users unaffected) |
 | Trial on annual only + day-5 reminder | Higher annual mix, fewer refunds | Positive |
@@ -284,9 +308,9 @@ Rough funnel today versus proposed:
 
 | Step | Built today | Proposed |
 |---|---|---|
-| Install → trial start | ~4 to 5% (only quota walls and banner) | **10 to 14%** |
-| Trial → paid | ~45% (mix of monthly and annual) | **45 to 55%** (annual only, honest reminder) |
-| Install → paid | **~2 to 2.5%** | **~5 to 6%** |
+| Install → trial start | ~4 to 5% (only quota walls and banner) | **8 to 11%** (all after the value gate) |
+| Trial → paid | ~45% (mix of monthly and annual) | **55 to 60%** (annual only, high-intent moments, honest reminder) |
+| Install → paid | **~2 to 2.5%** | **~4.5 to 6%** |
 
 ---
 
@@ -378,7 +402,7 @@ All copy is personalized by the intent chosen in onboarding. Default copy below 
 | Plan rows | Yearly · {price}/year · {monthly-equivalent}/month · 7 days free / Monthly · {price}/month | سنوي · {price} سنويًا · {monthly-equivalent} شهريًا · ٧ أيام مجانًا / شهري · {price} شهريًا |
 | CTA (annual) | Start my 7 free days | ابدأ أيامي السبعة المجانية |
 | CTA (monthly) | Subscribe monthly | اشترك شهريًا |
-| Secondary (onboarding) | Continue free | المتابعة مجانًا |
+| Secondary | Continue free | المتابعة مجانًا |
 | Small print | No charge today. Cancel anytime in your App Store or Google Play settings. Auto-renews until cancelled. | لا خصم اليوم. يمكنك الإلغاء في أي وقت من إعدادات App Store أو Google Play. يتجدد تلقائيًا حتى الإلغاء. |
 | Closing line | Your subscription keeps Muslim AI free of ads, always. | اشتراكك يُبقي التطبيق بلا إعلانات، دائمًا. |
 
@@ -392,9 +416,10 @@ Remove "Less than a coffee a month" and the "advanced analytics" bullet.
 | Weekly recitation checks used up | You've used this week's 10 checks. They renew on Friday. | استخدمت تسميعات هذا الأسبوع العشرة. تتجدد يوم الجمعة. | Wait until Friday · Try Premium free (equal weight) |
 | 60-second clip limit | Free checks cover 60 seconds. Premium checks a full page in one go. | التسميع المجاني حتى ٦٠ ثانية. المميز يسمّع صفحة كاملة دفعة واحدة. | Text link only |
 | Weekly summary, at-risk > 0 | 6 ayahs are at risk of being forgotten this week. Premium tests all of them for you. | ٦ آيات معرّضة للنسيان هذا الأسبوع. المميز يختبرها كلها معك. | See my plan |
+| First surah memorized (milestone) | You've memorized Surah {name}. Alhamdulillah. Keep it strong for good: the coach tests it with you until it's mastered. | أتممت حفظ سورة {name}، الحمد لله. حافظ عليها للأبد: المدرّب يختبرها معك حتى تُتقنها. | Celebration first · Keep it with Premium, 7 days free (link) |
 | 7-day streak | Seven days in a row. Masha'Allah. Unlock your full coach for the next seven. | سبعة أيام متتالية، ما شاء الله. افتح المدرّب الكامل للأيام السبعة القادمة. | Small link under celebration |
 | Ask limit | You've asked 15 questions this week. They renew on Friday. | طرحت ١٥ سؤالًا هذا الأسبوع. تتجدد يوم الجمعة. | Wait · Try Premium free |
-| Home banner (day 3+) | Your Hifz Coach · 7 days free | مدرّب الحفظ · ٧ أيام مجانًا | Tap to open |
+| Home banner (after value gate) | Your Hifz Coach · 7 days free | مدرّب الحفظ · ٧ أيام مجانًا | Tap to open |
 | Ramadan (15 Sha'ban) | Make this Ramadan your strongest. A plan for your Quran, with a coach that listens. | اجعل رمضان هذا العام الأقوى. خطة لقرآنك، ومدرّب يستمع إليك. | Start 7 days free |
 
 ### 14.3 Trial and billing messages
@@ -433,13 +458,13 @@ the rule per monthly window.
 | First recitation completed (Al-Fatiha) | `recitation_completed {source: onboarding}` | 65% of starters |
 | Plan revealed | `hifz_plan_created` | 60% |
 | Notifications granted | `notification_permission_result` | 50% |
-| Trial offer viewed | `paywall_viewed {source: onboarding}` | 60% of installs |
-| **Trial started from onboarding** | `purchase_completed {source: onboarding}` | **6 to 9% of installs** |
 | Day 1 return (first review) | `hifz_reviewed` on day 1 | 45% |
-| Trial started later (limits, summary, Ramadan) | `purchase_completed` other sources | +4 to 5% of installs |
+| **Value gate passed** (value on 3 different days) | `value_gate_passed` | 30 to 35% of installs |
+| First offer viewed (limit, milestone or day-7 summary) | `paywall_viewed {source: limit / milestone / summary}` | 25 to 30% of installs |
+| **Trial started** (all sources, incl. Ramadan) | `purchase_completed` | **8 to 11% of installs** (≈ 30 to 35% of first-offer viewers) |
 | Trial reminder shown (day 5) | `trial_reminder_shown` | 100% of trials |
-| **Trial → paid** | RevenueCat `INITIAL_PURCHASE` after trial | **45 to 55%** |
-| **Install → paid** | | **5 to 6%** |
+| **Trial → paid** | RevenueCat `INITIAL_PURCHASE` after trial | **55 to 60%** |
+| **Install → paid** | | **4.5 to 6%** |
 
 ---
 
@@ -447,9 +472,10 @@ the rule per monthly window.
 
 | When | What happens | Goal |
 |---|---|---|
-| Day 0 | Al-Fatiha aha, plan, reminder for tomorrow's review | Reason to return |
+| Day 0 | Al-Fatiha aha, plan, reminder for tomorrow's review. No offer. | Reason to return |
 | Day 1 | "Your first review is ready. 3 minutes." (user-set time) | D1 ≥ 45% |
-| Day 2 to 6 | Daily review + streak; first AI hifz test grades automatically; streak freeze explained when first used | Habit |
+| Day 2 to 6 | Daily review + streak; first AI hifz test grades automatically; streak freeze explained when first used. No offer until value on 3 different days. | Habit |
+| First value moment after the gate | First trial offer: weekly limit, hifz milestone or day-7 summary, whichever comes first | Trial start at peak conviction |
 | Day 5 (trial) | Honest trial-ending reminder | Trust, fewer refunds |
 | Day 7 | First weekly summary: ayahs strengthened, ayahs at risk, best score | D7 ≥ 25% |
 | Weekly (Friday) | Limits renew; Al-Kahf reminder; summary | Weekly rhythm |
@@ -481,21 +507,24 @@ No code is changed in this audit. Ordered by importance; "Must" means before sto
 | 5 | Free clip limit 60 s (app stops; server rejects > 65 s for free and reserves 1 minute instead of 5) | `coach_screen.dart:36`, `recitation-analyze` | S |
 | 6 | Ring-fence 40% of budget for recitation + hifz (`core_share` in `ai_budget_settings`) | `20261124000001_ai_cost_cap.sql` | M |
 | 7 | Pool annual budget across the year with 3× monthly pacing (needs owner OK) | same | M |
-| 8 | New onboarding: intent, known surahs, Al-Fatiha check (not counted), plan reveal, contextual reminders, trial offer | `onboarding_screen.dart`, router | L |
+| 8 | New onboarding: intent, known surahs, Al-Fatiha check (not counted), plan reveal, contextual reminders (no offer) | `onboarding_screen.dart`, router | L |
+| 8b | Value gate: count distinct days with a check, AI test or completed review; expose `value_days` in `get_dashboard`; hide automatic Premium surfaces below 3; hifz milestone events | `get_dashboard`, `home_screen.dart`, hifz RPCs | S |
 | 9 | Weak-words drill from `recitation_sessions.mistakes` | new RPC + screen | M |
-| 10 | Personalized paywall copy, trial timeline, inline hifz-test prompt, paywall frequency caps, banner from day 3 | `paywall_screen.dart`, `hifz_review_screen.dart`, `home_screen.dart` | M |
+| 10 | Personalized paywall copy, trial timeline, inline hifz-test prompt, milestone offer, paywall frequency caps, banner after value gate | `paywall_screen.dart`, `hifz_review_screen.dart`, `home_screen.dart` | M |
 | 11 | Trial day-5 reminder (local notification scheduled at purchase), cancellation survey, renewal summary | `notifications.dart`, `revenuecat-webhook` | S |
 
 ---
 
 ## 19. The one strategy I would bet my own money on
 
-**"Recitation first, then one honest annual trial, and sell the Hifz Coach."**
+**"Value first, then one honest annual trial, and sell the Hifz Coach."**
 
 Concretely: every new user recites Al-Fatiha in onboarding and sees their mistakes word by word. They get a hifz plan
-with a review tomorrow. Then, once, they see a 7-day free trial of the **annual** plan, sold as the Hifz Coach
-(unlimited AI hifz tests, full-page checks, weak-words drill), with a timeline that promises a reminder on day 5 and a
-full-width "Continue free" button. Free stays genuinely useful, with weekly limits that renew every Friday. All reciters
+with a review tomorrow, and **no offer at all.** For their first days the app only gives: reviews, AI tests, streaks.
+Only after they have had real value on at least 3 different days, at the first moment that proves it (a weekly limit, a
+hifz milestone such as their first surah memorized, or their day-7 summary), they see a 7-day free trial of the
+**annual** plan, sold as the Hifz Coach (unlimited AI hifz tests, full-page checks, weak-words drill), with a timeline that
+promises a reminder on day 5 and a full-width "Continue free" button. Free stays genuinely useful, with weekly limits that renew every Friday. All reciters
 and all worship content stay free. Premium's AI budget protects recitation and hifz first, and annual subscribers can
 use their whole year's budget. GCC annual at $29.99; monthly at $4.99 with no trial; regional prices unchanged.
 
@@ -504,8 +533,9 @@ Why this and nothing else:
 - **It sells an outcome that compounds.** People don't renew for "more AI". They renew because 2 juz of memorization
   will fade without the coach, and the app shows them which ayahs are fading. That is retention and revenue from the
   same mechanism.
-- **It converts at peak intent without betraying trust.** The ask comes seconds after the user has proof the product
-  works on their own voice, and it says exactly when they will be charged and that they'll be reminded first. In a
+- **It converts at peak conviction without betraying trust.** The ask comes only after days of real use, at a moment
+  when the user has just felt what the coach does for them (a limit they ran into, a surah they finished), and it says
+  exactly when they will be charged and that they'll be reminded first. In a
   Quran app, the reviews that say "honest, reminded me before charging" are worth more than any trial-to-paid
   optimisation.
 - **It wins Ramadan twice.** Annual-only trials capture the Ramadan spike for a full year, and the renewal lands on the
