@@ -2,7 +2,7 @@
 
 AI-powered Quran companion: AI recitation coach, hifz (memorization) coach with spaced repetition,
 semantic Quran search, Ask the Quran, Islamic assistant, daily adhkar, goals, streaks and XP.
-Arabic (RTL) and English at launch. Premium at $2.99/month or $19.99/year (7-day free trial, lower regional prices in markets such as Egypt,
+Arabic (RTL) and English at launch. Premium at $4.99/month or $29.99/year (7-day free trial on annual, lower regional prices in markets such as Egypt,
 Pakistan and Indonesia) through Apple IAP and Google Play Billing (RevenueCat).
 
 Product and launch documentation lives in [`docs/`](docs/). This README covers the code.

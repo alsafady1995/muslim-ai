@@ -523,8 +523,8 @@ class DemoPaymentProvider implements PaymentProvider {
 
   @override
   Future<List<PlanOffer>> offers() async => [
-    PlanOffer(id: 'monthly', priceString: r'$0.99', period: 'month'),
-    PlanOffer(id: 'annual', priceString: r'$7.99', period: 'year', trialDays: 7),
+    PlanOffer(id: 'monthly', priceString: r'$4.99', period: 'month'),
+    PlanOffer(id: 'annual', priceString: r'$29.99', period: 'year', trialDays: 7),
   ];
 
   @override

@@ -147,8 +147,8 @@ the user in onboarding until it finishes, even if the app is closed mid-way.
 | S4 | We promised no reminder before the charge, and had none. | High | **Shipped:** local notification scheduled 2 days before the trial ends |
 | S5 | "Not now" was a small link. | Medium | **Shipped:** full-width "Continue free" |
 | S6 | No frequency control: the banner was on Home from minute one, every day. | High | **Shipped:** PaywallGate (below) |
-| S7 | Monthly plan carries a 7-day trial. | Medium | **Owner:** trial on annual only (BLOCKERS #21) |
-| S8 | GCC price ($19.99/yr) is below the market. | Medium | **Owner decision** (BLOCKERS #22) |
+| S7 | Monthly plan carries a 7-day trial. | Medium | **Decided:** trial on annual only; store steps ready in `docs/store-setup.md` |
+| S8 | GCC price ($19.99/yr) is below the market. | Medium | **Decided:** $29.99/yr and $4.99/mo; docs, demo and store steps updated |
 | S9 | No billing-issue handling in the app. | High | **Shipped:** "update your payment" card when the store reports a billing issue or grace period. **Owner:** enable grace periods (BLOCKERS #23) |
 | S10 | No win-back. | Medium | **Owner:** store win-back offers (BLOCKERS #24) |
 
@@ -336,7 +336,7 @@ Effort: S ≤ 1 day, M 2–4 days, L 1–2 weeks.
 |---|---|---|---|---|
 | MA-20 | Merge #1–#4 then this PR; check the backend deploy run | P0 | S | GitHub → merge in order → Actions → "Deploy backend" green |
 | MA-21 | Trial on annual only | P0 | S | Remove the intro offer from the monthly product in both stores |
-| MA-22 | GCC/EU/US price decision | P1 | S | Recommended $29.99 / $4.99; change in both stores |
+| MA-22 | GCC/EU/US prices $29.99 / $4.99 (decided) | P1 | S | Enter in both stores: `docs/store-setup.md` §1 |
 | MA-23 | Billing grace period + account hold | P0 | S | Apple 16 days; Google 7 + 30 |
 | MA-24 | Win-back offers | P2 | S | Apple win-back, Google lapsed-subscriber offer |
 | MA-25 | PostHog funnel dashboards | P1 | S | Build from the event list in §4 and §7 |

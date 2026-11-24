@@ -226,7 +226,7 @@ class _TrialTimeline extends StatelessWidget {
   }
 }
 
-/// Savings of annual vs 12 x monthly, e.g. 44 for $19.99/yr vs $2.99/mo. Null if prices are unknown.
+/// Savings of annual vs 12 x monthly, e.g. 49 for $29.99/yr vs $4.99/mo. Null if prices are unknown.
 int? _annualSavingsPercent(List<PlanOffer> offers) {
   double? year, month;
   for (final o in offers) {

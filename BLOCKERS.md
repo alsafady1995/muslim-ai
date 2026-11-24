@@ -21,9 +21,9 @@ the "Where it goes" column says where to paste the result. Order = fastest path 
 |---|---|---|
 | 8 | **Apple Developer Program** ($99/yr) | developer.apple.com/programs/enroll → enroll **as an individual** (no company needed). Needs Apple ID with 2FA and government ID. Approval 1–2 days. |
 | 9 | **Apple: Paid Apps agreement + banking + tax** | App Store Connect → Business → accept Paid Apps Agreement, add bank account and W-8BEN tax form. Without this, in-app purchases do not work even in TestFlight. Also enrol in the **App Store Small Business Program** (15% commission instead of 30%). |
-| 10 | **App Store Connect app + subscription** | Create app with bundle ID `app.muslimai.mobile`. Subscriptions → group "Premium" → `muslimai_premium_annual` **$19.99/year** and `muslimai_premium_monthly` **$2.99/month**, each with a **7-day free trial** introductory offer (new subscribers only). Then set lower prices per storefront for Egypt, Pakistan and Indonesia (see "Regional prices" below). Create an **App Store Connect API key** (Users and Access → Integrations) → gives Key ID, Issuer ID, .p8 file. |
+| 10 | **App Store Connect app + subscription** | Create app with bundle ID `app.muslimai.mobile`. Subscriptions → group "Premium" → `muslimai_premium_annual` **$29.99/year** with a **7-day free trial** introductory offer (new subscribers only) and `muslimai_premium_monthly` **$4.99/month** with **no trial**. Exact clicks in `docs/store-setup.md`. Then set lower prices per storefront for Egypt, Pakistan and Indonesia (see "Regional prices" below). Create an **App Store Connect API key** (Users and Access → Integrations) → gives Key ID, Issuer ID, .p8 file. |
 | 11 | **Google Play Console** ($25 once) | play.google.com/console → personal account. New personal accounts must run a **closed test with 12+ testers for 14 days** before production access, so start this early. Identity verification required. |
-| 12 | **Play: payments profile + subscription** | Set up a merchant/payments profile (individual is fine) → create app `app.muslimai.mobile` → Monetize → Subscriptions → `muslimai_premium_annual` $19.99 (base plan `annual`) and `muslimai_premium_monthly` $2.99 (base plan `monthly`), each with a 7-day free-trial offer; set regional prices as below. Create a service account with "Release manager" access → JSON key. |
+| 12 | **Play: payments profile + subscription** | Set up a merchant/payments profile (individual is fine) → create app `app.muslimai.mobile` → Monetize → Subscriptions → `muslimai_premium_annual` $29.99 (base plan `annual`, with a 7-day free-trial offer) and `muslimai_premium_monthly` $4.99 (base plan `monthly`, no offer); set regional prices as below. Create a service account with "Release manager" access → JSON key. |
 | 13 | **RevenueCat** (free under $2.5k MTR) | app.revenuecat.com → project → add iOS app (upload App Store Connect in-app purchase key) and Android app (upload Play service account JSON) → entitlement `premium` → offering `default` with `$rc_annual` first and `$rc_monthly` (the app pre-selects annual) → Integrations → Webhooks: URL `https://<project>.supabase.co/functions/v1/revenuecat-webhook`, Authorization header = a random 64-char string. | App: `REVENUECAT_APPLE_KEY`, `REVENUECAT_GOOGLE_KEY`. Secret: `REVENUECAT_WEBHOOK_AUTH` (same string). |
 | 14 | **Sign in with Apple + Google** | Apple: Identifiers → enable Sign in with Apple, create a Services ID and key. Google Cloud → OAuth consent screen + iOS, Android and Web client IDs (Android needs the Play app-signing SHA-1). Paste into Supabase → Auth → Providers. | App: `GOOGLE_WEB_CLIENT_ID`, `GOOGLE_IOS_CLIENT_ID` |
 | 15 | **Signing for CI** | iOS: create a private git repo for `fastlane match`, run `bundle exec fastlane certs` once locally in `app/ios`. Android: `keytool -genkey -v -keystore upload.jks -alias upload -keyalg RSA -keysize 2048 -validity 10000`, keep it backed up. | GitHub secrets listed in `.github/workflows/release-mobile.yml` |
@@ -32,7 +32,7 @@ the "Where it goes" column says where to paste the result. Order = fastest path 
 
 | Market | Monthly | Annual | Why |
 |---|---|---|---|
-| Default (all other storefronts, incl. GCC, Europe, US) | $2.99 (≈ SAR 10.99) | $19.99 (≈ SAR 74.99), shown as "save 44%" | Base price |
+| Default (all other storefronts, incl. GCC, Europe, US) | $4.99 (≈ SAR 18.99), no trial | $29.99 (≈ SAR 109.99) with 7-day trial, shown as "save 49%" | Base price (decided 24 Nov 2026) |
 | Egypt, Pakistan, Indonesia | ≈ $0.99 in local currency | ≈ $6.99 in local currency | Purchasing power; volume markets |
 
 Apple: Subscription → Subscription Prices → Add pricing → pick the storefront → choose the local tier. Google: base plan → Set prices → edit the country. Other low-income markets (e.g. Bangladesh, Nigeria, India) can follow the same row later. The AI cost cap uses what each user actually paid, so a lower regional price automatically means a smaller AI budget; no code change is needed when you add or change a price.
@@ -62,8 +62,8 @@ All weekly limits are in `ARCHITECTURE.md` ("AI limits"); they renew every Frida
 
 | Plan | Net per month | AI budget per month | ≈ Sonnet answers before switching to Haiku |
 |---|---|---|---|
-| $2.99 monthly | ≈ $2.20–$2.54 | ≈ $1.10–$1.27 | ≈ 50–60 |
-| $19.99 annual | ≈ $1.23–$1.42 | ≈ $0.62–$0.71 | ≈ 30 |
+| $4.99 monthly | ≈ $3.69–$4.24 | ≈ $1.84–$2.12 | ≈ 55–60 (Ask may use 60% of the budget) |
+| $29.99 annual | ≈ $1.85–$2.12 | ≈ $0.92–$1.06 (pooled over the year, up to 3× in one month) | ≈ 28–32 |
 | Regional $0.99 monthly | ≈ $0.73–$0.84 | ≈ $0.37–$0.42 | ≈ 18 |
 | Regional $6.99 annual | ≈ $0.43–$0.50 | ≈ $0.21–$0.25 | ≈ 10 |
 
@@ -79,11 +79,11 @@ Before launch, run the answer-quality eval described in `docs/` on Haiku. If it 
 
 | # | What | Why |
 |---|---|---|
-| 20 | **Merge PRs #1–#4, then the audit PR.** Merging to `main` runs `deploy-backend.yml`, which applies the 4 new migrations and redeploys the edge functions. Check the run is green. | The app and the server change together (weekly limits, `hifz` feature). Shipping the app without the backend breaks recitation. |
-| 21 | **Trial on the annual plan only.** In App Store Connect and Play Console remove the free-trial offer from `muslimai_premium_monthly`; keep it on annual. | Monthly trials mostly attract people who cancel; the paywall now leads with annual and its trial timeline. |
-| 22 | **Decide the GCC/EU/US price.** Recommended: $29.99/year and $4.99/month (Egypt, Pakistan, Indonesia unchanged). The app reads prices from the store, so no release is needed. | Current $19.99 / $2.99 leaves money on the table in the launch market and is below Tarteel and Quranly. Your call. |
-| 23 | **Billing grace period** on both stores (Apple: App Store Connect → Subscriptions → Billing Grace Period, 16 days; Google: base plan → grace period 7 days + account hold 30). | Failed renewals are 20–40% of churn. The app now shows an "update your payment" card. |
-| 24 | **Win-back offers** (Apple win-back offer, Google "developer-determined" offer for lapsed subscribers), e.g. 50% off the first year. | The cheapest subscriber to acquire is a former one. |
+| 20 | ~~Merge PRs #1–#4, then the audit PR~~ Done by Claude on 24 Nov 2026; backend deploy ran from `main`. | |
+| 21 | **Trial on the annual plan only.** Ready to apply when the stores approve the account: `docs/store-setup.md` §1. | Monthly trials mostly attract people who cancel; the paywall leads with annual and its trial timeline. |
+| 22 | **Prices $29.99/year, $4.99/month** (decided). Enter them when creating the products: `docs/store-setup.md` §1. Egypt, Pakistan, Indonesia unchanged. | The app reads prices from the store; no release needed. |
+| 23 | **Billing grace period** + account hold: `docs/store-setup.md` §2. | Failed renewals are 20–40% of churn. The app shows an "update your payment" card. |
+| 24 | **Win-back offers**: `docs/store-setup.md` §3 (after launch, once there are lapsed subscribers). | The cheapest subscriber to acquire is a former one. |
 | 25 | **RevenueCat offering:** make sure `default` lists `$rc_annual` first and both products are attached to entitlement `premium`. | The paywall shows whatever the offering returns. |
 | 26 | **PostHog dashboards** for the funnel in `docs/full-audit.md` §7 (onboarding → first recitation → day-3 value gate → paywall view → trial → paid). | All events are already sent; you only need to build the charts. |
 
