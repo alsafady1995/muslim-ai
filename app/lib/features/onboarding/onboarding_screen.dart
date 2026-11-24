@@ -55,9 +55,18 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   void initState() {
     super.initState();
     Analytics.track(Events.onboardingStarted);
-    // Resume after the app was closed mid-onboarding (guest already created).
-    if (ref.read(supabaseProvider).auth.currentUser != null) _index = 2;
+    // Resume after the app was closed mid-onboarding (guest already created). Restore the
+    // intent picked before the restart, otherwise a "read" user resumes on the memorize steps.
+    if (ref.read(supabaseProvider).auth.currentUser != null) {
+      final prefs = ref.read(sharedPrefsProvider);
+      _intent = prefs.getString('intent') ?? _intent;
+      _planApplied = prefs.getBool(_planAppliedKey) ?? false;
+      _index = 2;
+    }
   }
+
+  /// Survives an app restart so the plan is not created twice when onboarding resumes.
+  static const _planAppliedKey = 'onboarding_plan_applied';
 
   void _next() {
     Analytics.track(Events.onboardingStepCompleted, {'step': _step.name, 'intent': _intent});
@@ -122,6 +131,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       await users.setGoal('quran_read', _dailyAyahs, true);
     }
     _planApplied = true;
+    await ref.read(sharedPrefsProvider).setBool(_planAppliedKey, true);
   }
 
   Future<void> _finish({required bool reminders}) async {
@@ -151,6 +161,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     }
     await ref.read(userRepoProvider).updateProfile({'onboarding_completed': true});
     await prefs.remove(onboardingInProgressKey);
+    await prefs.remove(_planAppliedKey);
     Analytics.track(Events.onboardingCompleted, {
       'intent': _intent,
       'known_surahs': _known.length,

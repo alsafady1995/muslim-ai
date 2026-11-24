@@ -43,9 +43,24 @@ class RevenueCatProvider implements PaymentProvider {
     final offerings = await Purchases.getOfferings();
     final current = offerings.current;
     if (current == null) return [];
+    // iOS shows the intro price even to people who already used their free trial; showing
+    // "7 days free" to them is misleading (and an App Review issue). Ask the SDK, and when it
+    // cannot tell, show the normal price as RevenueCat recommends. On Android the store only
+    // returns offers the user is eligible for.
+    var eligibleIds = <String>{};
+    if (_ios) {
+      try {
+        final ids = current.availablePackages.map((p) => p.storeProduct.identifier).toList();
+        final eligibility = await Purchases.checkTrialOrIntroductoryPriceEligibility(ids);
+        eligibleIds = {
+          for (final e in eligibility.entries)
+            if (e.value.status == IntroEligibilityStatus.introEligibilityStatusEligible) e.key,
+        };
+      } catch (_) {}
+    }
     return current.availablePackages.map((p) {
       final product = p.storeProduct;
-      final intro = product.introductoryPrice;
+      final intro = !_ios || eligibleIds.contains(product.identifier) ? product.introductoryPrice : null;
       return PlanOffer(
         id: p.identifier,
         priceString: product.priceString,

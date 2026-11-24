@@ -37,7 +37,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       final inProgress = ref.read(sharedPrefsProvider).getBool(onboardingInProgressKey) ?? false;
       final loc = state.matchedLocation;
       final onboarding = loc == '/onboarding' || loc == '/sign-in';
-      // The onboarding Al-Fatiha check opens the coach and the paywall must stay reachable.
+      // The onboarding Al-Fatiha check opens the coach. The paywall is deliberately not reachable
+      // during onboarding (no ask for money before the user has had value).
       final allowedDuringOnboarding = onboarding || loc == '/coach';
       if (!signedIn && !onboarding) return '/onboarding';
       if (signedIn && inProgress && !allowedDuringOnboarding) return '/onboarding';
