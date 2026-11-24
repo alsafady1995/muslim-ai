@@ -126,6 +126,71 @@ class ActivityResult {
   bool get goalsMet => raw['goals_met'] == true;
   List<Map<String, dynamic>> get newAchievements =>
       ((raw['new_achievements'] as List?) ?? const []).cast<Map<String, dynamic>>();
+
+  /// Set when this review completed a surah (first time only).
+  HifzMilestone? get milestone => HifzMilestone.tryParse(raw['milestone']);
+}
+
+/// "You've memorized Surah X" (server: hifz_milestones).
+class HifzMilestone {
+  HifzMilestone(this.raw);
+  final Map<String, dynamic> raw;
+  int get surahId => _i(raw['surah_id']);
+  String get nameAr => '${raw['name_ar'] ?? ''}';
+  String get transliteration => '${raw['transliteration'] ?? raw['name_en'] ?? ''}';
+  int get xp => _i(raw['xp']);
+  bool get first => raw['first'] == true;
+
+  static HifzMilestone? tryParse(Object? v) => v is Map ? HifzMilestone(v.cast<String, dynamic>()) : null;
+}
+
+/// Weekly AI limits (get_my_quota). Limits renew every Friday at 00:00 local time.
+class WeeklyQuota {
+  WeeklyQuota(this.raw);
+  final Map<String, dynamic> raw;
+  bool get premium => raw['premium'] == true;
+  DateTime? get resetsAt => DateTime.tryParse('${raw['resets_at'] ?? ''}')?.toLocal();
+  int get clipSeconds => _i(raw['clip_seconds'], 60);
+  bool get onboardingCheckAvailable => raw['onboarding_check_available'] == true;
+  Map<String, dynamic> _f(String feature) => ((raw['features'] as Map?)?[feature] as Map?)?.cast<String, dynamic>() ?? const {};
+  int limit(String feature) => _i(_f(feature)['limit']);
+  int used(String feature) => _i(_f(feature)['used']);
+  int remaining(String feature) => (limit(feature) - used(feature)).clamp(0, 1 << 30);
+}
+
+/// Last 7 days (get_weekly_summary).
+class WeeklySummary {
+  WeeklySummary(this.raw);
+  final Map<String, dynamic> raw;
+  int get activeDays => _i(raw['active_days']);
+  int get ayahsRead => _i(raw['ayahs_read']);
+  int get reviewsDone => _i(raw['reviews_done']);
+  int get ayahsMemorized => _i(raw['ayahs_memorized']);
+  int get recitations => _i(raw['recitations']);
+  double? get bestScore => _dn(raw['best_score']);
+  int get hifzMemorized => _i(raw['hifz_memorized']);
+  int get atRisk => _i(raw['at_risk']);
+  int get streak => _i(raw['streak']);
+  int get daysSinceSignup => _i(raw['days_since_signup']);
+}
+
+class WeakWord {
+  WeakWord(this.raw);
+  final Map<String, dynamic> raw;
+  int get ayahId => _i(raw['ayah_id']);
+  int get surahId => _i(raw['surah_id']);
+  int get ayahNumber => _i(raw['ayah_number']);
+  String get word => '${raw['word'] ?? ''}';
+  int get misses => _i(raw['misses']);
+}
+
+class WeakWords {
+  WeakWords(this.raw);
+  final Map<String, dynamic> raw;
+  bool get premium => raw['premium'] == true;
+  int get total => _i(raw['total']);
+  int get locked => _i(raw['locked']);
+  List<WeakWord> get words => ((raw['words'] as List?) ?? const []).map((e) => WeakWord((e as Map).cast())).toList();
 }
 
 class Dashboard {
@@ -152,6 +217,17 @@ class Dashboard {
   List<Map<String, dynamic>> get history => ((raw['history'] as List?) ?? const []).cast<Map<String, dynamic>>();
   List<Map<String, dynamic>> get recentRecitations =>
       ((raw['recent_recitations'] as List?) ?? const []).cast<Map<String, dynamic>>();
+  int get hifzAtRisk => _i(raw['hifz_at_risk']);
+  bool get hifzHasPlan => raw['hifz_has_plan'] == true;
+
+  /// Distinct days with a recitation check, an AI hifz test or a completed review.
+  int get valueDays => _i(raw['value_days']);
+  int get daysSinceSignup => _i(raw['days_since_signup']);
+  Map<String, dynamic>? get subscription => (raw['subscription'] as Map?)?.cast<String, dynamic>();
+  String? get subscriptionStatus => subscription?['status'] as String?;
+  bool get inTrial => subscription?['period_type'] == 'trial' && premium;
+  bool get billingProblem => subscriptionStatus == 'billing_issue' || subscriptionStatus == 'grace_period';
+  DateTime? get periodEnd => DateTime.tryParse('${subscription?['current_period_end'] ?? ''}')?.toLocal();
 
   /// goal type -> (progress, target)
   Map<String, (int, int)> get goals {
@@ -236,6 +312,13 @@ class RecitationResult {
       ((raw['words'] as List?) ?? const []).map((e) => WordResult.fromJson((e as Map).cast())).toList();
   List<Map<String, dynamic>> get mistakes => ((raw['mistakes'] as List?) ?? const []).cast<Map<String, dynamic>>();
   ActivityResult? get activity => raw['activity'] is Map ? ActivityResult((raw['activity'] as Map).cast()) : null;
+
+  /// AI hifz test: the ayahs that were graded (SM-2 updates). Empty when nothing was covered.
+  List<Map<String, dynamic>> get hifzUpdates => ((raw['hifz'] as List?) ?? const []).whereType<Map>().map((e) => e.cast<String, dynamic>()).toList();
+  HifzMilestone? get milestone => HifzMilestone.tryParse(raw['milestone']);
+
+  /// The free 60-second clip cut the recording short.
+  bool get clipped => raw['clipped'] == true;
 }
 
 class CitedAyah {

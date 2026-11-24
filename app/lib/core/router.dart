@@ -8,6 +8,7 @@ import '../features/auth/sign_in_screen.dart';
 import '../features/coach/coach_screen.dart';
 import '../features/goals/goals_screen.dart';
 import '../features/hifz/hifz_screen.dart';
+import '../features/hifz/weak_words_screen.dart';
 import '../features/home/home_screen.dart';
 import '../features/onboarding/onboarding_screen.dart';
 import '../features/paywall/paywall_screen.dart';
@@ -19,6 +20,10 @@ import '../features/search/search_screen.dart';
 import '../features/shell/app_shell.dart';
 import 'providers.dart';
 
+/// Set while the user is in onboarding. The guest account is created early (before the
+/// first Al-Fatiha check), so "signed in" alone no longer means "onboarding finished".
+const onboardingInProgressKey = 'onboarding_in_progress';
+
 final routerProvider = Provider<GoRouter>((ref) {
   final refresh = ValueNotifier(0);
   ref.listen(authStateProvider, (_, _) => refresh.value++);
@@ -29,9 +34,14 @@ final routerProvider = Provider<GoRouter>((ref) {
     refreshListenable: refresh,
     redirect: (context, state) {
       final signedIn = ref.read(supabaseProvider).auth.currentUser != null;
-      final onboarding = state.matchedLocation == '/onboarding' || state.matchedLocation == '/sign-in';
+      final inProgress = ref.read(sharedPrefsProvider).getBool(onboardingInProgressKey) ?? false;
+      final loc = state.matchedLocation;
+      final onboarding = loc == '/onboarding' || loc == '/sign-in';
+      // The onboarding Al-Fatiha check opens the coach and the paywall must stay reachable.
+      final allowedDuringOnboarding = onboarding || loc == '/coach';
       if (!signedIn && !onboarding) return '/onboarding';
-      if (signedIn && state.matchedLocation == '/onboarding') return '/home';
+      if (signedIn && inProgress && !allowedDuringOnboarding) return '/onboarding';
+      if (signedIn && !inProgress && loc == '/onboarding') return '/home';
       return null;
     },
     routes: [
@@ -69,8 +79,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           startAyahId: int.tryParse(s.uri.queryParameters['from'] ?? ''),
           endAyahId: int.tryParse(s.uri.queryParameters['to'] ?? ''),
           hifzMode: s.uri.queryParameters['mode'] == 'hifz',
+          source: s.uri.queryParameters['source'] ?? (s.uri.queryParameters['mode'] == 'hifz' ? 'hifz' : 'coach'),
         ),
       ),
+      GoRoute(path: '/weak-words', builder: (_, _) => const WeakWordsScreen()),
       GoRoute(path: '/search', builder: (_, s) => SearchScreen(initialQuery: s.uri.queryParameters['q'])),
       GoRoute(path: '/assistant', builder: (_, _) => const AskScreen(assistantMode: true)),
       GoRoute(path: '/adhkar', builder: (_, _) => const AdhkarScreen()),

@@ -13,6 +13,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../core/analytics.dart';
 import '../../core/config.dart';
 import '../../core/providers.dart';
+import '../../core/router.dart' show onboardingInProgressKey;
 import '../../core/widgets.dart';
 
 /// linkMode = true: a guest saves progress by attaching Apple / Google / email to the
@@ -52,6 +53,8 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     try {
       await action();
       Analytics.track(Events.accountLinked, {'method': method, 'link': widget.linkMode});
+      // Signing in to an existing account ends onboarding (their plan is already on the server).
+      if (!widget.linkMode) await ref.read(sharedPrefsProvider).remove(onboardingInProgressKey);
       if (mounted) context.go('/home');
     } on AuthException catch (e) {
       _toast(e.message);

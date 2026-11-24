@@ -1,11 +1,12 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-/// Thrown when the user hit a daily AI limit; the UI shows the paywall.
+/// Thrown when the user hit a weekly AI limit; the UI shows the limit sheet (lib/core/limits.dart).
 class QuotaExceeded implements Exception {
-  QuotaExceeded(this.feature, {required this.premium, required this.limit});
-  final String feature;
+  QuotaExceeded(this.feature, {required this.premium, required this.limit, this.resetsAt});
+  final String feature; // recitation | hifz | ask | search
   final bool premium;
   final int limit;
+  final DateTime? resetsAt; // Friday 00:00 local time
 }
 
 /// Thrown when the user's AI allowance for the current period is used up (server-enforced
@@ -40,7 +41,9 @@ class EdgeApi {
       final details = e.details is Map ? (e.details as Map).cast<String, dynamic>() : <String, dynamic>{};
       if (e.status == 402 && details['error'] == 'quota_exceeded') {
         throw QuotaExceeded('${details['feature']}',
-            premium: details['premium'] == true, limit: (details['limit'] as num?)?.toInt() ?? 0);
+            premium: details['premium'] == true,
+            limit: (details['limit'] as num?)?.toInt() ?? 0,
+            resetsAt: DateTime.tryParse('${details['resets_at'] ?? ''}')?.toLocal());
       }
       if (e.status == 429 && details['error'] == 'ai_budget_exhausted') {
         throw AiBudgetExhausted('${details['feature']}',

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/ai_budget.dart';
 import '../../core/analytics.dart';
 import '../../core/api.dart';
+import '../../core/monetization.dart';
 import '../../core/providers.dart';
 import '../../core/widgets.dart';
 import '../../data/models.dart';
@@ -59,11 +60,14 @@ class _AskScreenState extends ConsumerState<AskScreen> {
       }
     } on AiBudgetExhausted catch (e) {
       _turns.remove(turn);
+      _input.text = q; // keep what they typed
       if (mounted) showAiBudgetExhausted(context, e);
-    } on QuotaExceeded {
+    } on QuotaExceeded catch (e) {
       _turns.remove(turn);
-      Analytics.track(Events.quotaHit, {'feature': 'ask'});
-      if (mounted) context.push('/paywall?source=ask_quota');
+      _input.text = q;
+      // Never sell inside a conversation about a crisis: plain limit message only.
+      final sensitive = _turns.any((t) => t.answer?.answerType == 'crisis');
+      if (mounted) await showLimitSheet(context, e, allowUpgrade: !sensitive);
     } catch (_) {
       turn.failed = true;
     } finally {

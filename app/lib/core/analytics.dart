@@ -38,6 +38,16 @@ abstract final class Events {
   static const referralShared = 'referral_shared';
   static const referralApplied = 'referral_applied';
   static const accountDeleted = 'account_deleted';
+  // Value-first funnel (docs/full-audit.md §16)
+  static const onboardingIntent = 'onboarding_intent';
+  static const paywallDismissed = 'paywall_dismissed';
+  static const offerShown = 'offer_shown';
+  static const valueGatePassed = 'value_gate_passed';
+  static const weeklySummaryViewed = 'weekly_summary_viewed';
+  static const milestoneReached = 'milestone_reached';
+  static const trialReminderScheduled = 'trial_reminder_scheduled';
+  static const weakWordsOpened = 'weak_words_opened';
+  static const searchFallback = 'search_fallback';
 }
 
 class Analytics {

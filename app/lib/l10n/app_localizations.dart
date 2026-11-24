@@ -209,13 +209,13 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingTitle.
   ///
   /// In en, this message translates to:
-  /// **'Your daily Quran companion'**
+  /// **'Recite. Get corrected. Never forget what you memorize.'**
   String get onboardingTitle;
 
   /// No description provided for @onboardingSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Recite with an AI coach, memorize with a smart plan, and grow every day.'**
+  /// **'An AI coach that listens to your recitation, and a hifz plan that keeps it strong.'**
   String get onboardingSubtitle;
 
   /// No description provided for @getStarted.
@@ -269,13 +269,13 @@ abstract class AppLocalizations {
   /// No description provided for @remindersTitle.
   ///
   /// In en, this message translates to:
-  /// **'Gentle reminders'**
+  /// **'When should we remind you?'**
   String get remindersTitle;
 
   /// No description provided for @remindersBody.
   ///
   /// In en, this message translates to:
-  /// **'We\'ll remind you of morning and evening adhkar and to keep your streak.'**
+  /// **'One gentle reminder a day. You can change it anytime in settings.'**
   String get remindersBody;
 
   /// No description provided for @enableReminders.
@@ -431,7 +431,7 @@ abstract class AppLocalizations {
   /// No description provided for @premiumPitchShort.
   ///
   /// In en, this message translates to:
-  /// **'Your AI Quran coach. Try it free for 7 days'**
+  /// **'Your Hifz Coach · 7 days free'**
   String get premiumPitchShort;
 
   /// No description provided for @last7Days.
@@ -1541,44 +1541,8 @@ abstract class AppLocalizations {
   /// No description provided for @premiumSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Less than a coffee a month, for your Quran every day.'**
+  /// **'Your Hifz Coach listens, grades each review and schedules the next one, so nothing slips.'**
   String get premiumSubtitle;
-
-  /// No description provided for @benefitRecitation.
-  ///
-  /// In en, this message translates to:
-  /// **'AI recitation analysis every day'**
-  String get benefitRecitation;
-
-  /// No description provided for @benefitHifz.
-  ///
-  /// In en, this message translates to:
-  /// **'AI memorization coaching'**
-  String get benefitHifz;
-
-  /// No description provided for @benefitAsk.
-  ///
-  /// In en, this message translates to:
-  /// **'More questions to Ask the Quran and the assistant'**
-  String get benefitAsk;
-
-  /// No description provided for @benefitAnalytics.
-  ///
-  /// In en, this message translates to:
-  /// **'Personalized plans and advanced progress analytics'**
-  String get benefitAnalytics;
-
-  /// No description provided for @benefitReciters.
-  ///
-  /// In en, this message translates to:
-  /// **'All premium reciters'**
-  String get benefitReciters;
-
-  /// No description provided for @benefitSupport.
-  ///
-  /// In en, this message translates to:
-  /// **'Support continued development'**
-  String get benefitSupport;
 
   /// No description provided for @storeUnavailable.
   ///
@@ -1699,6 +1663,570 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You\'re near this month\'s AI allowance, so answers use a lighter model until {date}.'**
   String aiLighterMode(String date);
+
+  /// No description provided for @intentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What matters most to you right now?'**
+  String get intentTitle;
+
+  /// No description provided for @intentMemorize.
+  ///
+  /// In en, this message translates to:
+  /// **'Memorize the Quran'**
+  String get intentMemorize;
+
+  /// No description provided for @intentRecite.
+  ///
+  /// In en, this message translates to:
+  /// **'Perfect my recitation'**
+  String get intentRecite;
+
+  /// No description provided for @intentRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Read every day'**
+  String get intentRead;
+
+  /// No description provided for @intentUnderstand.
+  ///
+  /// In en, this message translates to:
+  /// **'Understand the Quran'**
+  String get intentUnderstand;
+
+  /// No description provided for @knownTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Which surahs do you already know by heart?'**
+  String get knownTitle;
+
+  /// No description provided for @knownBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ll keep them fresh with short reviews.'**
+  String get knownBody;
+
+  /// No description provided for @knownNone.
+  ///
+  /// In en, this message translates to:
+  /// **'None yet'**
+  String get knownNone;
+
+  /// No description provided for @firstRecitationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recite Al-Fatiha'**
+  String get firstRecitationTitle;
+
+  /// No description provided for @firstRecitationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Recite it aloud and see what the coach hears, word by word. This one is on us.'**
+  String get firstRecitationBody;
+
+  /// No description provided for @reciteNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Recite now'**
+  String get reciteNow;
+
+  /// No description provided for @skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get skip;
+
+  /// No description provided for @firstResult.
+  ///
+  /// In en, this message translates to:
+  /// **'Score {score} · {n} words to polish'**
+  String firstResult(int score, int n);
+
+  /// No description provided for @firstResultPerfect.
+  ///
+  /// In en, this message translates to:
+  /// **'Score {score} · masha\'Allah, no mistakes'**
+  String firstResultPerfect(int score);
+
+  /// No description provided for @planTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your plan'**
+  String get planTitle;
+
+  /// No description provided for @planMemorize.
+  ///
+  /// In en, this message translates to:
+  /// **'Memorize Surah {name}'**
+  String planMemorize(String name);
+
+  /// No description provided for @planKnown.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} surahs you know get short reviews, starting tomorrow.'**
+  String planKnown(int n);
+
+  /// No description provided for @planRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Read {n} ayahs a day'**
+  String planRead(int n);
+
+  /// No description provided for @planFirstReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Your first review is tomorrow.'**
+  String get planFirstReview;
+
+  /// No description provided for @reminderAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Remind me at {time}'**
+  String reminderAt(String time);
+
+  /// No description provided for @alsoAdhkar.
+  ///
+  /// In en, this message translates to:
+  /// **'Also remind me of morning and evening adhkar'**
+  String get alsoAdhkar;
+
+  /// No description provided for @remindMe.
+  ///
+  /// In en, this message translates to:
+  /// **'Remind me'**
+  String get remindMe;
+
+  /// No description provided for @reminderReadTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your daily ayahs'**
+  String get reminderReadTitle;
+
+  /// No description provided for @reminderReadBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A few minutes with the Quran.'**
+  String get reminderReadBody;
+
+  /// No description provided for @limitTitleRecitation.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve used this week\'s {n} checks'**
+  String limitTitleRecitation(int n);
+
+  /// No description provided for @limitTitleHifz.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve used this week\'s {n} AI tests'**
+  String limitTitleHifz(int n);
+
+  /// No description provided for @limitTitleAsk.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve asked {n} questions this week'**
+  String limitTitleAsk(int n);
+
+  /// No description provided for @limitTitleSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve used this week\'s {n} meaning searches'**
+  String limitTitleSearch(int n);
+
+  /// No description provided for @limitRenews.
+  ///
+  /// In en, this message translates to:
+  /// **'They renew on {day}.'**
+  String limitRenews(String day);
+
+  /// No description provided for @limitWaitUntil.
+  ///
+  /// In en, this message translates to:
+  /// **'Wait until {day}'**
+  String limitWaitUntil(String day);
+
+  /// No description provided for @limitKeepsWorking.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading, listening, adhkar and self-graded reviews stay unlimited.'**
+  String get limitKeepsWorking;
+
+  /// No description provided for @tryPremiumFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Try Premium free'**
+  String get tryPremiumFree;
+
+  /// No description provided for @checksLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{left} of {limit} checks left this week'**
+  String checksLeft(int left, int limit);
+
+  /// No description provided for @aiTestsLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{left} AI tests left this week'**
+  String aiTestsLeft(int left);
+
+  /// No description provided for @clipNoteFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Free checks cover 60 seconds. Premium checks a full page in one go.'**
+  String get clipNoteFree;
+
+  /// No description provided for @secondsLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{s}s left'**
+  String secondsLeft(int s);
+
+  /// No description provided for @rangeTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Up to 50 ayahs at a time.'**
+  String get rangeTooLong;
+
+  /// No description provided for @searchFellBack.
+  ///
+  /// In en, this message translates to:
+  /// **'This week\'s meaning searches are used up, so these are word matches. They renew on {day}.'**
+  String searchFellBack(String day);
+
+  /// No description provided for @hifzLimitInline.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve used this week\'s {n} AI tests. Your review continues with self-grading. Want the coach to grade every review?'**
+  String hifzLimitInline(int n);
+
+  /// No description provided for @continueReviewing.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue reviewing'**
+  String get continueReviewing;
+
+  /// No description provided for @aiTestNotGraded.
+  ///
+  /// In en, this message translates to:
+  /// **'That recitation didn\'t cover this ayah. Grade it yourself.'**
+  String get aiTestNotGraded;
+
+  /// No description provided for @milestoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve memorized Surah {name}'**
+  String milestoneTitle(String name);
+
+  /// No description provided for @milestoneBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Alhamdulillah. +{xp} XP'**
+  String milestoneBody(int xp);
+
+  /// No description provided for @milestoneOffer.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep it strong for good: the coach tests it with you until it\'s mastered. 7 days free.'**
+  String get milestoneOffer;
+
+  /// No description provided for @finishCoach.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get finishCoach;
+
+  /// No description provided for @paywallHeadlineMemorize.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep every ayah you memorize.'**
+  String get paywallHeadlineMemorize;
+
+  /// No description provided for @paywallHeadlineRecite.
+  ///
+  /// In en, this message translates to:
+  /// **'Recite with confidence. Every word checked.'**
+  String get paywallHeadlineRecite;
+
+  /// No description provided for @benefitHifzTests.
+  ///
+  /// In en, this message translates to:
+  /// **'Test your hifz with your voice every day. Grading is automatic.'**
+  String get benefitHifzTests;
+
+  /// No description provided for @benefitFullPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Check a full page in one go, up to 3 minutes.'**
+  String get benefitFullPage;
+
+  /// No description provided for @benefitWeakWords.
+  ///
+  /// In en, this message translates to:
+  /// **'Your weak words, practised first.'**
+  String get benefitWeakWords;
+
+  /// No description provided for @benefitBestAi.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask the Quran with our most capable AI.'**
+  String get benefitBestAi;
+
+  /// No description provided for @trialToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get trialToday;
+
+  /// No description provided for @trialTodayBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Full access, no charge.'**
+  String get trialTodayBody;
+
+  /// No description provided for @trialDayN.
+  ///
+  /// In en, this message translates to:
+  /// **'Day {n}'**
+  String trialDayN(int n);
+
+  /// No description provided for @trialReminderStep.
+  ///
+  /// In en, this message translates to:
+  /// **'We remind you before any charge.'**
+  String get trialReminderStep;
+
+  /// No description provided for @trialChargeStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Your plan starts at {price}/{period}. Cancel before then and pay nothing.'**
+  String trialChargeStep(String price, String period);
+
+  /// No description provided for @startMyFreeDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Start my {n} free days'**
+  String startMyFreeDays(int n);
+
+  /// No description provided for @subscribeMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscribe monthly'**
+  String get subscribeMonthly;
+
+  /// No description provided for @continueFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue free'**
+  String get continueFree;
+
+  /// No description provided for @noChargeToday.
+  ///
+  /// In en, this message translates to:
+  /// **'No charge today. Cancel anytime in your App Store or Google Play settings. Auto-renews until cancelled.'**
+  String get noChargeToday;
+
+  /// No description provided for @adFreePromise.
+  ///
+  /// In en, this message translates to:
+  /// **'Your subscription keeps Muslim AI free of ads, always.'**
+  String get adFreePromise;
+
+  /// No description provided for @trialReminderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your free trial ends in 2 days'**
+  String get trialReminderTitle;
+
+  /// No description provided for @trialReminderBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep it and your plan continues. Cancel in your store settings and you won\'t be charged.'**
+  String get trialReminderBody;
+
+  /// No description provided for @todayReviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s review'**
+  String get todayReviewTitle;
+
+  /// No description provided for @todayReviewBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} ayahs · about {m} min'**
+  String todayReviewBody(int n, int m);
+
+  /// No description provided for @todayNewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s new ayahs'**
+  String get todayNewTitle;
+
+  /// No description provided for @todayReciteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recite with the coach'**
+  String get todayReciteTitle;
+
+  /// No description provided for @todayReciteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'One minute, word-by-word feedback'**
+  String get todayReciteBody;
+
+  /// No description provided for @todayDoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s review is done'**
+  String get todayDoneTitle;
+
+  /// No description provided for @todayDoneBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Alhamdulillah. See you tomorrow.'**
+  String get todayDoneBody;
+
+  /// No description provided for @startHifzPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Start a hifz plan'**
+  String get startHifzPlan;
+
+  /// No description provided for @startHifzPlanBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A few ayahs a day, reviewed before you forget them'**
+  String get startHifzPlanBody;
+
+  /// No description provided for @startLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get startLabel;
+
+  /// No description provided for @weekTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your week'**
+  String get weekTitle;
+
+  /// No description provided for @weekStats.
+  ///
+  /// In en, this message translates to:
+  /// **'{days} active days · {reviews} reviews · {ayahs} ayahs read'**
+  String weekStats(int days, int reviews, int ayahs);
+
+  /// No description provided for @weekAtRisk.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} ayahs are at risk of being forgotten this week.'**
+  String weekAtRisk(int n);
+
+  /// No description provided for @weekAtRiskOffer.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium tests all of them for you.'**
+  String get weekAtRiskOffer;
+
+  /// No description provided for @weekAllSafe.
+  ///
+  /// In en, this message translates to:
+  /// **'Every ayah you memorized is safe. Masha\'Allah.'**
+  String get weekAllSafe;
+
+  /// No description provided for @seeMyPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'See my plan'**
+  String get seeMyPlan;
+
+  /// No description provided for @billingIssue.
+  ///
+  /// In en, this message translates to:
+  /// **'Update your payment to keep your Hifz Coach.'**
+  String get billingIssue;
+
+  /// No description provided for @trialEnds.
+  ///
+  /// In en, this message translates to:
+  /// **'Your free trial ends on {date}. Cancel anytime in your store settings.'**
+  String trialEnds(String date);
+
+  /// No description provided for @update.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get update;
+
+  /// No description provided for @weakWordsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your weak words'**
+  String get weakWordsTitle;
+
+  /// No description provided for @weakWordsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The words you get wrong most often, practised first.'**
+  String get weakWordsBody;
+
+  /// No description provided for @weakWordsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No weak words yet. Recite with the coach and they\'ll appear here.'**
+  String get weakWordsEmpty;
+
+  /// No description provided for @weakWordMisses.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed {n} times'**
+  String weakWordMisses(int n);
+
+  /// No description provided for @weakWordsLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} more words and the full drill with Premium'**
+  String weakWordsLocked(int n);
+
+  /// No description provided for @practise.
+  ///
+  /// In en, this message translates to:
+  /// **'Practise'**
+  String get practise;
+
+  /// No description provided for @knownSurahsPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Already memorized'**
+  String get knownSurahsPlan;
+
+  /// No description provided for @notificationsBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications are off for Muslim AI. Turn them on in your phone settings.'**
+  String get notificationsBlocked;
+
+  /// No description provided for @pausePlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause new ayahs'**
+  String get pausePlan;
+
+  /// No description provided for @resumePlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume'**
+  String get resumePlan;
+
+  /// No description provided for @planPaused.
+  ///
+  /// In en, this message translates to:
+  /// **'Paused · reviews continue'**
+  String get planPaused;
+
+  /// No description provided for @weakWordsCardBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} words to polish'**
+  String weakWordsCardBody(int n);
 }
 
 class _AppLocalizationsDelegate

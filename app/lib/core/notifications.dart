@@ -13,6 +13,8 @@ class Reminders {
   static const eveningAdhkar = 2;
   static const hifzReview = 3;
   static const streakSaver = 4;
+  static const dailyReading = 5;
+  static const trialEnding = 10;
 
   static Future<void> init() async {
     if (_ready || kIsWeb) return; // no local notifications on web
@@ -65,6 +67,25 @@ class Reminders {
       ),
       androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
       matchDateTimeComponents: DateTimeComponents.time,
+    );
+  }
+
+  /// One-off notification (e.g. the trial-ending reminder, a service message, not a sale).
+  static Future<void> scheduleOnce(int id, String title, String body, DateTime at) async {
+    if (kIsWeb) return;
+    await init();
+    final when = tz.TZDateTime.from(at, tz.local);
+    if (when.isBefore(tz.TZDateTime.now(tz.local))) return;
+    await _plugin.zonedSchedule(
+      id: id,
+      title: title,
+      body: body,
+      scheduledDate: when,
+      notificationDetails: const NotificationDetails(
+        android: AndroidNotificationDetails('account', 'Account', importance: Importance.high),
+        iOS: DarwinNotificationDetails(),
+      ),
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
     );
   }
 
