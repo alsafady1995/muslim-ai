@@ -15,9 +15,10 @@ abstract class PaymentProvider {
 }
 
 class PlanOffer {
-  PlanOffer({required this.id, required this.priceString, required this.period, this.trialDays, this.native});
+  PlanOffer({required this.id, required this.priceString, required this.period, this.price, this.trialDays, this.native});
   final String id;
-  final String priceString; // localized, e.g. "$0.99" or "3.99 SAR"
+  final String priceString; // localized, e.g. "$2.99" or "11.99 SAR"
+  final double? price; // numeric price in the store currency, used for the savings badge
   final String period; // "month" | "year"
   final int? trialDays;
   final Object? native; // provider-specific package object

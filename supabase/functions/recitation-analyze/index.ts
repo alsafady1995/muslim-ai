@@ -3,12 +3,17 @@
 // pending recitation_sessions row, then calls this function. We transcribe with the
 // Quran ASR service (word timestamps), align against the expected words, score, update
 // hifz scheduling when mode = "hifz", award XP, and delete the audio.
+//
+// Privacy: the audio is deleted in every outcome (success, limit reached, failure).
+// Optional body.source = "onboarding": the user's first Al-Fatiha check is not counted.
 import { handler, HttpError, json } from "../_shared/http.ts";
 import { admin, requireUser } from "../_shared/supabase.ts";
-import { consumeQuota, refundQuota } from "../_shared/quota.ts";
+import { type AiCall, beginAiCall, cancelAiCall, finishAiCall, quotaInfo } from "../_shared/quota.ts";
+import { ASR_MAX_MINUTES, asrCostPerMinuteUsd, roundUsd } from "../_shared/ai_cost.ts";
 import { analyzeRecitation, type ExpectedWord, type HeardWord, scoreToGrade } from "../_shared/alignment.ts";
 import { env } from "../_shared/env.ts";
 import { track } from "../_shared/analytics.ts";
+import { clipHeardWords, clipSeconds, featureFor, isOnboardingCheck } from "../_shared/recitation_policy.ts";
 
 interface AsrResponse {
   text: string;
@@ -39,13 +44,34 @@ Deno.serve(handler(async (req, body) => {
   ).maybeSingle();
   if (error) throw error;
   if (!session) throw new HttpError(404, "session_not_found");
-  if (session.status !== "pending") throw new HttpError(409, "already_processed");
   if (!String(session.audio_path).startsWith(`${user.id}/`)) throw new HttpError(403, "forbidden");
 
-  const quota = await consumeQuota(user.id, "recitation");
-  await db.from("recitation_sessions").update({ status: "processing" }).eq("id", sessionId);
+  // Claim the session atomically so a double tap or a retry cannot analyse (and award XP) twice.
+  const { data: claimed, error: claimErr } = await db.from("recitation_sessions").update({
+    status: "processing",
+  })
+    .eq("id", sessionId).eq("user_id", user.id).eq("status", "pending").select("id").maybeSingle();
+  if (claimErr) throw claimErr;
+  if (!claimed) throw new HttpError(409, "already_processed");
 
+  let ai: AiCall | null = null;
+  let asrCost = 0;
   try {
+    const { count: earlier } = await db.from("recitation_sessions").select("id", {
+      count: "exact",
+      head: true,
+    })
+      .eq("user_id", user.id).neq("id", sessionId).in("status", ["processing", "done"]);
+    const onboarding = isOnboardingCheck(body.source, session, earlier ?? 0);
+    // Reserve the longest recording we accept; settled with the real duration below.
+    ai = await beginAiCall(
+      user.id,
+      featureFor(session.mode),
+      ASR_MAX_MINUTES * asrCostPerMinuteUsd(),
+      undefined,
+      { countUsage: !onboarding },
+    );
+
     const { data: signed, error: signErr } = await db.storage.from("recitations").createSignedUrl(
       session.audio_path,
       300,
@@ -67,7 +93,11 @@ Deno.serve(handler(async (req, body) => {
     }));
     if (!expected.length) throw new Error("no expected words for range");
 
-    const result = analyzeRecitation(expected, asr.words);
+    asrCost = roundUsd((Math.min(asr.duration ?? 0, ASR_MAX_MINUTES * 60) / 60) * asrCostPerMinuteUsd());
+    // Free checks cover 60 seconds (the app stops there; this enforces it server-side).
+    const maxSeconds = clipSeconds(ai.premium);
+    const heard = clipHeardWords(asr.words ?? [], maxSeconds);
+    const result = analyzeRecitation(expected, heard.words);
 
     const { error: updErr } = await db.from("recitation_sessions").update({
       status: "done",
@@ -93,7 +123,7 @@ Deno.serve(handler(async (req, body) => {
     });
 
     // Hifz: grade each recited ayah that is part of a plan
-    const hifzUpdates: unknown[] = [];
+    const hifzUpdates: any[] = [];
     if (session.mode === "hifz") {
       const { data: items } = await db.from("hifz_items").select("id, ayah_id").eq("user_id", user.id)
         .gte("ayah_id", session.start_ayah_id).lte("ayah_id", session.end_ayah_id);
@@ -118,14 +148,16 @@ Deno.serve(handler(async (req, body) => {
       }
     }
 
-    await db.storage.from("recitations").remove([session.audio_path]);
     track(user.id, "recitation_analyzed", {
       mode: session.mode,
       overall: result.overall,
       words: result.wordsTotal,
       mistakes: result.mistakes.length,
-      premium: quota.premium,
+      premium: ai.premium,
+      onboarding,
+      clipped: heard.clipped,
     });
+    await finishAiCall(ai, asrCost, "asr", { seconds: asr.duration, onboarding });
 
     return json({
       session_id: sessionId,
@@ -143,15 +175,26 @@ Deno.serve(handler(async (req, body) => {
       mistakes: result.mistakes,
       activity,
       hifz: hifzUpdates,
-      quota: { remaining: quota.remaining, limit: quota.limit, premium: quota.premium },
+      milestone: hifzUpdates.map((u) => u?.milestone).find((m) => m) ?? null,
+      clipped: heard.clipped,
+      clip_seconds: maxSeconds,
+      onboarding,
+      quota: quotaInfo(ai),
     });
   } catch (e) {
-    console.error("recitation analysis failed", e);
-    await db.from("recitation_sessions").update({ status: "failed", error: String(e).slice(0, 500) }).eq(
-      "id",
-      sessionId,
-    );
-    await refundQuota(user.id, "recitation");
+    const limit = e instanceof HttpError;
+    if (!limit) console.error("recitation analysis failed", e);
+    await db.from("recitation_sessions").update({
+      status: "failed",
+      error: limit ? (e as HttpError).code : String(e).slice(0, 500),
+    }).eq("id", sessionId);
+    if (ai) await cancelAiCall(ai, asrCost);
+    // Weekly limit / AI budget errors go to the app as they are (it shows the limit sheet).
+    if (limit) throw e;
     throw new HttpError(502, "analysis_failed", "We couldn't analyse this recording. Please try again.");
+  } finally {
+    // Never keep a recording, whatever happened above.
+    const { error: rmErr } = await db.storage.from("recitations").remove([session.audio_path]);
+    if (rmErr) console.error("audio delete failed", rmErr);
   }
 }));

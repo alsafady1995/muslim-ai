@@ -76,6 +76,25 @@ class UserRepository {
 
   Future<Map<String, dynamic>> quota() async => ((await _db.rpc('get_my_quota')) as Map).cast();
 
+  Future<WeeklyQuota> weeklyQuota() async => WeeklyQuota(await quota());
+
+  Future<WeeklySummary> weeklySummary() async =>
+      WeeklySummary(((await _db.rpc('get_weekly_summary')) as Map).cast());
+
+  Future<WeakWords> weakWords({int limit = 30}) async =>
+      WeakWords(((await _db.rpc('get_weak_words', params: {'p_limit': limit})) as Map).cast());
+
+  /// Onboarding: surahs the user already knows go straight into spaced review.
+  Future<int> seedKnownSurahs(List<int> surahs, String title) async {
+    if (surahs.isEmpty) return 0;
+    final res = await _db.rpc('seed_known_surahs', params: {'p_surahs': surahs, 'p_title': title});
+    return ((res as Map)['items'] as num?)?.toInt() ?? 0;
+  }
+
+  Future<void> setPlanActive(String planId, bool active) async {
+    await _db.from('hifz_plans').update({'active': active}).eq('id', planId);
+  }
+
   Future<Map<String, dynamic>> applyReferral(String code) async =>
       ((await _db.rpc('apply_referral', params: {'p_code': code})) as Map).cast();
 
@@ -84,8 +103,9 @@ class UserRepository {
 
   Future<Map<String, dynamic>> hifzStats() async => ((await _db.rpc('get_hifz_stats')) as Map).cast();
 
+  /// Active plans first, then paused ones (paused plans add no new ayahs; reviews continue).
   Future<List<Map<String, dynamic>>> hifzPlans() async =>
-      await _db.from('hifz_plans').select().eq('active', true).order('created_at');
+      await _db.from('hifz_plans').select().order('active', ascending: false).order('created_at');
 
   Future<String> createHifzPlan(int startAyahId, int endAyahId, int dailyNew, String? title) async {
     final id = await _db.rpc('create_hifz_plan', params: {

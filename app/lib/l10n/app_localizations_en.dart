@@ -67,11 +67,12 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get onboardingTitle => 'Your daily Quran companion';
+  String get onboardingTitle =>
+      'Recite. Get corrected. Never forget what you memorize.';
 
   @override
   String get onboardingSubtitle =>
-      'Recite with an AI coach, memorize with a smart plan, and grow every day.';
+      'An AI coach that listens to your recitation, and a hifz plan that keeps it strong.';
 
   @override
   String get getStarted => 'Get started';
@@ -100,11 +101,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get remindersTitle => 'Gentle reminders';
+  String get remindersTitle => 'When should we remind you?';
 
   @override
   String get remindersBody =>
-      'We\'ll remind you of morning and evening adhkar and to keep your streak.';
+      'One gentle reminder a day. You can change it anytime in settings.';
 
   @override
   String get enableReminders => 'Enable reminders';
@@ -185,7 +186,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get goPremium => 'Go Premium';
 
   @override
-  String get premiumPitchShort => 'Unlimited AI coaching for \$0.99/month';
+  String get premiumPitchShort => 'Your Hifz Coach · 7 days free';
 
   @override
   String get last7Days => 'Last 7 days';
@@ -778,26 +779,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get premiumSubtitle =>
-      'Less than a coffee a month, for your Quran every day.';
-
-  @override
-  String get benefitRecitation => 'Unlimited AI recitation analysis';
-
-  @override
-  String get benefitHifz => 'Unlimited AI memorization coaching';
-
-  @override
-  String get benefitAsk => 'More questions to Ask the Quran and the assistant';
-
-  @override
-  String get benefitAnalytics =>
-      'Personalized plans and advanced progress analytics';
-
-  @override
-  String get benefitReciters => 'All premium reciters';
-
-  @override
-  String get benefitSupport => 'Support continued development';
+      'Your Hifz Coach listens, grades each review and schedules the next one, so nothing slips.';
 
   @override
   String get storeUnavailable => 'Subscriptions aren\'t available right now.';
@@ -834,4 +816,399 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get purchaseFailed => 'Purchase failed.';
+
+  @override
+  String get bestValue => 'Best value';
+
+  @override
+  String savePercent(int pct) {
+    return 'Save $pct%';
+  }
+
+  @override
+  String startFreeTrial(int n) {
+    return 'Start $n-day free trial';
+  }
+
+  @override
+  String trialThenPrice(int n, String price, String period) {
+    return '$n days free, then $price / $period';
+  }
+
+  @override
+  String get aiBudgetTitle => 'This month\'s AI allowance is used up';
+
+  @override
+  String aiBudgetPremium(String date) {
+    return 'To keep Premium affordable for everyone, AI features pause until $date. Reading, listening, keyword search, adhkar and your hifz reviews keep working as usual.';
+  }
+
+  @override
+  String aiBudgetFree(String date) {
+    return 'Free AI features renew on $date. Premium includes a much larger allowance. Meanwhile, reading, listening and your hifz reviews keep working.';
+  }
+
+  @override
+  String aiBudgetTrial(String date) {
+    return 'You\'ve used the AI allowance included in your free trial. It renews when your subscription starts on $date.';
+  }
+
+  @override
+  String aiLighterMode(String date) {
+    return 'You\'re near this month\'s AI allowance, so answers use a lighter model until $date.';
+  }
+
+  @override
+  String get intentTitle => 'What matters most to you right now?';
+
+  @override
+  String get intentMemorize => 'Memorize the Quran';
+
+  @override
+  String get intentRecite => 'Perfect my recitation';
+
+  @override
+  String get intentRead => 'Read every day';
+
+  @override
+  String get intentUnderstand => 'Understand the Quran';
+
+  @override
+  String get knownTitle => 'Which surahs do you already know by heart?';
+
+  @override
+  String get knownBody => 'We\'ll keep them fresh with short reviews.';
+
+  @override
+  String get knownNone => 'None yet';
+
+  @override
+  String get firstRecitationTitle => 'Recite Al-Fatiha';
+
+  @override
+  String get firstRecitationBody =>
+      'Recite it aloud and see what the coach hears, word by word. This one is on us.';
+
+  @override
+  String get reciteNow => 'Recite now';
+
+  @override
+  String get skip => 'Skip';
+
+  @override
+  String firstResult(int score, int n) {
+    return 'Score $score · $n words to polish';
+  }
+
+  @override
+  String firstResultPerfect(int score) {
+    return 'Score $score · masha\'Allah, no mistakes';
+  }
+
+  @override
+  String get planTitle => 'Your plan';
+
+  @override
+  String planMemorize(String name) {
+    return 'Memorize Surah $name';
+  }
+
+  @override
+  String planKnown(int n) {
+    return '$n surahs you know get short reviews, starting tomorrow.';
+  }
+
+  @override
+  String planRead(int n) {
+    return 'Read $n ayahs a day';
+  }
+
+  @override
+  String get planFirstReview => 'Your first review is tomorrow.';
+
+  @override
+  String reminderAt(String time) {
+    return 'Remind me at $time';
+  }
+
+  @override
+  String get alsoAdhkar => 'Also remind me of morning and evening adhkar';
+
+  @override
+  String get remindMe => 'Remind me';
+
+  @override
+  String get reminderReadTitle => 'Your daily ayahs';
+
+  @override
+  String get reminderReadBody => 'A few minutes with the Quran.';
+
+  @override
+  String limitTitleRecitation(int n) {
+    return 'You\'ve used this week\'s $n checks';
+  }
+
+  @override
+  String limitTitleHifz(int n) {
+    return 'You\'ve used this week\'s $n AI tests';
+  }
+
+  @override
+  String limitTitleAsk(int n) {
+    return 'You\'ve asked $n questions this week';
+  }
+
+  @override
+  String limitTitleSearch(int n) {
+    return 'You\'ve used this week\'s $n meaning searches';
+  }
+
+  @override
+  String limitRenews(String day) {
+    return 'They renew on $day.';
+  }
+
+  @override
+  String limitWaitUntil(String day) {
+    return 'Wait until $day';
+  }
+
+  @override
+  String get limitKeepsWorking =>
+      'Reading, listening, adhkar and self-graded reviews stay unlimited.';
+
+  @override
+  String get tryPremiumFree => 'Try Premium free';
+
+  @override
+  String checksLeft(int left, int limit) {
+    return '$left of $limit checks left this week';
+  }
+
+  @override
+  String aiTestsLeft(int left) {
+    return '$left AI tests left this week';
+  }
+
+  @override
+  String get clipNoteFree =>
+      'Free checks cover 60 seconds. Premium checks a full page in one go.';
+
+  @override
+  String secondsLeft(int s) {
+    return '${s}s left';
+  }
+
+  @override
+  String get rangeTooLong => 'Up to 50 ayahs at a time.';
+
+  @override
+  String searchFellBack(String day) {
+    return 'This week\'s meaning searches are used up, so these are word matches. They renew on $day.';
+  }
+
+  @override
+  String hifzLimitInline(int n) {
+    return 'You\'ve used this week\'s $n AI tests. Your review continues with self-grading. Want the coach to grade every review?';
+  }
+
+  @override
+  String get continueReviewing => 'Continue reviewing';
+
+  @override
+  String get aiTestNotGraded =>
+      'That recitation didn\'t cover this ayah. Grade it yourself.';
+
+  @override
+  String milestoneTitle(String name) {
+    return 'You\'ve memorized Surah $name';
+  }
+
+  @override
+  String milestoneBody(int xp) {
+    return 'Alhamdulillah. +$xp XP';
+  }
+
+  @override
+  String get milestoneOffer =>
+      'Keep it strong for good: the coach tests it with you until it\'s mastered. 7 days free.';
+
+  @override
+  String get finishCoach => 'Continue';
+
+  @override
+  String get paywallHeadlineMemorize => 'Keep every ayah you memorize.';
+
+  @override
+  String get paywallHeadlineRecite =>
+      'Recite with confidence. Every word checked.';
+
+  @override
+  String get benefitHifzTests =>
+      'Test your hifz with your voice every day. Grading is automatic.';
+
+  @override
+  String get benefitFullPage => 'Check a full page in one go, up to 3 minutes.';
+
+  @override
+  String get benefitWeakWords => 'Your weak words, practised first.';
+
+  @override
+  String get benefitBestAi => 'Ask the Quran with our most capable AI.';
+
+  @override
+  String get trialToday => 'Today';
+
+  @override
+  String get trialTodayBody => 'Full access, no charge.';
+
+  @override
+  String trialDayN(int n) {
+    return 'Day $n';
+  }
+
+  @override
+  String get trialReminderStep => 'We remind you before any charge.';
+
+  @override
+  String trialChargeStep(String price, String period) {
+    return 'Your plan starts at $price/$period. Cancel before then and pay nothing.';
+  }
+
+  @override
+  String startMyFreeDays(int n) {
+    return 'Start my $n free days';
+  }
+
+  @override
+  String get subscribeMonthly => 'Subscribe monthly';
+
+  @override
+  String get continueFree => 'Continue free';
+
+  @override
+  String get noChargeToday =>
+      'No charge today. Cancel anytime in your App Store or Google Play settings. Auto-renews until cancelled.';
+
+  @override
+  String get adFreePromise =>
+      'Your subscription keeps Muslim AI free of ads, always.';
+
+  @override
+  String get trialReminderTitle => 'Your free trial ends in 2 days';
+
+  @override
+  String get trialReminderBody =>
+      'Keep it and your plan continues. Cancel in your store settings and you won\'t be charged.';
+
+  @override
+  String get todayReviewTitle => 'Today\'s review';
+
+  @override
+  String todayReviewBody(int n, int m) {
+    return '$n ayahs · about $m min';
+  }
+
+  @override
+  String get todayNewTitle => 'Today\'s new ayahs';
+
+  @override
+  String get todayReciteTitle => 'Recite with the coach';
+
+  @override
+  String get todayReciteBody => 'One minute, word-by-word feedback';
+
+  @override
+  String get todayDoneTitle => 'Today\'s review is done';
+
+  @override
+  String get todayDoneBody => 'Alhamdulillah. See you tomorrow.';
+
+  @override
+  String get startHifzPlan => 'Start a hifz plan';
+
+  @override
+  String get startHifzPlanBody =>
+      'A few ayahs a day, reviewed before you forget them';
+
+  @override
+  String get startLabel => 'Start';
+
+  @override
+  String get weekTitle => 'Your week';
+
+  @override
+  String weekStats(int days, int reviews, int ayahs) {
+    return '$days active days · $reviews reviews · $ayahs ayahs read';
+  }
+
+  @override
+  String weekAtRisk(int n) {
+    return '$n ayahs are at risk of being forgotten this week.';
+  }
+
+  @override
+  String get weekAtRiskOffer => 'Premium tests all of them for you.';
+
+  @override
+  String get weekAllSafe => 'Every ayah you memorized is safe. Masha\'Allah.';
+
+  @override
+  String get seeMyPlan => 'See my plan';
+
+  @override
+  String get billingIssue => 'Update your payment to keep your Hifz Coach.';
+
+  @override
+  String trialEnds(String date) {
+    return 'Your free trial ends on $date. Cancel anytime in your store settings.';
+  }
+
+  @override
+  String get update => 'Update';
+
+  @override
+  String get weakWordsTitle => 'Your weak words';
+
+  @override
+  String get weakWordsBody =>
+      'The words you get wrong most often, practised first.';
+
+  @override
+  String get weakWordsEmpty =>
+      'No weak words yet. Recite with the coach and they\'ll appear here.';
+
+  @override
+  String weakWordMisses(int n) {
+    return 'Missed $n times';
+  }
+
+  @override
+  String weakWordsLocked(int n) {
+    return '$n more words and the full drill with Premium';
+  }
+
+  @override
+  String get practise => 'Practise';
+
+  @override
+  String get knownSurahsPlan => 'Already memorized';
+
+  @override
+  String get notificationsBlocked =>
+      'Notifications are off for Muslim AI. Turn them on in your phone settings.';
+
+  @override
+  String get pausePlan => 'Pause new ayahs';
+
+  @override
+  String get resumePlan => 'Resume';
+
+  @override
+  String get planPaused => 'Paused · reviews continue';
+
+  @override
+  String weakWordsCardBody(int n) {
+    return '$n words to polish';
+  }
 }

@@ -67,11 +67,11 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get onboardingTitle => 'رفيقك اليومي مع القرآن';
+  String get onboardingTitle => 'رتّل، وصحّح تلاوتك، ولا تنسَ ما حفظت.';
 
   @override
   String get onboardingSubtitle =>
-      'رتّل مع مدرب ذكي، واحفظ بخطة ذكية، وتقدّم كل يوم.';
+      'مدرّب ذكي يستمع إلى تلاوتك، وخطة حفظ تحافظ على ما حفظت.';
 
   @override
   String get getStarted => 'ابدأ الآن';
@@ -100,11 +100,11 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get remindersTitle => 'تذكيرات لطيفة';
+  String get remindersTitle => 'متى نذكّرك؟';
 
   @override
   String get remindersBody =>
-      'سنذكّرك بأذكار الصباح والمساء وبالمحافظة على سلسلتك.';
+      'تذكير لطيف واحد يوميًا. يمكنك تغييره في أي وقت من الإعدادات.';
 
   @override
   String get enableReminders => 'تفعيل التذكيرات';
@@ -180,10 +180,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get continueJourney => 'تابع رحلتك';
 
   @override
-  String get goPremium => 'اشترك في بريميوم';
+  String get goPremium => 'اشترك في المميز';
 
   @override
-  String get premiumPitchShort => 'تدريب ذكي غير محدود مقابل ٠٫٩٩\$ شهريًا';
+  String get premiumPitchShort => 'مدرّب الحفظ · ٧ أيام مجانًا';
 
   @override
   String get last7Days => 'آخر ٧ أيام';
@@ -769,28 +769,11 @@ class AppLocalizationsAr extends AppLocalizations {
       'سيُحذف تقدمك وبياناتك نهائيًا. ألغِ أي اشتراك من حساب المتجر بشكل منفصل.';
 
   @override
-  String get premiumTitle => 'مسلم AI بريميوم';
+  String get premiumTitle => 'مسلم AI المميز';
 
   @override
-  String get premiumSubtitle => 'أقل من ثمن فنجان قهوة شهريًا، لقرآنك كل يوم.';
-
-  @override
-  String get benefitRecitation => 'تحليل غير محدود لتلاوتك';
-
-  @override
-  String get benefitHifz => 'تدريب حفظ ذكي غير محدود';
-
-  @override
-  String get benefitAsk => 'أسئلة أكثر في اسأل القرآن والمساعد';
-
-  @override
-  String get benefitAnalytics => 'خطط مخصصة وتحليلات تقدم متقدمة';
-
-  @override
-  String get benefitReciters => 'جميع القرّاء المميزين';
-
-  @override
-  String get benefitSupport => 'ادعم استمرار تطوير التطبيق';
+  String get premiumSubtitle =>
+      'مدرّب الحفظ يستمع إليك، ويقيّم كل مراجعة، ويجدول التالية تلقائيًا، فلا يتفلّت منك شيء.';
 
   @override
   String get storeUnavailable => 'الاشتراكات غير متاحة حاليًا.';
@@ -827,4 +810,394 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get purchaseFailed => 'فشلت عملية الشراء.';
+
+  @override
+  String get bestValue => 'الأفضل قيمة';
+
+  @override
+  String savePercent(int pct) {
+    return 'وفّر $pct٪';
+  }
+
+  @override
+  String startFreeTrial(int n) {
+    return 'ابدأ تجربة مجانية لمدة $n أيام';
+  }
+
+  @override
+  String trialThenPrice(int n, String price, String period) {
+    return '$n أيام مجانًا، ثم $price / $period';
+  }
+
+  @override
+  String get aiBudgetTitle => 'انتهى رصيد الذكاء الاصطناعي لهذه الفترة';
+
+  @override
+  String aiBudgetPremium(String date) {
+    return 'حتى يبقى بريميوم بسعر في متناول الجميع، تتوقف ميزات الذكاء الاصطناعي حتى $date. القراءة والاستماع والبحث بالكلمات والأذكار ومراجعة الحفظ تعمل كالمعتاد.';
+  }
+
+  @override
+  String aiBudgetFree(String date) {
+    return 'تتجدد ميزات الذكاء الاصطناعي المجانية في $date. يتضمن بريميوم رصيدًا أكبر بكثير. وحتى ذلك الحين تعمل القراءة والاستماع ومراجعة الحفظ كالمعتاد.';
+  }
+
+  @override
+  String aiBudgetTrial(String date) {
+    return 'استهلكت رصيد الذكاء الاصطناعي المضمَّن في الفترة التجريبية. يتجدد عند بدء اشتراكك في $date.';
+  }
+
+  @override
+  String aiLighterMode(String date) {
+    return 'اقتربت من رصيد الذكاء الاصطناعي لهذه الفترة، لذا تُستخدم إجابات أخف حتى $date.';
+  }
+
+  @override
+  String get intentTitle => 'ما الأهم بالنسبة لك الآن؟';
+
+  @override
+  String get intentMemorize => 'حفظ القرآن';
+
+  @override
+  String get intentRecite => 'إتقان التلاوة';
+
+  @override
+  String get intentRead => 'القراءة كل يوم';
+
+  @override
+  String get intentUnderstand => 'فهم القرآن';
+
+  @override
+  String get knownTitle => 'ما السور التي تحفظها؟';
+
+  @override
+  String get knownBody => 'سنحافظ عليها بمراجعات قصيرة.';
+
+  @override
+  String get knownNone => 'لا شيء بعد';
+
+  @override
+  String get firstRecitationTitle => 'رتّل سورة الفاتحة';
+
+  @override
+  String get firstRecitationBody =>
+      'رتّلها بصوتك وشاهد ما يسمعه المدرّب كلمة بكلمة. هذه علينا.';
+
+  @override
+  String get reciteNow => 'رتّل الآن';
+
+  @override
+  String get skip => 'تخطَّ';
+
+  @override
+  String firstResult(int score, int n) {
+    return 'النتيجة $score · $n كلمات تحتاج إتقانًا';
+  }
+
+  @override
+  String firstResultPerfect(int score) {
+    return 'النتيجة $score · ما شاء الله، بلا أخطاء';
+  }
+
+  @override
+  String get planTitle => 'خطتك';
+
+  @override
+  String planMemorize(String name) {
+    return 'حفظ سورة $name';
+  }
+
+  @override
+  String planKnown(int n) {
+    return '$n سور تحفظها ستُراجع مراجعات قصيرة بدءًا من الغد.';
+  }
+
+  @override
+  String planRead(int n) {
+    return 'اقرأ $n آيات يوميًا';
+  }
+
+  @override
+  String get planFirstReview => 'أول مراجعة لك غدًا.';
+
+  @override
+  String reminderAt(String time) {
+    return 'ذكّرني الساعة $time';
+  }
+
+  @override
+  String get alsoAdhkar => 'ذكّرني أيضًا بأذكار الصباح والمساء';
+
+  @override
+  String get remindMe => 'ذكّرني';
+
+  @override
+  String get reminderReadTitle => 'آياتك اليومية';
+
+  @override
+  String get reminderReadBody => 'دقائق مع القرآن.';
+
+  @override
+  String limitTitleRecitation(int n) {
+    return 'استخدمت تسميعات هذا الأسبوع ($n)';
+  }
+
+  @override
+  String limitTitleHifz(int n) {
+    return 'استخدمت اختبارات الحفظ الذكية لهذا الأسبوع ($n)';
+  }
+
+  @override
+  String limitTitleAsk(int n) {
+    return 'طرحت $n سؤالًا هذا الأسبوع';
+  }
+
+  @override
+  String limitTitleSearch(int n) {
+    return 'استخدمت عمليات البحث بالمعنى لهذا الأسبوع ($n)';
+  }
+
+  @override
+  String limitRenews(String day) {
+    return 'تتجدد يوم $day.';
+  }
+
+  @override
+  String limitWaitUntil(String day) {
+    return 'أنتظر حتى $day';
+  }
+
+  @override
+  String get limitKeepsWorking =>
+      'القراءة والاستماع والأذكار والمراجعة الذاتية تبقى بلا حدود.';
+
+  @override
+  String get tryPremiumFree => 'جرّب المميز مجانًا';
+
+  @override
+  String checksLeft(int left, int limit) {
+    return 'تبقّى $left من $limit تسميعات هذا الأسبوع';
+  }
+
+  @override
+  String aiTestsLeft(int left) {
+    return 'تبقّى $left اختبارات ذكية هذا الأسبوع';
+  }
+
+  @override
+  String get clipNoteFree =>
+      'التسميع المجاني حتى ٦٠ ثانية. المميز يسمّع صفحة كاملة دفعة واحدة.';
+
+  @override
+  String secondsLeft(int s) {
+    return 'تبقّى $s ث';
+  }
+
+  @override
+  String get rangeTooLong => 'حتى ٥٠ آية في المرة الواحدة.';
+
+  @override
+  String searchFellBack(String day) {
+    return 'انتهت عمليات البحث بالمعنى لهذا الأسبوع، فهذه نتائج مطابقة الكلمات. تتجدد يوم $day.';
+  }
+
+  @override
+  String hifzLimitInline(int n) {
+    return 'استخدمت اختبارات الحفظ الذكية ($n) لهذا الأسبوع. ستكمل مراجعتك بالتقييم الذاتي. هل تريد أن يقيّم المدرّب كل مراجعة؟';
+  }
+
+  @override
+  String get continueReviewing => 'أكمل المراجعة';
+
+  @override
+  String get aiTestNotGraded => 'لم يشمل التسميع هذه الآية. قيّمها بنفسك.';
+
+  @override
+  String milestoneTitle(String name) {
+    return 'أتممت حفظ سورة $name';
+  }
+
+  @override
+  String milestoneBody(int xp) {
+    return 'الحمد لله. +$xp نقطة';
+  }
+
+  @override
+  String get milestoneOffer =>
+      'حافظ عليها للأبد: المدرّب يختبرها معك حتى تُتقنها. ٧ أيام مجانًا.';
+
+  @override
+  String get finishCoach => 'متابعة';
+
+  @override
+  String get paywallHeadlineMemorize => 'احفظ… ولا تنسَ ما حفظت.';
+
+  @override
+  String get paywallHeadlineRecite => 'اقرأ بثقة. كل كلمة تُراجَع.';
+
+  @override
+  String get benefitHifzTests => 'اختبر حفظك بصوتك كل يوم، والتقييم تلقائي.';
+
+  @override
+  String get benefitFullPage => 'سمّع صفحة كاملة دفعة واحدة، حتى ٣ دقائق.';
+
+  @override
+  String get benefitWeakWords => 'الكلمات التي تخطئ فيها، تتدرب عليها أولًا.';
+
+  @override
+  String get benefitBestAi => 'اسأل القرآن بأقوى نموذج لدينا.';
+
+  @override
+  String get trialToday => 'اليوم';
+
+  @override
+  String get trialTodayBody => 'وصول كامل بدون أي خصم.';
+
+  @override
+  String trialDayN(int n) {
+    return 'اليوم $n';
+  }
+
+  @override
+  String get trialReminderStep => 'نذكّرك قبل أي خصم.';
+
+  @override
+  String trialChargeStep(String price, String period) {
+    return 'يبدأ اشتراكك بـ $price/$period. ألغِ قبلها ولن تدفع شيئًا.';
+  }
+
+  @override
+  String startMyFreeDays(int n) {
+    return 'ابدأ أيامي المجانية ($n)';
+  }
+
+  @override
+  String get subscribeMonthly => 'اشترك شهريًا';
+
+  @override
+  String get continueFree => 'المتابعة مجانًا';
+
+  @override
+  String get noChargeToday =>
+      'لا خصم اليوم. يمكنك الإلغاء في أي وقت من إعدادات App Store أو Google Play. يتجدد تلقائيًا حتى الإلغاء.';
+
+  @override
+  String get adFreePromise => 'اشتراكك يُبقي التطبيق بلا إعلانات، دائمًا.';
+
+  @override
+  String get trialReminderTitle => 'تنتهي تجربتك المجانية بعد يومين';
+
+  @override
+  String get trialReminderBody =>
+      'إن أبقيتها يستمر اشتراكك، وإن ألغيتها من إعدادات المتجر فلن يُخصم منك شيء.';
+
+  @override
+  String get todayReviewTitle => 'مراجعة اليوم';
+
+  @override
+  String todayReviewBody(int n, int m) {
+    return '$n آيات · حوالي $m دقائق';
+  }
+
+  @override
+  String get todayNewTitle => 'آيات اليوم الجديدة';
+
+  @override
+  String get todayReciteTitle => 'رتّل مع المدرّب';
+
+  @override
+  String get todayReciteBody => 'دقيقة واحدة وتقييم كلمة بكلمة';
+
+  @override
+  String get todayDoneTitle => 'أنهيت مراجعة اليوم';
+
+  @override
+  String get todayDoneBody => 'الحمد لله. نلقاك غدًا.';
+
+  @override
+  String get startHifzPlan => 'ابدأ خطة حفظ';
+
+  @override
+  String get startHifzPlanBody => 'آيات قليلة يوميًا، تُراجَع قبل أن تنساها';
+
+  @override
+  String get startLabel => 'ابدأ';
+
+  @override
+  String get weekTitle => 'أسبوعك';
+
+  @override
+  String weekStats(int days, int reviews, int ayahs) {
+    return '$days أيام نشاط · $reviews مراجعة · $ayahs آية مقروءة';
+  }
+
+  @override
+  String weekAtRisk(int n) {
+    return '$n آيات معرّضة للنسيان هذا الأسبوع.';
+  }
+
+  @override
+  String get weekAtRiskOffer => 'المميز يختبرها كلها معك.';
+
+  @override
+  String get weekAllSafe => 'كل ما حفظته في أمان. ما شاء الله.';
+
+  @override
+  String get seeMyPlan => 'اعرض خطتي';
+
+  @override
+  String get billingIssue => 'حدّث طريقة الدفع لتحتفظ بمدرّب الحفظ.';
+
+  @override
+  String trialEnds(String date) {
+    return 'تنتهي تجربتك المجانية في $date. يمكنك الإلغاء في أي وقت من إعدادات المتجر.';
+  }
+
+  @override
+  String get update => 'تحديث';
+
+  @override
+  String get weakWordsTitle => 'كلماتك الضعيفة';
+
+  @override
+  String get weakWordsBody =>
+      'الكلمات التي تخطئ فيها أكثر، تتدرّب عليها أولًا.';
+
+  @override
+  String get weakWordsEmpty =>
+      'لا توجد كلمات ضعيفة بعد. رتّل مع المدرّب وستظهر هنا.';
+
+  @override
+  String weakWordMisses(int n) {
+    return 'أخطأت فيها $n مرات';
+  }
+
+  @override
+  String weakWordsLocked(int n) {
+    return '$n كلمات أخرى والتدريب الكامل مع المميز';
+  }
+
+  @override
+  String get practise => 'تدرّب';
+
+  @override
+  String get knownSurahsPlan => 'المحفوظ سابقًا';
+
+  @override
+  String get notificationsBlocked =>
+      'الإشعارات متوقفة لتطبيق Muslim AI. فعّلها من إعدادات الهاتف.';
+
+  @override
+  String get pausePlan => 'إيقاف الآيات الجديدة مؤقتًا';
+
+  @override
+  String get resumePlan => 'استئناف';
+
+  @override
+  String get planPaused => 'متوقفة · المراجعة مستمرة';
+
+  @override
+  String weakWordsCardBody(int n) {
+    return '$n كلمات تحتاج إتقانًا';
+  }
 }

@@ -4,9 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'core/analytics.dart';
+import 'core/config.dart';
 import 'core/providers.dart';
 import 'core/router.dart';
 import 'core/theme.dart';
+import 'demo/demo_banner.dart';
 import 'l10n/app_localizations.dart';
 
 class MuslimAiApp extends ConsumerStatefulWidget {
@@ -54,6 +56,7 @@ class _MuslimAiAppState extends ConsumerState<MuslimAiApp> {
       theme: AppTheme.light(locale),
       darkTheme: AppTheme.dark(locale),
       routerConfig: router,
+      builder: AppConfig.demoMode ? (_, child) => DemoBanner(child: child!) : null,
     );
   }
 }

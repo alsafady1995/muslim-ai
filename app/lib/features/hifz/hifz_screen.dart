@@ -8,6 +8,7 @@ import '../../core/theme.dart';
 import '../../core/widgets.dart';
 import '../../data/models.dart';
 import 'hifz_review_screen.dart';
+import 'weak_words_screen.dart';
 
 final hifzQueueProvider = FutureProvider.autoDispose<HifzQueue>((ref) => ref.watch(userRepoProvider).hifzQueue());
 final hifzStatsProvider = FutureProvider.autoDispose<Map<String, dynamic>>((ref) => ref.watch(userRepoProvider).hifzStats());
@@ -62,6 +63,14 @@ class HifzScreen extends ConsumerWidget {
                   const SizedBox(height: 8),
                   Text(l10n.queueSummary(q.reviews.length, q.fresh.length)),
                   const SizedBox(height: 12),
+                  // No plan yet: the empty queue means "nothing set up", not "all done".
+                  if (q.isEmpty && !(plans.value?.any((p) => p['active'] == true && p['review_only'] != true) ?? true))
+                    FilledButton.icon(
+                      onPressed: () => _createPlan(context, ref),
+                      icon: const Icon(Icons.add),
+                      label: Text(l10n.newPlan),
+                    )
+                  else
                   FilledButton(
                     onPressed: q.isEmpty
                         ? null
@@ -77,6 +86,7 @@ class HifzScreen extends ConsumerWidget {
               ),
             ),
           ),
+          const _WeakWordsCard(),
           SectionTitle(l10n.myPlans,
               trailing: TextButton.icon(
                 onPressed: () => _createPlan(context, ref),
@@ -89,15 +99,7 @@ class HifzScreen extends ConsumerWidget {
             data: (list) => list.isEmpty
                 ? Card(child: Padding(padding: const EdgeInsets.all(16), child: Text(l10n.noPlansYet)))
                 : Column(children: [
-                    for (final p in list)
-                      Card(
-                        margin: const EdgeInsets.only(bottom: 8),
-                        child: ListTile(
-                          leading: const Icon(Icons.flag_outlined),
-                          title: Text('${p['title'] ?? l10n.hifzPlan}'),
-                          subtitle: Text(l10n.newPerDay(p['daily_new_ayahs'] as int)),
-                        ),
-                      ),
+                    for (final p in list) _PlanTile(plan: p),
                   ]),
           ),
         ]),
@@ -117,6 +119,69 @@ class HifzScreen extends ConsumerWidget {
       ref.invalidate(hifzQueueProvider);
       ref.invalidate(hifzStatsProvider);
     }
+  }
+}
+
+/// Shown once the coach has heard at least one mistake.
+class _WeakWordsCard extends ConsumerWidget {
+  const _WeakWordsCard();
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final w = ref.watch(weakWordsProvider).value;
+    if (w == null || w.total == 0) return const SizedBox.shrink();
+    final l10n = context.l10n;
+    return Card(
+      margin: const EdgeInsets.only(top: 12),
+      child: ListTile(
+        leading: const Icon(Icons.spellcheck),
+        title: Text(l10n.weakWordsTitle, style: const TextStyle(fontWeight: FontWeight.w700)),
+        subtitle: Text(l10n.weakWordsCardBody(w.total)),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () async {
+          await context.push('/weak-words');
+          ref.invalidate(weakWordsProvider);
+        },
+      ),
+    );
+  }
+}
+
+class _PlanTile extends ConsumerWidget {
+  const _PlanTile({required this.plan});
+  final Map<String, dynamic> plan;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final reviewOnly = plan['review_only'] == true;
+    final active = plan['active'] == true;
+    Future<void> setActive(bool on) async {
+      try {
+        await ref.read(userRepoProvider).setPlanActive('${plan['id']}', on);
+      } catch (_) {
+        if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.errorGeneric)));
+      }
+      ref.invalidate(hifzPlansProvider);
+      ref.invalidate(hifzQueueProvider);
+    }
+
+    return Card(
+      margin: const EdgeInsets.only(bottom: 8),
+      child: ListTile(
+        leading: Icon(reviewOnly ? Icons.verified_outlined : (active ? Icons.flag_outlined : Icons.pause_circle_outline)),
+        title: Text(reviewOnly ? l10n.knownSurahsPlan : '${plan['title'] ?? l10n.hifzPlan}'),
+        subtitle: reviewOnly
+            ? null
+            : Text(active ? l10n.newPerDay((plan['daily_new_ayahs'] as num).toInt()) : l10n.planPaused),
+        trailing: reviewOnly
+            ? null
+            : active
+                ? PopupMenuButton<String>(
+                    onSelected: (_) => setActive(false),
+                    itemBuilder: (_) => [PopupMenuItem(value: 'pause', child: Text(l10n.pausePlan))],
+                  )
+                : TextButton(onPressed: () => setActive(true), child: Text(l10n.resumePlan)),
+      ),
+    );
   }
 }
 

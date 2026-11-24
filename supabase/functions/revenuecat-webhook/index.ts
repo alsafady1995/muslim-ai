@@ -6,7 +6,7 @@ import { handler, HttpError, json } from "../_shared/http.ts";
 import { admin } from "../_shared/supabase.ts";
 import { env } from "../_shared/env.ts";
 import { track } from "../_shared/analytics.ts";
-import { mapRevenueCatEvent } from "../_shared/billing.ts";
+import { isStaleEvent, mapRevenueCatEvent } from "../_shared/billing.ts";
 
 function timingSafeEqual(a: string, b: string): boolean {
   const ea = new TextEncoder().encode(a);
@@ -64,7 +64,15 @@ Deno.serve(handler(async (req, body) => {
   if (row) {
     const { data: exists } = await db.from("profiles").select("id").eq("id", userId).maybeSingle();
     if (!exists) return json({ ok: true, ignored: "unknown_user" });
-    const { error } = await db.from("subscriptions").upsert({ user_id: userId, ...row }, {
+    const { data: current } = await db.from("subscriptions").select("last_event_ms").eq("user_id", userId)
+      .maybeSingle();
+    if (isStaleEvent(event, current?.last_event_ms)) return json({ ok: true, ignored: "stale_event" });
+    const eventMs = Number(event.event_timestamp_ms);
+    const { error } = await db.from("subscriptions").upsert({
+      user_id: userId,
+      ...row,
+      ...(Number.isFinite(eventMs) && eventMs > 0 ? { last_event_ms: eventMs } : {}),
+    }, {
       onConflict: "user_id",
     });
     if (error) throw error;

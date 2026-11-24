@@ -78,8 +78,13 @@ void showXpToast(BuildContext context, int xp, {List<Map<String, dynamic>> achie
   if (xp <= 0 && achievements.isEmpty) return;
   final l10n = context.l10n;
   final names = achievements.map((a) => context.isArabic ? a['name_ar'] : a['name_en']).join(', ');
+  // Shown near the top so it never covers the action buttons at the bottom of a
+  // screen (e.g. the hifz grade buttons), which would swallow the next tap.
+  final height = MediaQuery.sizeOf(context).height;
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     behavior: SnackBarBehavior.floating,
+    duration: const Duration(milliseconds: 2500),
+    margin: EdgeInsets.fromLTRB(16, 0, 16, (height - 170).clamp(16, double.infinity)),
     content: Text(achievements.isEmpty ? l10n.xpEarned(xp) : '${l10n.xpEarned(xp)} · ${l10n.achievementUnlocked(names)}'),
   ));
 }

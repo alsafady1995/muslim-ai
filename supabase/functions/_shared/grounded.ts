@@ -8,6 +8,10 @@ import { z } from "zod";
 import { claude, FALLBACK_BETA, supportsFallbacks } from "./claude.ts";
 import { env } from "./env.ts";
 import type { RetrievalResult, RetrievedAyah, RetrievedHadith } from "./retrieval.ts";
+import type { ClaudeUsage } from "./ai_cost.ts";
+
+/** Output cap per answer; also the output side of the cost reservation in ask_flow.ts. */
+export const ANSWER_MAX_TOKENS = 4096;
 
 export const AnswerSchema = z.object({
   answer_type: z.enum(["answer", "needs_scholar", "out_of_scope", "crisis"]),
@@ -28,7 +32,7 @@ export interface GroundedAnswer {
   follow_up_questions: string[];
   disclaimer: string;
   model: string;
-  usage: { input_tokens: number; output_tokens: number };
+  usage: ClaudeUsage;
 }
 
 const DISCLAIMER: Record<string, string> = {
@@ -48,7 +52,7 @@ const LANGUAGE_NAME: Record<string, string> = {
 };
 
 // Kept byte-stable so it is served from the prompt cache.
-const SYSTEM_PROMPT =
+export const SYSTEM_PROMPT =
   `You are the educational assistant inside "Muslim AI", a Quran learning app used by Muslims worldwide.
 
 You receive SOURCES (Quran verses with translation and a tafsir excerpt, and hadith with their grading) retrieved for the user's question, then the question itself.
@@ -65,7 +69,7 @@ Rules:
 9. Be warm, clear and concise (explanation under 180 words). Do not take sides in sectarian disputes. Do not issue takfir or speak ill of any group.
 10. Write explanation, why_relevant, scholarly_differences and follow_up_questions in the user's language given in the request. Offer up to 3 short follow_up_questions.`;
 
-function formatSources(r: RetrievalResult): string {
+export function formatSources(r: RetrievalResult): string {
   const ayahs = r.ayahs.map((a) =>
     `<verse key="${a.verse_key}" surah="${a.surah_name_en}">\n<arabic>${a.arabic}</arabic>\n<translation>${
       a.translation ?? ""
@@ -108,9 +112,11 @@ export async function groundedAnswer(params: {
   sources: RetrievalResult;
   history?: HistoryTurn[];
   premium?: boolean;
+  /** Overrides the tier's model (used when the user's AI budget only fits the cheaper one). */
+  model?: string;
 }): Promise<GroundedAnswer> {
   const { question, locale, sources } = params;
-  const model = params.premium ? env.claudeModelPremium() : env.claudeModel();
+  const model = params.model ?? (params.premium ? env.claudeModelPremium() : env.claudeModel());
   const history: Anthropic.Beta.BetaMessageParam[] = (params.history ?? []).slice(-6).map((t) => ({
     role: t.role,
     content: t.content,
@@ -118,7 +124,7 @@ export async function groundedAnswer(params: {
 
   const response = await claude().beta.messages.parse({
     model,
-    max_tokens: 4096,
+    max_tokens: ANSWER_MAX_TOKENS,
     ...(supportsFallbacks(model) ? { betas: [FALLBACK_BETA], fallbacks: "default" as const } : {}),
     system: [{ type: "text", text: SYSTEM_PROMPT, cache_control: { type: "ephemeral" } }],
     output_config: { effort: env.claudeEffort(), format: betaZodOutputFormat(AnswerSchema) },
@@ -133,7 +139,12 @@ export async function groundedAnswer(params: {
     ],
   });
 
-  const usage = { input_tokens: response.usage.input_tokens, output_tokens: response.usage.output_tokens };
+  const usage: ClaudeUsage = {
+    input_tokens: response.usage.input_tokens,
+    output_tokens: response.usage.output_tokens,
+    cache_read_input_tokens: response.usage.cache_read_input_tokens ?? 0,
+    cache_creation_input_tokens: response.usage.cache_creation_input_tokens ?? 0,
+  };
   const disclaimer = DISCLAIMER[locale] ?? DISCLAIMER.en;
 
   if (response.stop_reason === "refusal" || !response.parsed_output) {

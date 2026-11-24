@@ -32,8 +32,8 @@
       }
     }
   },
-  "onboardingTitle": "Your daily Quran companion",
-  "onboardingSubtitle": "Recite with an AI coach, memorize with a smart plan, and grow every day.",
+  "onboardingTitle": "Recite. Get corrected. Never forget what you memorize.",
+  "onboardingSubtitle": "An AI coach that listens to your recitation, and a hifz plan that keeps it strong.",
   "getStarted": "Get started",
   "haveAccount": "I already have an account",
   "pickDailyGoal": "How much Quran a day?",
@@ -49,8 +49,8 @@
       }
     }
   },
-  "remindersTitle": "Gentle reminders",
-  "remindersBody": "We'll remind you of morning and evening adhkar and to keep your streak.",
+  "remindersTitle": "When should we remind you?",
+  "remindersBody": "One gentle reminder a day. You can change it anytime in settings.",
   "enableReminders": "Enable reminders",
   "notNow": "Not now",
   "reminderMorningTitle": "Morning adhkar",
@@ -76,7 +76,7 @@
   "prayersToday": "Today's prayers",
   "continueJourney": "Continue your journey",
   "goPremium": "Go Premium",
-  "premiumPitchShort": "Unlimited AI coaching for $0.99/month",
+  "premiumPitchShort": "Your Hifz Coach · 7 days free",
   "last7Days": "Last 7 days",
   "dayStreak": "day streak",
   "levelN": "Level {n}",
@@ -358,13 +358,7 @@
   "deleteAccount": "Delete account",
   "deleteAccountWarning": "This permanently deletes your progress and data. Cancel any subscription in your store account separately.",
   "premiumTitle": "Muslim AI Premium",
-  "premiumSubtitle": "Less than a coffee a month, for your Quran every day.",
-  "benefitRecitation": "Unlimited AI recitation analysis",
-  "benefitHifz": "Unlimited AI memorization coaching",
-  "benefitAsk": "More questions to Ask the Quran and the assistant",
-  "benefitAnalytics": "Personalized plans and advanced progress analytics",
-  "benefitReciters": "All premium reciters",
-  "benefitSupport": "Support continued development",
+  "premiumSubtitle": "Your Hifz Coach listens, grades each review and schedules the next one, so nothing slips.",
   "storeUnavailable": "Subscriptions aren't available right now.",
   "yearly": "Yearly",
   "monthly": "Monthly",
@@ -382,5 +376,384 @@
   "subscriptionTerms": "Auto-renews until cancelled. Cancel anytime in your App Store or Google Play account settings.",
   "welcomePremium": "Welcome to Premium!",
   "purchasePending": "Your purchase is pending.",
-  "purchaseFailed": "Purchase failed."
+  "purchaseFailed": "Purchase failed.",
+  "bestValue": "Best value",
+  "savePercent": "Save {pct}%",
+  "@savePercent": {
+    "placeholders": {
+      "pct": {
+        "type": "int"
+      }
+    }
+  },
+  "startFreeTrial": "Start {n}-day free trial",
+  "@startFreeTrial": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "trialThenPrice": "{n} days free, then {price} / {period}",
+  "@trialThenPrice": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      },
+      "price": {
+        "type": "String"
+      },
+      "period": {
+        "type": "String"
+      }
+    }
+  },
+  "aiBudgetTitle": "This month's AI allowance is used up",
+  "aiBudgetPremium": "To keep Premium affordable for everyone, AI features pause until {date}. Reading, listening, keyword search, adhkar and your hifz reviews keep working as usual.",
+  "@aiBudgetPremium": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "aiBudgetFree": "Free AI features renew on {date}. Premium includes a much larger allowance. Meanwhile, reading, listening and your hifz reviews keep working.",
+  "@aiBudgetFree": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "aiBudgetTrial": "You've used the AI allowance included in your free trial. It renews when your subscription starts on {date}.",
+  "@aiBudgetTrial": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "aiLighterMode": "You're near this month's AI allowance, so answers use a lighter model until {date}.",
+  "@aiLighterMode": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "intentTitle": "What matters most to you right now?",
+  "intentMemorize": "Memorize the Quran",
+  "intentRecite": "Perfect my recitation",
+  "intentRead": "Read every day",
+  "intentUnderstand": "Understand the Quran",
+  "knownTitle": "Which surahs do you already know by heart?",
+  "knownBody": "We'll keep them fresh with short reviews.",
+  "knownNone": "None yet",
+  "firstRecitationTitle": "Recite Al-Fatiha",
+  "firstRecitationBody": "Recite it aloud and see what the coach hears, word by word. This one is on us.",
+  "reciteNow": "Recite now",
+  "skip": "Skip",
+  "firstResult": "Score {score} · {n} words to polish",
+  "@firstResult": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      },
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "firstResultPerfect": "Score {score} · masha'Allah, no mistakes",
+  "@firstResultPerfect": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "planTitle": "Your plan",
+  "planMemorize": "Memorize Surah {name}",
+  "@planMemorize": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "planKnown": "{n} surahs you know get short reviews, starting tomorrow.",
+  "@planKnown": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "planRead": "Read {n} ayahs a day",
+  "@planRead": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "planFirstReview": "Your first review is tomorrow.",
+  "reminderAt": "Remind me at {time}",
+  "@reminderAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "alsoAdhkar": "Also remind me of morning and evening adhkar",
+  "remindMe": "Remind me",
+  "reminderReadTitle": "Your daily ayahs",
+  "reminderReadBody": "A few minutes with the Quran.",
+  "limitTitleRecitation": "You've used this week's {n} checks",
+  "@limitTitleRecitation": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "limitTitleHifz": "You've used this week's {n} AI tests",
+  "@limitTitleHifz": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "limitTitleAsk": "You've asked {n} questions this week",
+  "@limitTitleAsk": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "limitTitleSearch": "You've used this week's {n} meaning searches",
+  "@limitTitleSearch": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "limitRenews": "They renew on {day}.",
+  "@limitRenews": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "limitWaitUntil": "Wait until {day}",
+  "@limitWaitUntil": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "limitKeepsWorking": "Reading, listening, adhkar and self-graded reviews stay unlimited.",
+  "tryPremiumFree": "Try Premium free",
+  "checksLeft": "{left} of {limit} checks left this week",
+  "@checksLeft": {
+    "placeholders": {
+      "left": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "aiTestsLeft": "{left} AI tests left this week",
+  "@aiTestsLeft": {
+    "placeholders": {
+      "left": {
+        "type": "int"
+      }
+    }
+  },
+  "clipNoteFree": "Free checks cover 60 seconds. Premium checks a full page in one go.",
+  "secondsLeft": "{s}s left",
+  "@secondsLeft": {
+    "placeholders": {
+      "s": {
+        "type": "int"
+      }
+    }
+  },
+  "rangeTooLong": "Up to 50 ayahs at a time.",
+  "searchFellBack": "This week's meaning searches are used up, so these are word matches. They renew on {day}.",
+  "@searchFellBack": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "hifzLimitInline": "You've used this week's {n} AI tests. Your review continues with self-grading. Want the coach to grade every review?",
+  "@hifzLimitInline": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "continueReviewing": "Continue reviewing",
+  "aiTestNotGraded": "That recitation didn't cover this ayah. Grade it yourself.",
+  "milestoneTitle": "You've memorized Surah {name}",
+  "@milestoneTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "milestoneBody": "Alhamdulillah. +{xp} XP",
+  "@milestoneBody": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
+  "milestoneOffer": "Keep it strong for good: the coach tests it with you until it's mastered. 7 days free.",
+  "finishCoach": "Continue",
+  "paywallHeadlineMemorize": "Keep every ayah you memorize.",
+  "paywallHeadlineRecite": "Recite with confidence. Every word checked.",
+  "benefitHifzTests": "Test your hifz with your voice every day. Grading is automatic.",
+  "benefitFullPage": "Check a full page in one go, up to 3 minutes.",
+  "benefitWeakWords": "Your weak words, practised first.",
+  "benefitBestAi": "Ask the Quran with our most capable AI.",
+  "trialToday": "Today",
+  "trialTodayBody": "Full access, no charge.",
+  "trialDayN": "Day {n}",
+  "@trialDayN": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "trialReminderStep": "We remind you before any charge.",
+  "trialChargeStep": "Your plan starts at {price}/{period}. Cancel before then and pay nothing.",
+  "@trialChargeStep": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      },
+      "period": {
+        "type": "String"
+      }
+    }
+  },
+  "startMyFreeDays": "Start my {n} free days",
+  "@startMyFreeDays": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "subscribeMonthly": "Subscribe monthly",
+  "continueFree": "Continue free",
+  "noChargeToday": "No charge today. Cancel anytime in your App Store or Google Play settings. Auto-renews until cancelled.",
+  "adFreePromise": "Your subscription keeps Muslim AI free of ads, always.",
+  "trialReminderTitle": "Your free trial ends in 2 days",
+  "trialReminderBody": "Keep it and your plan continues. Cancel in your store settings and you won't be charged.",
+  "todayReviewTitle": "Today's review",
+  "todayReviewBody": "{n} ayahs · about {m} min",
+  "@todayReviewBody": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      },
+      "m": {
+        "type": "int"
+      }
+    }
+  },
+  "todayNewTitle": "Today's new ayahs",
+  "todayReciteTitle": "Recite with the coach",
+  "todayReciteBody": "One minute, word-by-word feedback",
+  "todayDoneTitle": "Today's review is done",
+  "todayDoneBody": "Alhamdulillah. See you tomorrow.",
+  "startHifzPlan": "Start a hifz plan",
+  "startHifzPlanBody": "A few ayahs a day, reviewed before you forget them",
+  "startLabel": "Start",
+  "weekTitle": "Your week",
+  "weekStats": "{days} active days · {reviews} reviews · {ayahs} ayahs read",
+  "@weekStats": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      },
+      "reviews": {
+        "type": "int"
+      },
+      "ayahs": {
+        "type": "int"
+      }
+    }
+  },
+  "weekAtRisk": "{n} ayahs are at risk of being forgotten this week.",
+  "@weekAtRisk": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "weekAtRiskOffer": "Premium tests all of them for you.",
+  "weekAllSafe": "Every ayah you memorized is safe. Masha'Allah.",
+  "seeMyPlan": "See my plan",
+  "billingIssue": "Update your payment to keep your Hifz Coach.",
+  "trialEnds": "Your free trial ends on {date}. Cancel anytime in your store settings.",
+  "@trialEnds": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "update": "Update",
+  "weakWordsTitle": "Your weak words",
+  "weakWordsBody": "The words you get wrong most often, practised first.",
+  "weakWordsEmpty": "No weak words yet. Recite with the coach and they'll appear here.",
+  "weakWordMisses": "Missed {n} times",
+  "@weakWordMisses": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "weakWordsLocked": "{n} more words and the full drill with Premium",
+  "@weakWordsLocked": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "practise": "Practise",
+  "knownSurahsPlan": "Already memorized",
+  "notificationsBlocked": "Notifications are off for Muslim AI. Turn them on in your phone settings.",
+  "pausePlan": "Pause new ayahs",
+  "resumePlan": "Resume",
+  "planPaused": "Paused · reviews continue",
+  "weakWordsCardBody": "{n} words to polish",
+  "@weakWordsCardBody": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  }
 }

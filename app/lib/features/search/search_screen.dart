@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/analytics.dart';
 import '../../core/api.dart';
+import '../../core/monetization.dart';
 import '../../core/providers.dart';
 import '../../core/theme.dart';
 import '../../core/widgets.dart';
@@ -55,14 +56,24 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         });
       }).toList();
       setState(() => _results = rows);
-    } on QuotaExceeded {
-      Analytics.track(Events.quotaHit, {'feature': 'search'});
-      if (mounted) context.push('/paywall?source=search_quota');
+    } on AiBudgetExhausted catch (e) {
+      // Word search is free and unlimited: answer the question instead of stopping.
+      await _fallBackToKeyword(query, e.resetsAt);
+    } on QuotaExceeded catch (e) {
+      await _fallBackToKeyword(query, e.resetsAt);
     } catch (_) {
       setState(() => _error = true);
     } finally {
       if (mounted) setState(() => _busy = false);
     }
+  }
+
+  Future<void> _fallBackToKeyword(String query, DateTime? resetsAt) async {
+    Analytics.track(Events.searchFallback, {'from': 'semantic'});
+    final note = context.l10n.searchFellBack(renewalDay(context, resetsAt));
+    setState(() => _semantic = false);
+    await _search(query);
+    if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(note)));
   }
 
   @override

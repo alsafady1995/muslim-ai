@@ -16,5 +16,8 @@ class AppConfig {
   static const privacyUrl = String.fromEnvironment('PRIVACY_URL', defaultValue: 'https://muslimai.app/privacy');
   static const termsUrl = String.fromEnvironment('TERMS_URL', defaultValue: 'https://muslimai.app/terms');
 
+  /// Web preview with no backend: auth, AI and payments are simulated (lib/demo/).
+  static const demoMode = bool.fromEnvironment('DEMO_MODE');
+
   static bool get hasSupabase => supabaseUrl.isNotEmpty && supabaseAnonKey.isNotEmpty;
 }

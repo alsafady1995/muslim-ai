@@ -4,10 +4,12 @@
 // keyword: free text match on Arabic / translation, no quota.
 import { handler, HttpError, json } from "../_shared/http.ts";
 import { admin, requireUser } from "../_shared/supabase.ts";
-import { consumeQuota, refundQuota } from "../_shared/quota.ts";
+import { beginAiCall, cancelAiCall, finishAiCall, quotaInfo } from "../_shared/quota.ts";
+import { embeddingCostUsd } from "../_shared/ai_cost.ts";
 import { retrieve } from "../_shared/retrieval.ts";
 import { env } from "../_shared/env.ts";
 import { track } from "../_shared/analytics.ts";
+import { keywordQuery } from "../_shared/arabic.ts";
 
 Deno.serve(handler(async (req, body) => {
   const user = await requireUser(req);
@@ -21,7 +23,7 @@ Deno.serve(handler(async (req, body) => {
 
   if (body.mode === "keyword") {
     const { data, error } = await admin().rpc("search_ayahs_keyword", {
-      p_query: query,
+      p_query: keywordQuery(query),
       p_translation_id: translationId,
       p_limit: limit,
     });
@@ -29,9 +31,10 @@ Deno.serve(handler(async (req, body) => {
     return json({ mode: "keyword", results: data });
   }
 
-  const quota = await consumeQuota(user.id, "search");
+  const ai = await beginAiCall(user.id, "search", embeddingCostUsd());
   try {
     const { ayahs } = await retrieve(query, { locale, translationId, includeHadith: false, maxAyahs: limit });
+    await finishAiCall(ai, embeddingCostUsd(), "embedding");
     track(user.id, "quran_search", { mode: "semantic", results: ayahs.length, locale });
     return json({
       mode: "semantic",
@@ -48,10 +51,10 @@ Deno.serve(handler(async (req, body) => {
         tafsir_source: a.tafsir_source,
         relevance: a.similarity,
       })),
-      quota: { remaining: quota.remaining, limit: quota.limit, premium: quota.premium },
+      quota: quotaInfo(ai),
     });
   } catch (e) {
-    await refundQuota(user.id, "search");
+    await cancelAiCall(ai);
     throw e;
   }
 }));

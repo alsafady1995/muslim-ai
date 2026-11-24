@@ -5,11 +5,18 @@ import '../../core/widgets.dart';
 import '../../data/models.dart';
 
 class CoachResultView extends StatelessWidget {
-  const CoachResultView({super.key, required this.result, required this.ayahs, required this.onRetry, required this.onListen});
+  const CoachResultView({super.key, required this.result, required this.ayahs, required this.onRetry, required this.onListen,
+      this.onContinue, this.notes = const []});
   final RecitationResult result;
   final List<Ayah> ayahs;
   final VoidCallback onRetry;
   final VoidCallback onListen;
+
+  /// When set (onboarding, hifz test), "Continue" is the primary action and returns to the caller.
+  final VoidCallback? onContinue;
+
+  /// Extra lines above the actions, e.g. the free 60-second note.
+  final List<Widget> notes;
 
   static Color statusColor(String status) => switch (status) {
         'correct' => AppColors.success,
@@ -100,10 +107,16 @@ class CoachResultView extends StatelessWidget {
       ],
       const SizedBox(height: 8),
       Text(l10n.coachDisclaimer, style: theme.textTheme.bodySmall, textAlign: TextAlign.center),
+      ...notes,
       const SizedBox(height: 16),
       OutlinedButton.icon(onPressed: onListen, icon: const Icon(Icons.headphones), label: Text(l10n.listenCorrect)),
       const SizedBox(height: 8),
-      FilledButton.icon(onPressed: onRetry, icon: const Icon(Icons.replay), label: Text(l10n.tryAgain)),
+      if (onContinue != null) ...[
+        OutlinedButton.icon(onPressed: onRetry, icon: const Icon(Icons.replay), label: Text(l10n.tryAgain)),
+        const SizedBox(height: 8),
+        FilledButton(onPressed: onContinue, child: Text(l10n.finishCoach)),
+      ] else
+        FilledButton.icon(onPressed: onRetry, icon: const Icon(Icons.replay), label: Text(l10n.tryAgain)),
     ]);
   }
 
