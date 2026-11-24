@@ -109,7 +109,94 @@ class DemoUserRepository extends UserRepository {
         for (final r in _s.recitations.reversed.take(5))
           {'id': (r as Map)['id'], 'score': r['overall_score'], 'created_at': r['created_at']},
       ],
+      'hifz_at_risk': items.where((i) => (_retention(i) ?? 1) < 0.8).length,
+      'hifz_has_plan': _s.hifzPlans.any((p) => (p as Map)['active'] == true && p['review_only'] != true),
+      'value_days': _s.valueDays,
+      'days_since_signup': _s.daysSinceSignup,
+      'subscription': await subscription(),
     });
+  }
+
+  @override
+  Future<WeeklyQuota> weeklyQuota() async => WeeklyQuota(await quota());
+
+  @override
+  Future<WeeklySummary> weeklySummary() async {
+    final days = [for (var i = 0; i < 7; i++) DemoStore.dateOf(DateTime.now().subtract(Duration(days: i)))];
+    int sum(String k) => days.fold(0, (a, d) => a + (((_s.daily[d] as Map?)?[k] as int?) ?? 0));
+    final items = _s.hifzItems.cast<Map<String, dynamic>>();
+    return WeeklySummary({
+      'active_days': days.where((d) => (((_s.daily[d] as Map?)?['xp_earned'] as int?) ?? 0) > 0).length,
+      'ayahs_read': sum('ayahs_read'),
+      'reviews_done': sum('reviews_done'),
+      'ayahs_memorized': sum('ayahs_memorized'),
+      'recitations': sum('recitations'),
+      'hifz_memorized': items.where((i) => i['status'] == 'review' || i['status'] == 'mastered').length,
+      'at_risk': items.where((i) => (_retention(i) ?? 1) < 0.8).length,
+      'streak': _s.profile['current_streak'] ?? 0,
+      'days_since_signup': _s.daysSinceSignup,
+    });
+  }
+
+  /// Same shape as get_weak_words: free users see the top 3 and a "locked" count.
+  @override
+  Future<WeakWords> weakWords({int limit = 30}) async {
+    await _s.ensureQuran();
+    final counts = <String, Map<String, dynamic>>{};
+    for (final w in _s.weakWordLog.cast<Map>()) {
+      final key = '${w['ayah_id']}:${w['position']}';
+      final row = counts.putIfAbsent(key, () {
+        final a = _s.ayahRow(w['ayah_id'] as int);
+        return {'ayah_id': w['ayah_id'], 'surah_id': a['surah_id'], 'ayah_number': a['ayah_number'], 'word': w['word'], 'misses': 0};
+      });
+      row['misses'] = (row['misses'] as int) + 1;
+    }
+    final all = counts.values.toList()..sort((a, b) => (b['misses'] as int).compareTo(a['misses'] as int));
+    final shown = _s.premium ? all.take(limit).toList() : all.take(3).toList();
+    return WeakWords({'premium': _s.premium, 'total': all.length, 'locked': all.length - shown.length, 'words': shown});
+  }
+
+  @override
+  Future<int> seedKnownSurahs(List<int> surahs, String title) async {
+    await _s.ensureQuran();
+    if (surahs.isEmpty) return 0;
+    final id = 'plan_known';
+    if (!_s.hifzPlans.any((p) => (p as Map)['id'] == id)) {
+      _s.hifzPlans.add({'id': id, 'title': title, 'daily_new_ayahs': 0, 'active': true, 'review_only': true,
+          'created_at': DateTime.now().toIso8601String()});
+    }
+    var n = 0;
+    final existing = _s.hifzItems.map((e) => (e as Map)['ayah_id']).toSet();
+    for (final s in surahs) {
+      for (final ayah in _s.idsOfSurah(s)) {
+        if (existing.contains(ayah)) continue;
+        _s.hifzItems.add({
+          'id': _s.hifzItems.length + 1000,
+          'plan_id': id,
+          'ayah_id': ayah,
+          'status': 'review',
+          'ease_factor': 2.5,
+          'interval_days': 3,
+          'repetitions': 2,
+          'lapses': 0,
+          // Spread over 6 days starting tomorrow, like the server.
+          'due_date': DemoStore.dateOf(DateTime.now().add(Duration(days: 1 + n % 6))),
+          'last_reviewed_at': DateTime.now().subtract(const Duration(days: 3)).toIso8601String(),
+          'introduced_on': _s.today,
+        });
+        n++;
+      }
+    }
+    await _s.save();
+    return n;
+  }
+
+  @override
+  Future<void> setPlanActive(String planId, bool active) async {
+    for (final p in _s.hifzPlans.cast<Map<String, dynamic>>()) {
+      if (p['id'] == planId) p['active'] = active;
+    }
+    await _s.save();
   }
 
   @override
@@ -198,8 +285,12 @@ class DemoUserRepository extends UserRepository {
   @override
   Future<Map<String, dynamic>> quota() async => {
     'premium': _s.premium,
+    'period': 'week',
+    'resets_at': _s.resetsAt.toIso8601String(),
+    'clip_seconds': _s.premium ? 180 : 60,
+    'onboarding_check_available': _s.state['onboarding_check_used'] != true,
     'features': {
-      for (final f in ['recitation', 'ask', 'search']) f: {'limit': _s.limitFor(f), 'used': _s.usedToday(f)},
+      for (final f in DemoStore.weeklyLimits.keys) f: {'limit': _s.limitFor(f), 'used': _s.usedThisWeek(f)},
     },
   };
 
@@ -279,13 +370,15 @@ class DemoUserRepository extends UserRepository {
   }
 
   @override
-  Future<List<Map<String, dynamic>>> hifzPlans() async =>
-      _s.hifzPlans.cast<Map<String, dynamic>>().where((p) => p['active'] == true).toList();
+  Future<List<Map<String, dynamic>>> hifzPlans() async => [
+    ..._s.hifzPlans.cast<Map<String, dynamic>>().where((p) => p['active'] == true),
+    ..._s.hifzPlans.cast<Map<String, dynamic>>().where((p) => p['active'] != true),
+  ];
 
   @override
   Future<String> createHifzPlan(int startAyahId, int endAyahId, int dailyNew, String? title) async {
     if (endAyahId < startAyahId) throw ApiError('invalid_range');
-    if (_s.hifzPlans.where((p) => (p as Map)['active'] == true).length >= 3) {
+    if (_s.hifzPlans.where((p) => (p as Map)['active'] == true && p['review_only'] != true).length >= 3) {
       throw ApiError('maximum 3 active plans');
     }
     final id = 'plan_${DateTime.now().microsecondsSinceEpoch}';
@@ -320,39 +413,11 @@ class DemoUserRepository extends UserRepository {
     return id;
   }
 
-  /// SM-2, same as public._hifz_apply_review.
   @override
   Future<ActivityResult> recordHifzReview(int itemId, int score) async {
-    final i = _s.hifzItems.cast<Map<String, dynamic>>().firstWhere((e) => e['id'] == itemId);
-    final wasNew = i['status'] == 'new';
-    final ef = max(1.3, (i['ease_factor'] as num) + (0.1 - (5 - score) * (0.08 + (5 - score) * 0.02)));
-    int interval, reps;
-    String status;
-    if (score < 3) {
-      reps = 0;
-      interval = 1;
-      if (!wasNew) i['lapses'] = (i['lapses'] as int) + 1;
-      status = 'learning';
-    } else {
-      reps = (i['repetitions'] as int) + 1;
-      interval = switch (reps) {
-        1 => 1,
-        2 => 3,
-        _ => (max(i['interval_days'] as int, 1) * ef).ceil(),
-      };
-      interval = min(interval, 180);
-      status = interval >= 30 ? 'mastered' : (reps >= 2 ? 'review' : 'learning');
-    }
-    i
-      ..['ease_factor'] = ef
-      ..['interval_days'] = interval
-      ..['repetitions'] = reps
-      ..['status'] = status
-      ..['due_date'] = DemoStore.dateOf(DateTime.now().add(Duration(days: interval)))
-      ..['last_reviewed_at'] = DateTime.now().toIso8601String()
-      ..['introduced_on'] = i['introduced_on'] ?? _s.today;
-    final activity = _s.logActivity(wasNew && score >= 3 ? 'ayah_memorized' : 'hifz_review', 1);
-    return ActivityResult({'item_id': itemId, 'status': status, 'interval_days': interval, ...activity});
+    final r = _s.applyHifzReview(itemId, score);
+    await _s.save();
+    return ActivityResult(r);
   }
 
   @override
@@ -395,8 +460,38 @@ class DemoEdgeApi extends EdgeApi {
         if (semantic) _quota('search');
         return DemoAi.search(_s, '${body['query']}', semantic: semantic);
       case 'recitation-analyze':
-        _quota('recitation');
-        return DemoAi.recitation(_s, body);
+        final hifz = body['mode'] == 'hifz';
+        // The first Al-Fatiha check in onboarding is free and not counted (as on the server).
+        final onboarding = body['source'] == 'onboarding' &&
+            _s.state['onboarding_check_used'] != true &&
+            body['start_ayah_id'] == 1 &&
+            (body['end_ayah_id'] as int) <= 7;
+        if (onboarding) {
+          _s.state['onboarding_check_used'] = true;
+        } else {
+          _quota(hifz ? 'hifz' : 'recitation');
+        }
+        final res = DemoAi.recitation(_s, body);
+        final clip = _s.premium ? 180 : 60;
+        res['clip_seconds'] = clip;
+        res['clipped'] = ((body['seconds'] as int?) ?? 0) > clip + 5;
+        res['onboarding'] = onboarding;
+        if (hifz) {
+          final updates = <Map<String, dynamic>>[];
+          for (final item in _s.hifzItems.cast<Map<String, dynamic>>().toList()) {
+            final ayah = item['ayah_id'] as int;
+            if (ayah < (body['start_ayah_id'] as int) || ayah > (body['end_ayah_id'] as int)) continue;
+            final words = (res['words'] as List).cast<Map>().where((w) => w['ayahId'] == ayah).toList();
+            if (words.isEmpty) continue;
+            final ok = words.where((w) => w['status'] == 'correct').length;
+            final pct = 100 * ok / words.length;
+            updates.add(_s.applyHifzReview(item['id'] as int, pct >= 95 ? 5 : pct >= 85 ? 4 : pct >= 70 ? 3 : 2));
+          }
+          res['hifz'] = updates;
+          res['milestone'] = updates.map((u) => u['milestone']).firstWhere((m) => m != null, orElse: () => null);
+          await _s.save();
+        }
+        return res;
       case 'delete-account':
         await _s.reset();
         return {'ok': true};
@@ -407,7 +502,9 @@ class DemoEdgeApi extends EdgeApi {
 
   int _quota(String feature) {
     final remaining = _s.consumeQuota(feature);
-    if (remaining == null) throw QuotaExceeded(feature, premium: _s.premium, limit: _s.limitFor(feature));
+    if (remaining == null) {
+      throw QuotaExceeded(feature, premium: _s.premium, limit: _s.limitFor(feature), resetsAt: _s.resetsAt);
+    }
     return remaining;
   }
 }

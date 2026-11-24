@@ -150,6 +150,7 @@ class DemoStore {
   /// Called when the (simulated) guest account is created.
   void bootstrapUser(String locale) {
     _state.clear();
+    _state['created_at'] = DateTime.now().toIso8601String();
     final r = Random();
     _state['profile'] = {
       'display_name': null,
@@ -296,22 +297,104 @@ class DemoStore {
   }
 
   // ------------------------------------------------------------ AI quota
-  int limitFor(String feature) {
-    final l = (reference['plan_limits'] as List).cast<Map<String, dynamic>>().firstWhere(
-      (r) => r['feature'] == feature,
-    );
-    return (premium ? l['premium_daily'] : l['free_daily']) as int;
+  /// Weekly limits, same numbers as public.plan_limits (free_weekly / premium_weekly).
+  static const weeklyLimits = <String, (int, int)>{
+    'recitation': (10, 150),
+    'hifz': (5, 150),
+    'ask': (15, 100),
+    'search': (30, 300),
+  };
+
+  /// Weeks start on Friday, as on the server (_week_start).
+  static DateTime weekStart(DateTime d) {
+    final day = DateTime(d.year, d.month, d.day);
+    return day.subtract(Duration(days: (day.weekday - DateTime.friday + 7) % 7));
   }
 
-  int usedToday(String feature) => aiUsage['$today:$feature'] as int? ?? 0;
+  String get week => dateOf(weekStart(DateTime.now()));
+  DateTime get resetsAt => weekStart(DateTime.now()).add(const Duration(days: 7));
 
-  /// Returns remaining after consuming one, or null when the daily limit is hit.
+  int limitFor(String feature) {
+    final l = weeklyLimits[feature] ?? (0, 0);
+    return premium ? l.$2 : l.$1;
+  }
+
+  int usedThisWeek(String feature) => aiUsage['$week:$feature'] as int? ?? 0;
+
+  /// Returns remaining after consuming one, or null when the weekly limit is hit.
   int? consumeQuota(String feature) {
     final limit = limitFor(feature);
-    final used = usedToday(feature);
+    final used = usedThisWeek(feature);
     if (used >= limit) return null;
-    aiUsage['$today:$feature'] = used + 1;
+    aiUsage['$week:$feature'] = used + 1;
     save();
     return limit - used - 1;
+  }
+
+  /// Days with real value (recitation check, AI hifz test or review), as get_dashboard.value_days.
+  int get valueDays => daily.values
+      .where((d) => ((d as Map)['recitations'] as int? ?? 0) > 0 || (d['reviews_done'] as int? ?? 0) > 0)
+      .length;
+
+  int get daysSinceSignup {
+    final created = DateTime.tryParse('${_state['created_at'] ?? ''}');
+    if (created == null) {
+      final first = (daily.keys.toList()..sort()).firstOrNull;
+      return first == null ? 0 : DateTime.now().difference(DateTime.parse(first)).inDays;
+    }
+    return DateTime.now().difference(created).inDays;
+  }
+
+  // ------------------------------------------------------------ hifz
+  List<dynamic> get weakWordLog => _list('weak_words');
+  List<dynamic> get milestones => _list('milestones');
+
+  /// SM-2, same as public._hifz_apply_review, including the "surah memorized" milestone.
+  Map<String, dynamic> applyHifzReview(int itemId, int score) {
+    final i = hifzItems.cast<Map<String, dynamic>>().firstWhere((e) => e['id'] == itemId);
+    final wasNew = i['status'] == 'new';
+    final ef = max(1.3, (i['ease_factor'] as num) + (0.1 - (5 - score) * (0.08 + (5 - score) * 0.02)));
+    int interval, reps;
+    String status;
+    if (score < 3) {
+      reps = 0;
+      interval = 1;
+      if (!wasNew) i['lapses'] = (i['lapses'] as int) + 1;
+      status = 'learning';
+    } else {
+      reps = (i['repetitions'] as int) + 1;
+      interval = switch (reps) {
+        1 => 1,
+        2 => 3,
+        _ => (max(i['interval_days'] as int, 1) * ef).ceil(),
+      };
+      interval = min(interval, 180);
+      status = interval >= 30 ? 'mastered' : (reps >= 2 ? 'review' : 'learning');
+    }
+    i
+      ..['ease_factor'] = ef
+      ..['interval_days'] = interval
+      ..['repetitions'] = reps
+      ..['status'] = status
+      ..['due_date'] = dateOf(DateTime.now().add(Duration(days: interval)))
+      ..['last_reviewed_at'] = DateTime.now().toIso8601String()
+      ..['introduced_on'] = i['introduced_on'] ?? today;
+    final milestone = _milestoneFor(i['ayah_id'] as int);
+    final activity = logActivity(wasNew && score >= 3 ? 'ayah_memorized' : 'hifz_review', 1);
+    return {'item_id': itemId, 'status': status, 'interval_days': interval, 'milestone': milestone, ...activity};
+  }
+
+  Map<String, dynamic>? _milestoneFor(int ayahId) {
+    final surah = ayahRow(ayahId)['surah_id'] as int;
+    if (milestones.any((m) => (m as Map)['surah_id'] == surah)) return null;
+    final ids = idsOfSurah(surah).toSet();
+    final items = hifzItems.cast<Map<String, dynamic>>().where((e) => ids.contains(e['ayah_id'])).toList();
+    final covered = items.map((e) => e['ayah_id']).toSet();
+    if (covered.length < ids.length || items.any((e) => e['status'] != 'review' && e['status'] != 'mastered')) return null;
+    final first = milestones.isEmpty;
+    milestones.add({'surah_id': surah, 'at': DateTime.now().toIso8601String()});
+    _awardXp(100);
+    final info = surahs[surah - 1];
+    return {'surah_id': surah, 'name_ar': info['name_ar'], 'transliteration': info['transliteration'], 'xp': 100, 'first': first};
   }
 }

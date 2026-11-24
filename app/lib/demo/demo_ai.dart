@@ -154,6 +154,9 @@ abstract final class DemoAi {
     final activity = s.logActivity('recitation', 1);
     final overall = double.parse((accuracy * 0.8 + 18).clamp(0, 100).toStringAsFixed(1));
     s.dayOf(s.today); // ensure exists
+    for (final m in mistakes) {
+      s.weakWordLog.add({'ayah_id': m['ayahId'], 'position': m['position'], 'word': m['expected']});
+    }
     s.recitations.add({
       'id': 'rec_${DateTime.now().millisecondsSinceEpoch}',
       'start_ayah_id': from,
