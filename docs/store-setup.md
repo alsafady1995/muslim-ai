@@ -18,8 +18,8 @@ Bundle and package IDs stay `app.muslimai.mobile`; product IDs stay as below. Us
 | Home-screen name | Asmi3ni | Asmi3ni (an Arabic home-screen name needs localized `InfoPlist.strings` / `values-ar`, not done yet) |
 | Tagline | Recite. It listens. | سمّع حفظك، وهو يصحّح لك |
 
-`asmi3ni.com` was registered on 24 November 2026 (Cloudflare Registrar). The site in `site/` is published there by
-`.github/workflows/pages.yml`: privacy `https://asmi3ni.com/privacy/`, terms `https://asmi3ni.com/terms/`,
+`asmi3ni.com` was registered on 24 November 2026 (Cloudflare Registrar). The static site in `site/` is published there by
+Cloudflare Pages (project connected to this repo, build output `site`, no build command): privacy `https://asmi3ni.com/privacy/`, terms `https://asmi3ni.com/terms/`,
 account deletion `https://asmi3ni.com/delete-account/` (use this for Google Play's data-deletion URL). The app
 defaults `PRIVACY_URL` and `TERMS_URL` to these.
 
