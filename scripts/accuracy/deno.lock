@@ -80,6 +80,8 @@
   "workspace": {
     "dependencies": [
       "jsr:@std/assert@1",
+      "jsr:@std/cli@1",
+      "jsr:@std/encoding@1",
       "npm:@supabase/supabase-js@2.119.2"
     ]
   }

@@ -6,7 +6,7 @@
 // Re-running only downloads new clips. Audio stays private: it is in the
 // "benchmark-clips" bucket, readable only with the service role.
 
-import { parseArgs } from "jsr:@std/cli@1/parse-args";
+import { parseArgs } from "@std/cli/parse-args";
 import { createClient } from "@supabase/supabase-js";
 import type { ManifestClip } from "./dataset.ts";
 

@@ -9,8 +9,8 @@
 // Pass --fresh to transcribe again (after changing the model). Writes report.md, report.json
 // and clips.jsonl to --out (default <dataset>/results/<system>).
 
-import { parseArgs } from "jsr:@std/cli@1/parse-args";
-import { encodeBase64 } from "jsr:@std/encoding@1/base64";
+import { parseArgs } from "@std/cli/parse-args";
+import { encodeBase64 } from "@std/encoding/base64";
 import { analyzeRecitation, type HeardWord, THRESHOLDS } from "../../supabase/functions/_shared/alignment.ts";
 import { type ManifestClip, parseManifest, parsePredictions, truthOf } from "./dataset.ts";
 import { type ClipPrediction, type ClipScore, scoreClip, summarize, verdictOf, wordKey } from "./metrics.ts";
