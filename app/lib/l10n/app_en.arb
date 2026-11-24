@@ -755,5 +755,50 @@
         "type": "int"
       }
     }
-  }
+  },
+  "benchTitle": "Accuracy recordings",
+  "benchConsentTitle": "Help us measure accuracy",
+  "benchConsentBody": "Record yourself reciting, then mark any mistakes you made, on purpose or by accident. Unlike normal checks, these recordings are kept, privately, so the Asmi3ni team can test how accurately the app hears recitation. Nobody else can listen to them. You can delete them here at any time, and deleting your account deletes them too.",
+  "benchConsentChild": "If the reciter is a child, a parent must agree and record with them.",
+  "benchAgree": "I agree",
+  "benchSpeaker": "Who is reciting?",
+  "benchMan": "Man",
+  "benchWoman": "Woman",
+  "benchChild": "Child (under 15)",
+  "benchNative": "Arabic is the reciter's first language",
+  "benchEnvironment": "Where are you recording?",
+  "benchQuiet": "Quiet room",
+  "benchNoisy": "Some background noise",
+  "benchRecitePrompt": "Recite the whole range. Mistakes on purpose are welcome: you will mark them next.",
+  "benchStartRecording": "Start recording",
+  "benchStopRecording": "Stop",
+  "benchLabelTitle": "Mark your mistakes",
+  "benchLabelHint": "Tap a word you said wrong. Tap again if you skipped it, and once more to clear it.",
+  "benchWrong": "Wrong",
+  "benchSkipped": "Skipped",
+  "benchMistakesMarked": "{n} mistakes marked",
+  "@benchMistakesMarked": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "benchNoMistakes": "No mistakes: I recited it correctly",
+  "benchListenBack": "Listen back",
+  "benchSave": "Save recording",
+  "benchDiscard": "Discard",
+  "benchSaved": "Saved. Thank you!",
+  "benchCount": "Recordings you have saved: {n}",
+  "@benchCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "benchAnother": "Record another",
+  "benchDeleteAll": "Delete all my recordings",
+  "benchDeleted": "Your recordings were deleted.",
+  "benchSaveFailed": "Couldn't save the recording. Check your connection and try again."
 }

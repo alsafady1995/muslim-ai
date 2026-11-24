@@ -87,6 +87,18 @@ Before launch, run the answer-quality eval described in `docs/` on Haiku. If it 
 | 25 | **RevenueCat offering:** make sure `default` lists `$rc_annual` first and both products are attached to entitlement `premium`. | The paywall shows whatever the offering returns. |
 | 26 | **PostHog dashboards** for the funnel in `docs/full-audit.md` §7 (onboarding → first recitation → day-3 value gate → paywall view → trial → paid). | All events are already sent; you only need to build the charts. |
 
+## 5b. Recitation accuracy benchmark (before public launch)
+
+Everything we sell depends on the coach not calling a correct recitation wrong. Steps and launch gates:
+[`docs/accuracy-benchmark.md`](docs/accuracy-benchmark.md).
+
+| # | What | Why |
+|---|---|---|
+| 27 | **Build an internal TestFlight / Play test build with `--dart-define=BENCHMARK_RECORDER=true`** (after items 8–12). | Adds Settings → Accuracy recordings. Never in store builds. |
+| 28 | **Collect about 300 labelled clips from at least 30 people**: men, women, children with a parent, at least 30% non-native speakers, 60+ of Al-Fatiha, about 40% with deliberate mistakes. | The benchmark is only as good as its clips. |
+| 29 | **Run `deno task export` and `deno task run --sweep`** in `scripts/accuracy` (service role key + ASR service). | Gives the false-flag rate, mistakes caught and the best threshold. |
+| 30 | **Type Tarteel's results for about 50 of the same clips** into `tarteel.jsonl` and run with `--predictions`. | The only honest way to say "as accurate as Tarteel". |
+
 ## 6. Not verified in this build environment
 
 

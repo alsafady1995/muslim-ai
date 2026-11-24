@@ -1,6 +1,7 @@
 """Quran recitation ASR service.
 
 POST /v1/transcribe {"audio_url": "...", "language": "ar"}
+                or {"audio_base64": "...", "language": "ar"}  (accuracy benchmark: local clips)
 -> {"text": str, "duration": float, "words": [{"word", "start", "end", "probability"}]}
 
 Uses a Whisper model fine-tuned on Quran recitation (default: tarteel-ai/whisper-base-ar-quran,
@@ -11,6 +12,8 @@ the correct text would hide the reciter's mistakes.
 
 from __future__ import annotations
 
+import base64
+import binascii
 import hmac
 import os
 import tempfile
@@ -18,7 +21,7 @@ from functools import lru_cache
 
 import httpx
 from fastapi import Depends, FastAPI, Header, HTTPException
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel, HttpUrl, model_validator
 
 MODEL_DIR = os.environ.get("ASR_MODEL_DIR", "/models/whisper-quran-ct2")
 DEVICE = os.environ.get("ASR_DEVICE", "cpu")  # "cuda" on GPU hosts
@@ -45,8 +48,18 @@ def model():
 
 
 class TranscribeRequest(BaseModel):
-    audio_url: HttpUrl
+    """Exactly one audio source: a URL (the app's signed storage URL) or inline base64
+    (the accuracy benchmark sends local clips this way)."""
+
+    audio_url: HttpUrl | None = None
+    audio_base64: str | None = None
     language: str = "ar"
+
+    @model_validator(mode="after")
+    def one_source(self) -> "TranscribeRequest":
+        if (self.audio_url is None) == (self.audio_base64 is None):
+            raise ValueError("send exactly one of audio_url or audio_base64")
+        return self
 
 
 class Word(BaseModel):
@@ -67,17 +80,29 @@ def healthz() -> dict:
     return {"ok": True}
 
 
-@app.post("/v1/transcribe", response_model=TranscribeResponse, dependencies=[Depends(require_token)])
-def transcribe(req: TranscribeRequest) -> TranscribeResponse:
+def load_audio(req: TranscribeRequest) -> bytes:
+    if req.audio_base64 is not None:
+        # base64 is 4/3 of the raw size: reject before decoding a huge payload
+        if len(req.audio_base64) > MAX_AUDIO_BYTES * 4 // 3 + 4:
+            raise HTTPException(413, "audio too large")
+        try:
+            return base64.b64decode(req.audio_base64, validate=True)
+        except (binascii.Error, ValueError):
+            raise HTTPException(400, "invalid audio_base64") from None
     with httpx.Client(timeout=30, follow_redirects=True) as client:
         r = client.get(str(req.audio_url))
     if r.status_code != 200:
         raise HTTPException(400, f"could not fetch audio ({r.status_code})")
     if len(r.content) > MAX_AUDIO_BYTES:
         raise HTTPException(413, "audio too large")
+    return r.content
 
+
+@app.post("/v1/transcribe", response_model=TranscribeResponse, dependencies=[Depends(require_token)])
+def transcribe(req: TranscribeRequest) -> TranscribeResponse:
+    audio = load_audio(req)
     with tempfile.NamedTemporaryFile(suffix=".audio") as f:
-        f.write(r.content)
+        f.write(audio)
         f.flush()
         segments, info = model().transcribe(
             f.name,

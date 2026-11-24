@@ -2227,6 +2227,192 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{n} words to polish'**
   String weakWordsCardBody(int n);
+
+  /// No description provided for @benchTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Accuracy recordings'**
+  String get benchTitle;
+
+  /// No description provided for @benchConsentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Help us measure accuracy'**
+  String get benchConsentTitle;
+
+  /// No description provided for @benchConsentBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Record yourself reciting, then mark any mistakes you made, on purpose or by accident. Unlike normal checks, these recordings are kept, privately, so the Asmi3ni team can test how accurately the app hears recitation. Nobody else can listen to them. You can delete them here at any time, and deleting your account deletes them too.'**
+  String get benchConsentBody;
+
+  /// No description provided for @benchConsentChild.
+  ///
+  /// In en, this message translates to:
+  /// **'If the reciter is a child, a parent must agree and record with them.'**
+  String get benchConsentChild;
+
+  /// No description provided for @benchAgree.
+  ///
+  /// In en, this message translates to:
+  /// **'I agree'**
+  String get benchAgree;
+
+  /// No description provided for @benchSpeaker.
+  ///
+  /// In en, this message translates to:
+  /// **'Who is reciting?'**
+  String get benchSpeaker;
+
+  /// No description provided for @benchMan.
+  ///
+  /// In en, this message translates to:
+  /// **'Man'**
+  String get benchMan;
+
+  /// No description provided for @benchWoman.
+  ///
+  /// In en, this message translates to:
+  /// **'Woman'**
+  String get benchWoman;
+
+  /// No description provided for @benchChild.
+  ///
+  /// In en, this message translates to:
+  /// **'Child (under 15)'**
+  String get benchChild;
+
+  /// No description provided for @benchNative.
+  ///
+  /// In en, this message translates to:
+  /// **'Arabic is the reciter\'s first language'**
+  String get benchNative;
+
+  /// No description provided for @benchEnvironment.
+  ///
+  /// In en, this message translates to:
+  /// **'Where are you recording?'**
+  String get benchEnvironment;
+
+  /// No description provided for @benchQuiet.
+  ///
+  /// In en, this message translates to:
+  /// **'Quiet room'**
+  String get benchQuiet;
+
+  /// No description provided for @benchNoisy.
+  ///
+  /// In en, this message translates to:
+  /// **'Some background noise'**
+  String get benchNoisy;
+
+  /// No description provided for @benchRecitePrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Recite the whole range. Mistakes on purpose are welcome: you will mark them next.'**
+  String get benchRecitePrompt;
+
+  /// No description provided for @benchStartRecording.
+  ///
+  /// In en, this message translates to:
+  /// **'Start recording'**
+  String get benchStartRecording;
+
+  /// No description provided for @benchStopRecording.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop'**
+  String get benchStopRecording;
+
+  /// No description provided for @benchLabelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark your mistakes'**
+  String get benchLabelTitle;
+
+  /// No description provided for @benchLabelHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap a word you said wrong. Tap again if you skipped it, and once more to clear it.'**
+  String get benchLabelHint;
+
+  /// No description provided for @benchWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong'**
+  String get benchWrong;
+
+  /// No description provided for @benchSkipped.
+  ///
+  /// In en, this message translates to:
+  /// **'Skipped'**
+  String get benchSkipped;
+
+  /// No description provided for @benchMistakesMarked.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} mistakes marked'**
+  String benchMistakesMarked(int n);
+
+  /// No description provided for @benchNoMistakes.
+  ///
+  /// In en, this message translates to:
+  /// **'No mistakes: I recited it correctly'**
+  String get benchNoMistakes;
+
+  /// No description provided for @benchListenBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Listen back'**
+  String get benchListenBack;
+
+  /// No description provided for @benchSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save recording'**
+  String get benchSave;
+
+  /// No description provided for @benchDiscard.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get benchDiscard;
+
+  /// No description provided for @benchSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved. Thank you!'**
+  String get benchSaved;
+
+  /// No description provided for @benchCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Recordings you have saved: {n}'**
+  String benchCount(int n);
+
+  /// No description provided for @benchAnother.
+  ///
+  /// In en, this message translates to:
+  /// **'Record another'**
+  String get benchAnother;
+
+  /// No description provided for @benchDeleteAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete all my recordings'**
+  String get benchDeleteAll;
+
+  /// No description provided for @benchDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Your recordings were deleted.'**
+  String get benchDeleted;
+
+  /// No description provided for @benchSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save the recording. Check your connection and try again.'**
+  String get benchSaveFailed;
 }
 
 class _AppLocalizationsDelegate

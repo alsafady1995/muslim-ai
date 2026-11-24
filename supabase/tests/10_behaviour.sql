@@ -440,5 +440,41 @@ do $$ begin
   assert not exists (select 1 from public.reciters where is_premium), 'all reciters free';
 end $$;
 
+-- accuracy benchmark clips: own rows only, labels fixed once saved, audio path in own folder
+do $$ begin
+  set local role authenticated;
+  set local request.jwt.claim.sub = '00000000-0000-0000-0000-000000000001';
+  insert into public.benchmark_clips (id, user_id, start_ayah_id, end_ayah_id, audio_path, speaker_group,
+    native_arabic, environment, mistakes, duration_ms, consented_at)
+  values ('10000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001', 1, 7,
+    '00000000-0000-0000-0000-000000000001/10000000-0000-0000-0000-000000000001.m4a', 'child', false, 'quiet',
+    '[{"ayah_id": 2, "position": 3, "type": "wrong"}]', 30000, now());
+  begin
+    insert into public.benchmark_clips (id, user_id, start_ayah_id, end_ayah_id, audio_path, speaker_group,
+      native_arabic, environment, consented_at)
+    values (gen_random_uuid(), '00000000-0000-0000-0000-000000000002', 1, 1,
+      '00000000-0000-0000-0000-000000000002/a.m4a', 'man', true, 'quiet', now());
+    raise exception 'insert for another user should be denied';
+  exception when insufficient_privilege then null;
+  end;
+  begin
+    insert into public.benchmark_clips (id, user_id, start_ayah_id, end_ayah_id, audio_path, speaker_group,
+      native_arabic, environment, consented_at)
+    values (gen_random_uuid(), '00000000-0000-0000-0000-000000000001', 1, 1,
+      '00000000-0000-0000-0000-000000000002/a.m4a', 'man', true, 'quiet', now());
+    raise exception 'audio outside own folder should be rejected';
+  exception when check_violation then null;
+  end;
+  begin
+    update public.benchmark_clips set mistakes = '[]';
+    raise exception 'labels should be fixed';
+  exception when insufficient_privilege then null;
+  end;
+  assert (select count(*) from public.benchmark_clips) = 1, 'sees own clip';
+  set local request.jwt.claim.sub = '00000000-0000-0000-0000-000000000002';
+  assert (select count(*) from public.benchmark_clips) = 0, 'cannot see others'' clips';
+end $$;
+reset role;
+
 rollback;
 \echo 'ALL DB TESTS PASSED'

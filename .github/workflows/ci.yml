@@ -35,6 +35,9 @@ jobs:
       - run: deno check */index.ts
       - run: deno test tests/
       - run: deno check ../../scripts/ingest/*.ts
+      - name: Accuracy benchmark scripts
+        working-directory: scripts/accuracy
+        run: deno fmt --check . && deno lint && deno check run.ts export.ts && deno test
 
   database:
     runs-on: ubuntu-latest

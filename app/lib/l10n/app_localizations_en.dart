@@ -1211,4 +1211,106 @@ class AppLocalizationsEn extends AppLocalizations {
   String weakWordsCardBody(int n) {
     return '$n words to polish';
   }
+
+  @override
+  String get benchTitle => 'Accuracy recordings';
+
+  @override
+  String get benchConsentTitle => 'Help us measure accuracy';
+
+  @override
+  String get benchConsentBody =>
+      'Record yourself reciting, then mark any mistakes you made, on purpose or by accident. Unlike normal checks, these recordings are kept, privately, so the Asmi3ni team can test how accurately the app hears recitation. Nobody else can listen to them. You can delete them here at any time, and deleting your account deletes them too.';
+
+  @override
+  String get benchConsentChild =>
+      'If the reciter is a child, a parent must agree and record with them.';
+
+  @override
+  String get benchAgree => 'I agree';
+
+  @override
+  String get benchSpeaker => 'Who is reciting?';
+
+  @override
+  String get benchMan => 'Man';
+
+  @override
+  String get benchWoman => 'Woman';
+
+  @override
+  String get benchChild => 'Child (under 15)';
+
+  @override
+  String get benchNative => 'Arabic is the reciter\'s first language';
+
+  @override
+  String get benchEnvironment => 'Where are you recording?';
+
+  @override
+  String get benchQuiet => 'Quiet room';
+
+  @override
+  String get benchNoisy => 'Some background noise';
+
+  @override
+  String get benchRecitePrompt =>
+      'Recite the whole range. Mistakes on purpose are welcome: you will mark them next.';
+
+  @override
+  String get benchStartRecording => 'Start recording';
+
+  @override
+  String get benchStopRecording => 'Stop';
+
+  @override
+  String get benchLabelTitle => 'Mark your mistakes';
+
+  @override
+  String get benchLabelHint =>
+      'Tap a word you said wrong. Tap again if you skipped it, and once more to clear it.';
+
+  @override
+  String get benchWrong => 'Wrong';
+
+  @override
+  String get benchSkipped => 'Skipped';
+
+  @override
+  String benchMistakesMarked(int n) {
+    return '$n mistakes marked';
+  }
+
+  @override
+  String get benchNoMistakes => 'No mistakes: I recited it correctly';
+
+  @override
+  String get benchListenBack => 'Listen back';
+
+  @override
+  String get benchSave => 'Save recording';
+
+  @override
+  String get benchDiscard => 'Discard';
+
+  @override
+  String get benchSaved => 'Saved. Thank you!';
+
+  @override
+  String benchCount(int n) {
+    return 'Recordings you have saved: $n';
+  }
+
+  @override
+  String get benchAnother => 'Record another';
+
+  @override
+  String get benchDeleteAll => 'Delete all my recordings';
+
+  @override
+  String get benchDeleted => 'Your recordings were deleted.';
+
+  @override
+  String get benchSaveFailed =>
+      'Couldn\'t save the recording. Check your connection and try again.';
 }

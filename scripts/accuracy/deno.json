@@ -1,0 +1,13 @@
+{
+  "imports": {
+    "@supabase/supabase-js": "npm:@supabase/supabase-js@2.119.2",
+    "@std/assert": "jsr:@std/assert@1"
+  },
+  "tasks": {
+    "export": "deno run --allow-env --allow-net --allow-read --allow-write export.ts",
+    "run": "deno run --allow-env --allow-net --allow-read --allow-write run.ts",
+    "test": "deno test"
+  },
+  "lint": { "rules": { "exclude": ["no-explicit-any"] } },
+  "fmt": { "lineWidth": 110 }
+}

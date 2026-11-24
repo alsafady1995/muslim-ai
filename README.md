@@ -17,6 +17,7 @@ Product and launch documentation lives in [`docs/`](docs/). This README covers t
 | `supabase/tests/` | Database behaviour tests (run against plain Postgres + pgvector in CI) |
 | `services/asr/` | Quran-tuned Whisper service returning words with timestamps (Docker, Cloud Run) |
 | `scripts/ingest/` | Loads Quran text, words, translation, tafsir, hadith and builds embeddings |
+| `scripts/accuracy/` | Recitation accuracy benchmark: labelled clips → false-flag rate, mistakes caught, launch gates ([docs](docs/accuracy-benchmark.md)) |
 | `tools/gen_arb.py` | Single source for app strings; generates `app_en.arb` / `app_ar.arb` |
 | `.github/workflows/` | CI, backend deploy, mobile release (Fastlane) |
 | `BLOCKERS.md` | Everything that needs the owner: accounts, keys, approvals |
@@ -67,10 +68,11 @@ cd app && flutter run -d chrome --dart-define=DEMO_MODE=true
 ## Tests
 
 ```bash
-cd app && flutter analyze && flutter test                       # 6 tests
-cd supabase/functions && deno lint && deno test tests/          # 11 tests (alignment, citations, billing)
+cd app && flutter analyze && flutter test                       # 37 tests
+cd supabase/functions && deno lint && deno test tests/          # 23 tests (alignment, citations, billing)
+cd scripts/accuracy && deno test                                # 9 tests (benchmark scoring)
 # DB: see .github/workflows/ci.yml job "database"               # RLS, XP caps, streaks, SM-2, quotas, referrals
-cd services/asr && python -m pytest -q tests                    # 3 tests
+cd services/asr && python -m pytest -q tests                    # 6 tests
 ```
 
 ## Key decisions
