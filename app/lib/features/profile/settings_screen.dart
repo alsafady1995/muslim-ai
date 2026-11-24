@@ -20,18 +20,47 @@ class SettingsScreen extends ConsumerStatefulWidget {
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   SharedPreferences get _prefs => ref.read(sharedPrefsProvider);
 
-  bool _reminder(String key) => _prefs.getBool('reminder_$key') ?? true;
+  /// Off unless the user (or onboarding) actually scheduled it. It used to default to on,
+  /// so the switches claimed reminders that were never scheduled.
+  bool _reminder(String key) => _prefs.getBool('reminder_$key') ?? false;
 
-  Future<void> _setReminder(String key, bool on, int id, String title, String body, int h, int m) async {
-    await _prefs.setBool('reminder_$key', on);
+  TimeOfDay _time(String key, TimeOfDay fallback) {
+    final parts = (_prefs.getString('reminder_${key}_time') ?? '').split(':');
+    final h = parts.length == 2 ? int.tryParse(parts[0]) : null;
+    final m = parts.length == 2 ? int.tryParse(parts[1]) : null;
+    return h == null || m == null ? fallback : TimeOfDay(hour: h, minute: m);
+  }
+
+  Future<void> _setReminder(String key, bool on, int id, String title, String body, TimeOfDay at) async {
     if (on) {
       final granted = await Reminders.requestPermission();
       Analytics.track(Events.notificationPermissionResult, {'granted': granted});
-      if (granted) await Reminders.scheduleDaily(id, title, body, h, m);
+      if (!granted) {
+        if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(context.l10n.notificationsBlocked)));
+        return;
+      }
+      await Reminders.scheduleDaily(id, title, body, at.hour, at.minute);
+      await _prefs.setString('reminder_${key}_time',
+          '${at.hour.toString().padLeft(2, '0')}:${at.minute.toString().padLeft(2, '0')}');
     } else {
       await Reminders.cancel(id);
     }
-    setState(() {});
+    await _prefs.setBool('reminder_$key', on);
+    if (mounted) setState(() {});
+  }
+
+  Widget _reminderTile(String key, String label, int id, String title, String body, TimeOfDay fallback) {
+    final at = _time(key, fallback);
+    return ListTile(
+      title: Text(label),
+      subtitle: Text(at.format(context)),
+      // Tap the row to change the time; the switch turns it on or off.
+      onTap: () async {
+        final t = await showTimePicker(context: context, initialTime: at);
+        if (t != null) await _setReminder(key, true, id, title, body, t);
+      },
+      trailing: Switch(value: _reminder(key), onChanged: (v) => _setReminder(key, v, id, title, body, at)),
+    );
   }
 
   Future<void> _deleteAccount() async {
@@ -52,7 +81,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       ),
     );
     if (confirmed != true) return;
-    await ref.read(edgeApiProvider).call('delete-account', {});
+    try {
+      await ref.read(edgeApiProvider).call('delete-account', {});
+    } catch (_) {
+      // Never sign the user out (and lose their guest data) when the delete did not happen.
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.errorGeneric)));
+      return;
+    }
     Analytics.track(Events.accountDeleted);
     await _signOut();
   }
@@ -98,14 +133,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               for (final r in reciters)
                 ListTile(
                   title: Text(context.isArabic ? r.nameAr : r.nameEn),
-                  trailing: r.isPremium && !premium ? const Icon(Icons.lock_outline) : (prefs['reciter_id'] == r.id ? const Icon(Icons.check) : null),
+                  // All reciters are free (docs/subscription-growth-audit.md): no lock, no paywall.
+                  trailing: prefs['reciter_id'] == r.id ? const Icon(Icons.check) : null,
                   onTap: () {
                     Navigator.pop(c);
-                    if (r.isPremium && !premium) {
-                      context.push('/paywall?source=reciter');
-                    } else {
-                      ref.read(prefsProvider.notifier).setValue('reciter_id', r.id);
-                    }
+                    ref.read(prefsProvider.notifier).setValue('reciter_id', r.id);
                   },
                 ),
             ]),
@@ -125,37 +157,23 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             title: Text(context.isArabic ? 'التذكيرات متاحة في تطبيق الجوال فقط' : 'Reminders are available in the mobile app only'),
           )
         else ...[
-        SwitchListTile(
-          title: Text(l10n.morningAdhkar),
-          subtitle: const Text('06:30'),
-          value: _reminder('morning'),
-          onChanged: (v) => _setReminder('morning', v, Reminders.morningAdhkar, l10n.reminderMorningTitle, l10n.reminderMorningBody, 6, 30),
-        ),
-        SwitchListTile(
-          title: Text(l10n.eveningAdhkar),
-          subtitle: const Text('17:30'),
-          value: _reminder('evening'),
-          onChanged: (v) => _setReminder('evening', v, Reminders.eveningAdhkar, l10n.reminderEveningTitle, l10n.reminderEveningBody, 17, 30),
-        ),
-        SwitchListTile(
-          title: Text(l10n.hifzReview),
-          subtitle: const Text('20:00'),
-          value: _reminder('hifz'),
-          onChanged: (v) => _setReminder('hifz', v, Reminders.hifzReview, l10n.reminderHifzTitle, l10n.reminderHifzBody, 20, 0),
-        ),
-        SwitchListTile(
-          title: Text(l10n.streakReminder),
-          subtitle: const Text('21:00'),
-          value: _reminder('streak'),
-          onChanged: (v) => _setReminder('streak', v, Reminders.streakSaver, l10n.reminderStreakTitle, l10n.reminderStreakBody, 21, 0),
-        ),
+        _reminderTile('morning', l10n.morningAdhkar, Reminders.morningAdhkar, l10n.reminderMorningTitle, l10n.reminderMorningBody,
+            const TimeOfDay(hour: 6, minute: 30)),
+        _reminderTile('evening', l10n.eveningAdhkar, Reminders.eveningAdhkar, l10n.reminderEveningTitle, l10n.reminderEveningBody,
+            const TimeOfDay(hour: 17, minute: 30)),
+        _reminderTile('hifz', l10n.hifzReview, Reminders.hifzReview, l10n.reminderHifzTitle, l10n.reminderHifzBody,
+            const TimeOfDay(hour: 20, minute: 0)),
+        _reminderTile('streak', l10n.streakReminder, Reminders.streakSaver, l10n.reminderStreakTitle, l10n.reminderStreakBody,
+            const TimeOfDay(hour: 21, minute: 0)),
         ],
         SectionTitle(l10n.subscription),
         if (premium)
           ListTile(
             leading: const Icon(Icons.workspace_premium),
             title: Text(l10n.manageSubscription),
-            onTap: () => launchUrl(payments.manageSubscriptionsUrl!, mode: LaunchMode.externalApplication),
+            onTap: payments.manageSubscriptionsUrl == null
+                ? null
+                : () => launchUrl(payments.manageSubscriptionsUrl!, mode: LaunchMode.externalApplication),
           )
         else
           ListTile(

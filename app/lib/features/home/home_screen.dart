@@ -1,18 +1,60 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/analytics.dart';
+import '../../core/monetization.dart';
 import '../../core/providers.dart';
 import '../../core/theme.dart';
 import '../../core/widgets.dart';
 import '../../data/models.dart';
+import '../hifz/hifz_review_screen.dart';
+import '../hifz/hifz_screen.dart' show hifzQueueProvider, hifzStatsProvider;
 
-class HomeScreen extends ConsumerWidget {
+final weeklySummaryProvider = FutureProvider.autoDispose<WeeklySummary>((ref) {
+  ref.watch(dashboardProvider);
+  return ref.watch(userRepoProvider).weeklySummary();
+});
+
+/// Home answers one question first: "what should I do today?" (docs/full-audit.md, UX).
+/// Then streak and goals, the week in review, and a short list of other things to do.
+/// Premium is only promoted after the user has had real value on 3 different days.
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
+  @override
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  static bool _tzSynced = false;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void initState() {
+    super.initState();
+    _syncTimezone();
+  }
+
+  /// Older builds sent "AST"/"+03" as the timezone; travellers move. Keep the IANA name current.
+  Future<void> _syncTimezone() async {
+    if (_tzSynced || kIsWeb) return;
+    _tzSynced = true;
+    try {
+      final tz = (await FlutterTimezone.getLocalTimezone()).identifier;
+      final prefs = ref.read(sharedPrefsProvider);
+      if (prefs.getString('tz_synced') == tz) return;
+      await ref.read(userRepoProvider).updateProfile({'timezone': tz});
+      await prefs.setString('tz_synced', tz);
+    } catch (_) {
+      _tzSynced = false; // try again next time Home opens
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final dash = ref.watch(dashboardProvider);
     final user = ref.watch(currentUserProvider);
     final l10n = context.l10n;
@@ -24,45 +66,214 @@ class HomeScreen extends ConsumerWidget {
       body: dash.when(
         loading: () => const LoadingView(),
         error: (e, _) => ErrorView(error: e, onRetry: () => ref.invalidate(dashboardProvider)),
-        data: (d) => RefreshIndicator(
-          onRefresh: () async => ref.invalidate(dashboardProvider),
-          child: ListView(padding: const EdgeInsets.fromLTRB(16, 8, 16, 32), children: [
-            _StreakCard(d: d),
-            const SizedBox(height: 12),
-            _GoalsCard(d: d),
-            SectionTitle(l10n.prayersToday),
-            _PrayerRow(d: d),
-            SectionTitle(l10n.continueJourney),
-            _QuickActions(d: d),
-            if (user?.isAnonymous == true) ...[
-              const SizedBox(height: 16),
-              Card(
-                child: ListTile(
-                  leading: const Icon(Icons.cloud_upload_outlined),
-                  title: Text(l10n.saveProgress),
-                  subtitle: Text(l10n.saveProgressHint),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => context.push('/sign-in?link=1'),
+        data: (d) {
+          final gate = ref.read(paywallGateProvider);
+          final valueGate = gate.valueGatePassed(d.valueDays);
+          if (valueGate && !gate.usedOnce('value_gate_tracked')) {
+            gate.markOnce('value_gate_tracked');
+            Analytics.track(Events.valueGatePassed, {'days_since_signup': d.daysSinceSignup});
+          }
+          return RefreshIndicator(
+            onRefresh: () async {
+              ref.invalidate(dashboardProvider);
+              ref.invalidate(hifzQueueProvider);
+            },
+            child: ListView(padding: const EdgeInsets.fromLTRB(16, 8, 16, 32), children: [
+              if (d.billingProblem) ...[_BillingCard(), const SizedBox(height: 12)],
+              if (d.inTrial && d.periodEnd != null) ...[
+                Card(
+                  child: ListTile(
+                    leading: const Icon(Icons.info_outline),
+                    title: Text(l10n.trialEnds(DateFormat.MMMd(Localizations.localeOf(context).languageCode).format(d.periodEnd!))),
+                  ),
                 ),
-              ),
-            ],
-            if (!d.premium) ...[
+                const SizedBox(height: 12),
+              ],
+              _TodayCard(d: d),
               const SizedBox(height: 12),
-              Card(
-                color: AppColors.gold.withValues(alpha: 0.15),
-                child: ListTile(
-                  leading: const Icon(Icons.workspace_premium, color: AppColors.gold),
-                  title: Text(l10n.goPremium),
-                  subtitle: Text(l10n.premiumPitchShort),
-                  onTap: () => context.push('/paywall?source=home_banner'),
+              _StreakCard(d: d),
+              const SizedBox(height: 12),
+              _GoalsCard(d: d),
+              if (d.daysSinceSignup >= 6) ...[
+                SectionTitle(l10n.weekTitle),
+                _WeekSummaryCard(d: d, offer: valueGate && !d.premium),
+              ],
+              SectionTitle(l10n.prayersToday),
+              _PrayerRow(d: d),
+              SectionTitle(l10n.continueJourney),
+              _QuickActions(d: d),
+              if (user?.isAnonymous == true) ...[
+                const SizedBox(height: 16),
+                Card(
+                  child: ListTile(
+                    leading: const Icon(Icons.cloud_upload_outlined),
+                    title: Text(l10n.saveProgress),
+                    subtitle: Text(l10n.saveProgressHint),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => context.push('/sign-in?link=1'),
+                  ),
                 ),
-              ),
-            ],
-            SectionTitle(l10n.last7Days),
-            _WeekChart(history: d.history),
-          ]),
-        ),
+              ],
+              if (!d.premium && valueGate) ...[
+                const SizedBox(height: 12),
+                Card(
+                  color: AppColors.gold.withValues(alpha: 0.15),
+                  child: ListTile(
+                    leading: const Icon(Icons.workspace_premium, color: AppColors.gold),
+                    title: Text(l10n.goPremium),
+                    subtitle: Text(l10n.premiumPitchShort),
+                    onTap: () => context.push('/paywall?source=home_banner'),
+                  ),
+                ),
+              ],
+              SectionTitle(l10n.last7Days),
+              _WeekChart(history: d.history),
+            ]),
+          );
+        },
       ),
+    );
+  }
+}
+
+class _BillingCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final url = defaultTargetPlatform == TargetPlatform.iOS
+        ? 'https://apps.apple.com/account/subscriptions'
+        : 'https://play.google.com/store/account/subscriptions';
+    return Card(
+      color: Theme.of(context).colorScheme.errorContainer,
+      child: ListTile(
+        leading: const Icon(Icons.credit_card_off_outlined),
+        title: Text(l10n.billingIssue),
+        trailing: TextButton(onPressed: () => launchUrl(Uri.parse(url)), child: Text(l10n.update)),
+      ),
+    );
+  }
+}
+
+/// The one thing to do today, picked by [nextBestAction].
+class _TodayCard extends ConsumerWidget {
+  const _TodayCard({required this.d});
+  final Dashboard d;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final queue = ref.watch(hifzQueueProvider).value;
+    final reviews = queue?.reviews.length ?? d.hifzDue;
+    final fresh = queue?.fresh.length ?? 0;
+    final action = nextBestAction(
+      hifzDue: reviews,
+      hasPlan: d.hifzHasPlan,
+      newAvailable: fresh,
+      recitationsToday: (d.today['recitations'] as num?)?.toInt() ?? 0,
+      reviewsToday: (d.today['reviews_done'] as num?)?.toInt() ?? 0,
+      intent: userIntent(ref),
+    );
+    final minutes = ((reviews * 0.5) + (fresh * 1.5)).ceil().clamp(1, 120);
+    final (IconData icon, String title, String body, String? cta, String? path) = switch (action) {
+      NextAction.review => (Icons.psychology, l10n.todayReviewTitle, l10n.todayReviewBody(reviews + fresh, minutes), l10n.startLabel, '/learn'),
+      NextAction.learnNew => (Icons.add_task, l10n.todayNewTitle, l10n.todayReviewBody(fresh, minutes), l10n.startLabel, '/learn'),
+      NextAction.startPlan => (Icons.flag_outlined, l10n.startHifzPlan, l10n.startHifzPlanBody, l10n.startLabel, '/learn'),
+      NextAction.recite => (Icons.mic, l10n.todayReciteTitle, l10n.todayReciteBody, l10n.startLabel, '/coach?source=home'),
+      NextAction.read => (
+          Icons.menu_book,
+          l10n.continueReading,
+          d.lastAyahId == null ? l10n.startWithFatihah : l10n.pickUpWhereLeft,
+          l10n.startLabel,
+          '/quran'
+        ),
+      NextAction.done => (Icons.check_circle, l10n.todayDoneTitle, l10n.todayDoneBody, null, null),
+    };
+    return Card(
+      color: theme.colorScheme.primaryContainer,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(children: [
+          Icon(icon, size: 40, color: theme.colorScheme.onPrimaryContainer),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(title, style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800)),
+              const SizedBox(height: 4),
+              Text(body),
+              if (action == NextAction.review && d.hifzAtRisk > 0) ...[
+                const SizedBox(height: 4),
+                Text(l10n.weekAtRisk(d.hifzAtRisk), style: theme.textTheme.bodySmall),
+              ],
+            ]),
+          ),
+          if (cta != null && path != null)
+            FilledButton(
+              onPressed: () async {
+                // Straight into the session: one tap from Home to the first card.
+                if ((action == NextAction.review || action == NextAction.learnNew) && queue != null && !queue.isEmpty) {
+                  await Navigator.of(context).push(MaterialPageRoute(builder: (_) => HifzReviewScreen(queue: queue)));
+                  ref.invalidate(hifzQueueProvider);
+                  ref.invalidate(hifzStatsProvider);
+                  ref.invalidate(dashboardProvider);
+                } else if (context.mounted) {
+                  path.startsWith('/coach') ? context.push(path) : context.go(path);
+                }
+              },
+              child: Text(cta),
+            ),
+        ]),
+      ),
+    );
+  }
+}
+
+class _WeekSummaryCard extends ConsumerStatefulWidget {
+  const _WeekSummaryCard({required this.d, required this.offer});
+  final Dashboard d;
+  final bool offer;
+  @override
+  ConsumerState<_WeekSummaryCard> createState() => _WeekSummaryCardState();
+}
+
+class _WeekSummaryCardState extends ConsumerState<_WeekSummaryCard> {
+  bool _tracked = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final summary = ref.watch(weeklySummaryProvider);
+    return summary.when(
+      loading: () => const SizedBox(height: 80, child: LoadingView()),
+      error: (_, _) => const SizedBox.shrink(),
+      data: (w) {
+        if (!_tracked) {
+          _tracked = true;
+          Analytics.track(Events.weeklySummaryViewed, {'active_days': w.activeDays, 'at_risk': w.atRisk});
+        }
+        return Card(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(l10n.weekStats(w.activeDays, w.reviewsDone, w.ayahsRead), style: theme.textTheme.titleSmall),
+              const SizedBox(height: 8),
+              if (w.hifzMemorized > 0)
+                Text(w.atRisk > 0 ? l10n.weekAtRisk(w.atRisk) : l10n.weekAllSafe),
+              if (w.atRisk > 0 && widget.offer) ...[
+                const SizedBox(height: 8),
+                Row(children: [
+                  Expanded(child: Text(l10n.weekAtRiskOffer, style: theme.textTheme.bodySmall)),
+                  TextButton(
+                    onPressed: () => context.push('/paywall?source=weekly_summary'),
+                    child: Text(l10n.tryPremiumFree),
+                  ),
+                ]),
+              ],
+            ]),
+          ),
+        );
+      },
     );
   }
 }
@@ -181,6 +392,7 @@ class _PrayerRow extends ConsumerWidget {
   }
 }
 
+/// Everything that is not today's main step. Recitation and hifz live in the Today card.
 class _QuickActions extends StatelessWidget {
   const _QuickActions({required this.d});
   final Dashboard d;
@@ -191,11 +403,9 @@ class _QuickActions extends StatelessWidget {
     final adhkarId = hour < 12 ? 1 : (hour < 20 ? 2 : 3);
     final items = <(IconData, String, String, String)>[
       (Icons.menu_book, l10n.continueReading, d.lastAyahId == null ? l10n.startWithFatihah : l10n.pickUpWhereLeft, '/quran'),
-      (Icons.psychology, l10n.hifzReview, l10n.dueCount(d.hifzDue), '/learn'),
-      (Icons.mic, l10n.reciteWithAi, l10n.aiCoachHint, '/coach'),
       (Icons.nights_stay, l10n.adhkar, adhkarId == 1 ? l10n.morningAdhkar : (adhkarId == 2 ? l10n.eveningAdhkar : l10n.sleepAdhkar), '/adhkar/$adhkarId'),
+      (Icons.mic, l10n.reciteWithAi, l10n.aiCoachHint, '/coach?source=home_grid'),
       (Icons.auto_awesome, l10n.askTheQuran, l10n.askHint, '/ask'),
-      (Icons.manage_search, l10n.searchQuran, l10n.searchHint, '/search'),
     ];
     return GridView.count(
       crossAxisCount: 2,
@@ -209,7 +419,7 @@ class _QuickActions extends StatelessWidget {
           Card(
             child: InkWell(
               borderRadius: BorderRadius.circular(20),
-              onTap: () => path.startsWith('/quran') || path == '/learn' || path == '/ask' ? context.go(path) : context.push(path),
+              onTap: () => path.startsWith('/quran') || path == '/ask' ? context.go(path) : context.push(path),
               child: Padding(
                 padding: const EdgeInsets.all(14),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
