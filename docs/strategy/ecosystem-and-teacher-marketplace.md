@@ -45,6 +45,37 @@ marked **(inference)**.
 
 ---
 
+## القرار (٢٥ نوفمبر ٢٠٢٦): بدون محامٍ وبدون اشتراكات مدفوعة
+
+قرّر المؤسس استبعاد **كل ما يحتاج محاميًا أو اشتراكًا مدفوعًا جديدًا** (Zoom وLiveKit وDaily ومزوّدي الدفع
+ومزوّدي التحقق من الهوية). الخطة القابلة للتنفيذ الآن هي ما في الجدول أدناه؛ بقية الوثيقة (الأقسام ٦٫٣–٦٫٤
+و١٠٫٣–١٠٫٤ و١٢٫١–١٢٫٢ والمرحلتان ٣ و٤) تبقى **مرجعًا مؤجّلًا** إن تغيّر القرار، وليست جزءًا من الخطة.
+
+The founder decided to exclude **anything that needs a lawyer or a new paid subscription** (video SDKs such as Zoom,
+LiveKit or Daily; payment or payout providers; KYC/ID providers). The executable plan is the table below. Sections
+6.3–6.4, 10.3–10.4, 12.1–12.2 and Phases 3–4 stay in this document only as **deferred reference**.
+
+| Item | Status under the constraint | How it stays inside it |
+|---|---|---|
+| 1. Halaqa mode | **Build** | Existing Supabase tables, RPCs and RLS; no new service |
+| 2. Async teacher tasmee' | **Build** | Recordings in existing Supabase Storage; teacher marks in `expert_labels` (PR #13); teacher voice note is a short audio file, not a call |
+| 3. Family plan + parent dashboard | **Build** | Sold through the existing Apple/Google subscriptions via RevenueCat (already paid for by the store cut, no new contract). Guardian consent is an in-app screen |
+| 4. Private circles | **Build** | Database only; preset encouragements, no chat |
+| 5. Teacher profile | **Build, verified by people we know** | No ID provider: a teacher is verified by the sheikh's recitation audition (recorded in-app) or by vouching from a known halaqa/association. Badge reads "verified recitation", never "ID verified" or "ijazah verified" |
+| Report, block, filter, contact page | **Build** (Apple 1.2) | Code plus a support email; reports go to the founder |
+| Institution plan (paid B2B) | **Dropped for now** | Direct invoicing needs contracts and tax setup. Associations use halaqa mode **free**; the value they bring is students and data |
+| Paid 1:1 sessions, booking, payouts, commission | **Dropped** | Needs a payment/payout provider and legal setup |
+| Live sessions (1:1 or group), video | **Dropped** | Needs a video subscription. Teachers keep using whatever they use today (in person, WhatsApp); the app handles everything between lessons |
+| Ijazah verification (level 3), paid moderators | **Dropped** | Profiles may show the teacher's own stated ijazah as "stated by the teacher", unverified, or not at all |
+| Open community, public communities, waitlists | **Rejected** (unchanged) | — |
+
+**What this means:** the product becomes **the best thing between lessons with a teacher** (which is already the
+brand promise in `docs/marketing/`), with the teacher inside the app, but the lesson itself stays outside it.
+Everything above runs on infrastructure the project already pays for (Supabase, the ASR service, RevenueCat).
+AI use from these features still goes through `begin_ai_call` and the 50% rule.
+
+---
+
 ## 1. The honest starting point
 
 | Fact | Source | Consequence for this plan |
