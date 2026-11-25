@@ -1,0 +1,380 @@
+<title>أسئلة المراجعة الأولى</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap">
+<style>
+/* Layout: one calm reading column, numbered sections because the order is the session's real sequence. */
+:root {
+  --bg: #f5f7f6;
+  --surface: #ffffff;
+  --ink: #17302b;
+  --muted: #5b6e69;
+  --line: #d9e2df;
+  --accent: #1f6b5c;
+  --accent-soft: #e3f0ec;
+  --gold: #9a7420;
+  --display: "Amiri", "Noto Naskh Arabic", "Times New Roman", serif;
+  --body: "IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1816; --surface: #16221f; --ink: #e4eeeb; --muted: #9db1ab; --line: #2a3a36;
+    --accent: #5fbfa8; --accent-soft: #1b322d; --gold: #d6b25e; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1816; --surface: #16221f; --ink: #e4eeeb; --muted: #9db1ab; --line: #2a3a36;
+  --accent: #5fbfa8; --accent-soft: #1b322d; --gold: #d6b25e; color-scheme: dark;
+}
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.75;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+main { max-width: 760px; margin: 0 auto; padding-block: 32px 64px; display: grid; gap: 28px; }
+h1, h2 { font-family: var(--display); font-weight: 700; text-wrap: balance; margin: 0; line-height: 1.4; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.45rem; display: flex; gap: 10px; align-items: baseline; }
+h2 .n { color: var(--gold); font-size: 1.1rem; font-variant-numeric: tabular-nums; }
+p { margin: 0; }
+.lead { color: var(--muted); }
+header { display: grid; gap: 10px; }
+.basmala { font-family: var(--display); color: var(--accent); font-size: 1.3rem; }
+section { display: grid; gap: 14px; padding-top: 22px; border-top: 1px solid var(--line); }
+.note { background: var(--accent-soft); border-radius: 10px; padding: 12px 14px; font-size: .95rem; }
+.warn { border-inline-start: 3px solid var(--gold); padding-inline-start: 12px; font-size: .95rem; color: var(--muted); }
+.q { display: grid; gap: 8px; }
+.q > label, .q > .lbl { font-weight: 600; }
+.hint { color: var(--muted); font-size: .88rem; }
+.choices { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+.choices label { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+textarea, input[type=text] {
+  width: 100%; box-sizing: border-box; font: inherit; color: var(--ink); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; min-width: 0;
+}
+textarea { min-height: 64px; resize: vertical; }
+textarea:focus, input:focus, button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+input[type=checkbox], input[type=radio] { accent-color: var(--accent); width: 18px; height: 18px; }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 340px; background: var(--surface); border-radius: 10px; overflow: hidden; }
+th, td { border-bottom: 1px solid var(--line); padding: 8px 6px; text-align: start; vertical-align: middle; }
+th { font-size: .85rem; color: var(--muted); font-weight: 500; }
+td.c { text-align: center; }
+.rule { font-weight: 600; }
+.rule small { display: block; color: var(--muted); font-weight: 400; font-size: .82rem; }
+.msg { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: grid; gap: 8px; }
+.msg q { font-family: var(--display); font-size: 1.15rem; quotes: "«" "»"; }
+.msg .ctx { color: var(--muted); font-size: .85rem; }
+.btns { display: flex; flex-wrap: wrap; gap: 10px; }
+button, .btn {
+  font: inherit; font-weight: 600; border: 0; border-radius: 999px; padding: 10px 20px; cursor: pointer;
+  background: var(--accent); color: var(--bg); text-decoration: none; display: inline-block;
+}
+.btn.ghost, button.ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+#out { min-height: 160px; font-size: .9rem; }
+#status { color: var(--accent); font-size: .9rem; min-height: 1.5em; }
+a { color: var(--accent); }
+ol.steps { margin: 0; padding-inline-start: 22px; display: grid; gap: 4px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<main dir="rtl" lang="ar">
+  <header>
+    <p class="basmala">بسم الله الرحمن الرحيم</p>
+    <h1>أسئلة المراجعة الأولى لتطبيق «أسمِعني»</h1>
+    <p class="lead">جزاكِ الله خيرًا على وقتكِ. «أسمِعني» تطبيق يستمع إلى تلاوة المستخدم ويُنبّهه على الكلمات الخاطئة أو المتروكة. نريد قبل أن نضيف أي تنبيه في التجويد أن تحدّدي لنا المعيار الصحيح وأن تراجعي الكلمات التي نخاطب بها المستخدمين.</p>
+    <div class="note">المدة نحو ساعة. كل الأسئلة اختيارية، واكتبي ما شئتِ في خانات الملاحظات. تُحفظ إجاباتكِ على هذا الجهاز تلقائيًا، وفي آخر الصفحة زر لإرسالها.</div>
+  </header>
+
+  <section>
+    <h2><span class="n">١</span>الرواية والطريق</h2>
+    <div class="q">
+      <span class="lbl">ما الرواية والطريق التي نعتمدها في التصحيح؟</span>
+      <div class="choices" id="riwaya">
+        <label><input type="radio" name="riwaya" id="rw1" value="حفص عن عاصم من طريق الشاطبية"> حفص عن عاصم من طريق الشاطبية</label>
+        <label><input type="radio" name="riwaya" id="rw2" value="حفص عن عاصم مع قبول أوجه الطيبة"> حفص عن عاصم مع قبول أوجه الطيبة</label>
+        <label><input type="radio" name="riwaya" id="rw3" value="غير ذلك"> غير ذلك</label>
+      </div>
+      <textarea id="riwaya_note" placeholder="ملاحظات (مثلًا: هل نقبل أوجهًا أخرى إذا قرأ بها المستخدم؟)"></textarea>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">٢</span>مقادير المدود المقبولة</h2>
+    <p class="hint">ضعي علامة على كل مقدار نقبله دون أن ننبّه المستخدم. الحركة تُقاس بسرعة القارئ نفسه، لا بالثواني.</p>
+    <div class="tablewrap">
+      <table id="madd">
+        <thead><tr><th>نوع المد</th><th>٢</th><th>٤</th><th>٥</th><th>٦</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="q">
+      <span class="lbl">هل يُشترط التسوية بين المدود المتماثلة في التلاوة الواحدة؟</span>
+      <div class="choices">
+        <label><input type="radio" name="taswiya" id="tw1" value="نعم، وننبّه إن اختلفت"> نعم، وننبّه إن اختلفت</label>
+        <label><input type="radio" name="taswiya" id="tw2" value="نعم، لكن لا ننبّه عليها الآن"> نعم، لكن لا ننبّه عليها الآن</label>
+        <label><input type="radio" name="taswiya" id="tw3" value="لا"> لا</label>
+      </div>
+    </div>
+    <div class="q">
+      <label for="madd_note">ملاحظات على المدود</label>
+      <textarea id="madd_note" placeholder="مثلًا: المتصل الموقوف عليه، مد التعظيم، ما الخطأ الأكثر شيوعًا عند الطالبات والطلاب"></textarea>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">٣</span>الغنّة وبقية الأحكام</h2>
+    <div class="q">
+      <label for="ghunna">مقدار الغنّة في النون والميم المشددتين، وما الذي نعدّه خطأً فيها؟</label>
+      <textarea id="ghunna" placeholder="مثلًا: حركتان، وننبّه إذا قصرت بوضوح"></textarea>
+    </div>
+    <div class="q">
+      <span class="lbl">بعد المدود والغنّة، بأي الأحكام نبدأ؟ (رتّبيها بالأرقام ١ = الأهم)</span>
+      <div class="tablewrap">
+        <table id="rank"><tbody></tbody></table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">٤</span>ما لا نعدّه خطأً</h2>
+    <p class="hint">أشياء صحيحة قد يظنها البرنامج خطأً. ضعي علامة على ما يجب ألّا ننبّه عليه.</p>
+    <div class="choices" id="ok" style="flex-direction:column;align-items:flex-start"></div>
+    <textarea id="ok_note" placeholder="أوجه أخرى صحيحة يجب أن نتجاوزها"></textarea>
+  </section>
+
+  <section>
+    <h2><span class="n">٥</span>كلمات التطبيق للمستخدم</h2>
+    <p class="hint">هذه هي الجمل التي يراها المستخدم الآن. هل هي مناسبة شرعًا ولغةً وتربويًا؟ اكتبي البديل إن وُجد.</p>
+    <div id="msgs" style="display:grid;gap:10px"></div>
+  </section>
+
+  <section>
+    <h2><span class="n">٦</span>التعاون</h2>
+    <div class="q">
+      <span class="lbl">كيف تحبين أن يُذكر اسمكِ في التطبيق والموقع؟</span>
+      <div class="choices">
+        <label><input type="radio" name="credit" id="cr1" value="بالاسم واللقب"> بالاسم واللقب</label>
+        <label><input type="radio" name="credit" id="cr2" value="بلقب عام دون اسم"> بلقب عام دون اسم</label>
+        <label><input type="radio" name="credit" id="cr3" value="لا يُذكر"> لا يُذكر</label>
+      </div>
+    </div>
+    <div class="q">
+      <span class="lbl">هل تقبلين ذكر إجازتكِ وسندكِ مؤهّلًا للمراجعة فقط؟</span>
+      <p class="hint">التطبيق لا يمنح إجازة ولا يغني عن المعلّمة، وسنكتب ذلك صراحةً.</p>
+      <div class="choices">
+        <label><input type="radio" name="ijazah" id="ij1" value="نعم"> نعم</label>
+        <label><input type="radio" name="ijazah" id="ij2" value="لا"> لا</label>
+        <label><input type="radio" name="ijazah" id="ij3" value="نتحدث في ذلك لاحقًا"> نتحدث في ذلك لاحقًا</label>
+      </div>
+    </div>
+    <div class="q">
+      <label for="hours">كم ساعة في الأسبوع تستطيعين تقريبًا؟</label>
+      <input type="text" id="hours" placeholder="مثلًا: ساعتان">
+    </div>
+    <div class="q">
+      <span class="lbl">هل لديكِ طالبة أو معلّمة ثانية تراجع جزءًا صغيرًا من التسجيلات للمقارنة؟</span>
+      <div class="choices">
+        <label><input type="radio" name="second" id="sc1" value="نعم"> نعم</label>
+        <label><input type="radio" name="second" id="sc2" value="لا"> لا</label>
+        <label><input type="radio" name="second" id="sc3" value="ربما"> ربما</label>
+      </div>
+    </div>
+    <div class="q">
+      <label for="other">أي شيء آخر تودّين قوله</label>
+      <textarea id="other"></textarea>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">٧</span>إرسال الإجابات</h2>
+    <p class="hint">يُجمع ما كتبتِه في النص أدناه. انسخيه وأرسليه، أو افتحي واتساب مباشرة.</p>
+    <textarea id="out" readonly aria-label="نص الإجابات"></textarea>
+    <div class="btns">
+      <button type="button" id="copy">نسخ الإجابات</button>
+      <a class="btn ghost" id="wa" href="https://wa.me/" target="_blank" rel="noopener">إرسال عبر واتساب</a>
+    </div>
+    <p id="status" role="status"></p>
+  </section>
+
+  <section>
+    <h2><span class="n">٨</span>الاطلاع على التطبيق</h2>
+    <p>يمكنكِ تصفّح واجهة التطبيق هنا: <a href="https://alsafady1995.github.io/muslim-ai/" target="_blank" rel="noopener">النسخة التجريبية على الويب</a>.</p>
+    <p class="warn">في هذه النسخة يكون التقييم <strong>محاكاة</strong> وليس استماعًا حقيقيًا، فهي للاطلاع على الشكل والكلمات فقط. لا تحكمي على دقة التصحيح منها. الخطوة التالية بعد هذه الأسئلة أن نرسل لكِ ٢٠ تسجيلًا حقيقيًا مع ما قاله التطبيق عن كل منها لتحكمي عليها.</p>
+  </section>
+</main>
+
+<script>
+(function () {
+  var MADD = [
+    ["المد الطبيعي", "افتراضنا: ٢ فقط"],
+    ["المتصل", "افتراضنا: ٤ أو ٥ (و٦ عند الوقف)"],
+    ["المنفصل", "افتراضنا: ٤ أو ٥"],
+    ["العارض للسكون", "افتراضنا: ٢ أو ٤ أو ٦"],
+    ["اللازم", "افتراضنا: ٦"],
+    ["البدل", "افتراضنا: ٢"],
+    ["اللين العارض للسكون", "افتراضنا: ٢ أو ٤ أو ٦"],
+    ["الصلة الصغرى", "افتراضنا: ٢"],
+    ["الصلة الكبرى", "افتراضنا: مثل المنفصل"]
+  ];
+  var LENS = ["2", "4", "5", "6"];
+  var RANK = ["القلقلة", "الإخفاء", "الإدغام", "الإقلاب", "الإظهار", "التفخيم والترقيق", "مخارج الحروف"];
+  var OK = [
+    "إعادة الكلمة أو جزء من الآية لتصحيح النطق",
+    "الوقف لضيق النفس ثم الإعادة من موضع صحيح",
+    "تكرار الآية كاملة",
+    "الوقف على رأس الآية ثم الوصل",
+    "السكت في مواضعه عند حفص",
+    "الاستعاذة والبسملة قبل التلاوة",
+    "اختلاف سرعة التلاوة (تحقيق، تدوير، حدر)"
+  ];
+  var MSGS = [
+    ["mistakeMispronounced", "خطأ في النطق", "وسم على الكلمة"],
+    ["mistakeWrongWord", "كلمة خاطئة", "وسم على الكلمة"],
+    ["mistakeSkipped", "كلمة متروكة", "وسم على الكلمة"],
+    ["mistakeAdded", "كلمة زائدة", "وسم على الكلمة"],
+    ["mistakeRepetition", "تكرار", "وسم على الكلمة"],
+    ["mistakeUnclear", "غير واضح، راجعها", "وسم على الكلمة"],
+    ["mistakeShortMadd", "احتمال قصر في المد (راجع المد)", "التنبيه الوحيد في التجويد الآن"],
+    ["mistakeLongPause", "توقف طويل", "وسم على الكلمة"],
+    ["coachDisclaimer", "قد يخطئ التقييم الآلي. لإتقان التجويد تعلّم على يد معلم متقن.", "تحت كل نتيجة"],
+    ["firstRecitationBody", "رتّلها بصوتك وشاهد ما يسمعه المدرّب كلمة بكلمة. هذه علينا.", "أول تجربة (الفاتحة)"],
+    ["paywallHeadlineRecite", "اقرأ بثقة. كل كلمة تُراجَع.", "صفحة الاشتراك"],
+    ["aiCoachHint", "احصل على تقييم فوري", "الشاشة الرئيسية"]
+  ];
+
+  function el(tag, attrs, text) {
+    var e = document.createElement(tag);
+    for (var k in attrs || {}) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    return e;
+  }
+
+  var tb = document.querySelector("#madd tbody");
+  MADD.forEach(function (m, i) {
+    var tr = el("tr");
+    var td = el("td", { "class": "rule" }, m[0]);
+    td.appendChild(el("small", null, m[1]));
+    tr.appendChild(td);
+    LENS.forEach(function (l) {
+      var c = el("td", { "class": "c" });
+      var cb = el("input", { type: "checkbox", id: "madd_" + i + "_" + l, "aria-label": m[0] + " " + l });
+      c.appendChild(cb); tr.appendChild(c);
+    });
+    tb.appendChild(tr);
+  });
+
+  var rk = document.querySelector("#rank tbody");
+  RANK.forEach(function (r, i) {
+    var tr = el("tr");
+    tr.appendChild(el("td", { "class": "rule" }, r));
+    var td = el("td");
+    var inp = el("input", { type: "text", id: "rank_" + i, inputmode: "numeric", "aria-label": "ترتيب " + r, style: "max-width:80px" });
+    td.appendChild(inp); tr.appendChild(td); rk.appendChild(tr);
+  });
+
+  var ok = document.getElementById("ok");
+  OK.forEach(function (o, i) {
+    var lb = el("label");
+    lb.appendChild(el("input", { type: "checkbox", id: "ok_" + i }));
+    lb.appendChild(document.createTextNode(" " + o));
+    ok.appendChild(lb);
+  });
+
+  var msgs = document.getElementById("msgs");
+  MSGS.forEach(function (m, i) {
+    var box = el("div", { "class": "msg" });
+    box.appendChild(el("q", null, m[1]));
+    box.appendChild(el("span", { "class": "ctx" }, "أين تظهر: " + m[2]));
+    var ch = el("div", { "class": "choices" });
+    [["مناسبة", "ok"], ["تحتاج تعديل", "edit"], ["تُحذف", "drop"]].forEach(function (c, j) {
+      var lb = el("label");
+      lb.appendChild(el("input", { type: "radio", name: "msg_" + i, id: "msg_" + i + "_" + j, value: c[0] }));
+      lb.appendChild(document.createTextNode(" " + c[0]));
+      ch.appendChild(lb);
+    });
+    box.appendChild(ch);
+    box.appendChild(el("input", { type: "text", id: "msgalt_" + i, placeholder: "البديل المقترح (اختياري)" }));
+    msgs.appendChild(box);
+  });
+
+  function radio(name) {
+    var r = document.querySelector('input[name="' + name + '"]:checked');
+    return r ? r.value : "";
+  }
+  function val(id) { var e = document.getElementById(id); return e ? e.value.trim() : ""; }
+  var AR = { "2": "٢", "4": "٤", "5": "٥", "6": "٦" };
+
+  function build() {
+    var L = ["إجابات المراجعة الأولى لتطبيق أسمِعني", ""];
+    L.push("١) الرواية: " + (radio("riwaya") || "—"));
+    if (val("riwaya_note")) L.push("   ملاحظة: " + val("riwaya_note"));
+    L.push("", "٢) المدود المقبولة:");
+    MADD.forEach(function (m, i) {
+      var picked = LENS.filter(function (l) { return document.getElementById("madd_" + i + "_" + l).checked; })
+        .map(function (l) { return AR[l]; });
+      L.push("   - " + m[0] + ": " + (picked.length ? picked.join(" أو ") + " حركات" : "—"));
+    });
+    L.push("   التسوية: " + (radio("taswiya") || "—"));
+    if (val("madd_note")) L.push("   ملاحظات: " + val("madd_note"));
+    L.push("", "٣) الغنّة: " + (val("ghunna") || "—"));
+    var ranks = RANK.map(function (r, i) { return [r, val("rank_" + i)]; }).filter(function (x) { return x[1]; })
+      .sort(function (a, b) { return (parseInt(a[1].replace(/[٠-٩]/g, function (d) { return "٠١٢٣٤٥٦٧٨٩".indexOf(d); }), 10) || 99) - (parseInt(b[1].replace(/[٠-٩]/g, function (d) { return "٠١٢٣٤٥٦٧٨٩".indexOf(d); }), 10) || 99); });
+    L.push("   ترتيب الأحكام: " + (ranks.length ? ranks.map(function (x) { return x[1] + "- " + x[0]; }).join("، ") : "—"));
+    L.push("", "٤) لا يُعدّ خطأً:");
+    var anyOk = false;
+    OK.forEach(function (o, i) { if (document.getElementById("ok_" + i).checked) { L.push("   - " + o); anyOk = true; } });
+    if (!anyOk) L.push("   —");
+    if (val("ok_note")) L.push("   أخرى: " + val("ok_note"));
+    L.push("", "٥) كلمات التطبيق:");
+    MSGS.forEach(function (m, i) {
+      var r = radio("msg_" + i), alt = val("msgalt_" + i);
+      if (r || alt) L.push("   - «" + m[1] + "»: " + (r || "") + (alt ? " ← البديل: " + alt : ""));
+    });
+    L.push("", "٦) ذكر الاسم: " + (radio("credit") || "—"));
+    L.push("   ذكر الإجازة: " + (radio("ijazah") || "—"));
+    L.push("   الساعات أسبوعيًا: " + (val("hours") || "—"));
+    L.push("   معلّمة ثانية: " + (radio("second") || "—"));
+    if (val("other")) L.push("   أخرى: " + val("other"));
+    return L.join("\n");
+  }
+
+  var KEY = "asmi3ni-sheikha-review-v1";
+  function save() {
+    var data = {};
+    document.querySelectorAll("main input, main textarea").forEach(function (e) {
+      if (!e.id || e.id === "out") return;
+      data[e.id] = (e.type === "checkbox" || e.type === "radio") ? e.checked : e.value;
+    });
+    try { localStorage.setItem(KEY, JSON.stringify(data)); } catch (err) {}
+  }
+  function load() {
+    var data = null;
+    try { data = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (err) {}
+    if (!data) return;
+    Object.keys(data).forEach(function (id) {
+      var e = document.getElementById(id);
+      if (!e) return;
+      if (e.type === "checkbox" || e.type === "radio") e.checked = !!data[id]; else e.value = data[id];
+    });
+  }
+  var out = document.getElementById("out"), wa = document.getElementById("wa");
+  function refresh() {
+    var t = build();
+    out.value = t;
+    wa.href = "https://wa.me/?text=" + encodeURIComponent(t);
+  }
+  load(); refresh();
+  document.querySelector("main").addEventListener("input", function () { save(); refresh(); });
+  document.querySelector("main").addEventListener("change", function () { save(); refresh(); });
+
+  var status = document.getElementById("status");
+  document.getElementById("copy").addEventListener("click", function () {
+    var t = build();
+    function fallback() { out.focus(); out.select(); status.textContent = "حدّدنا النص، اضغطي نسخ من القائمة."; }
+    try {
+      navigator.clipboard.writeText(t).then(function () { status.textContent = "نُسخت الإجابات. ألصقيها في رسالة."; }, fallback);
+    } catch (err) { fallback(); }
+  });
+})();
+</script>
