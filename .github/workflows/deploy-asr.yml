@@ -1,0 +1,23 @@
+name: Deploy ASR
+on:
+  push:
+    branches: [main]
+    paths: ["services/asr/**"]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      MODAL_TOKEN_ID: ${{ secrets.MODAL_TOKEN_ID }}
+      MODAL_TOKEN_SECRET: ${{ secrets.MODAL_TOKEN_SECRET }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - name: Deploy to Modal
+        run: |
+          if [ -z "$MODAL_TOKEN_ID" ]; then echo "MODAL_TOKEN_ID not set; skipping deploy"; exit 0; fi
+          pip install modal
+          modal deploy services/asr/modal_app.py

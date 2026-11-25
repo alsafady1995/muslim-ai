@@ -105,5 +105,5 @@ edge function ──finish_ai_call(call, measured cost) or cancel_ai_call(call)�
 
 - Content queries are cacheable and read-only; move them behind a CDN or ship an offline bundle in Phase 2.
 - `content_embeddings` uses an HNSW index; ~60k vectors fit comfortably on the smallest Supabase compute.
-- The ASR service is stateless and scales to zero on Cloud Run; switch to GPU instances only if latency requires it.
+- The ASR service is stateless and scales to zero on Modal (`services/asr/modal_app.py`, per-second billing); the same Dockerfile runs on Cloud Run or any container host. Switch to GPU only if latency requires it.
 - Claude system prompt is byte-stable and cached (`cache_control`), so repeated calls mostly pay for the question and sources.
