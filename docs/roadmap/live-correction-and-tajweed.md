@@ -1,7 +1,7 @@
 # Live correction and tajweed: implementation plan
 
 Status: plan only, nothing here is built yet. Written 2026-11-25.
-Arabic summary and the list of questions for the sheikh: [sheikh-brief-ar.md](sheikh-brief-ar.md).
+Arabic summary and the list of questions for the sheikha: [sheikh-brief-ar.md](sheikh-brief-ar.md).
 
 ## 0. Where we are today
 
@@ -15,8 +15,8 @@ Arabic summary and the list of questions for the sheikh: [sheikh-brief-ar.md](sh
   recorder, with proposed gates: at most 5% of clean recitations get any false flag, at most 1% of correct words are
   flagged, at least 80% of real mistakes are caught.
 
-The order stays: **1) measure, 2) live correction, 3) tajweed.** What changes now that a sheikh is available is that
-his work can start **today, in parallel**, because the single most valuable thing he can produce (a gold set of
+The order stays: **1) measure, 2) live correction, 3) tajweed.** What changes now that a sheikhaa (a qualified woman Quran teacher) is available is that
+her work can start **today, in parallel**, because the single most valuable thing she can produce (a gold set of
 clips labelled by an expert) is needed by all three steps.
 
 ## 1. Live (in-recitation) correction
@@ -89,7 +89,7 @@ today's cost. GPU only makes sense after there are enough concurrent users to ke
   never a pop-up. Red only appears on the final result screen, after the server confirms.
 - **Stop-on-mistake mode (opt-in, for hifz tests):** recitation pauses and shows the first word of the correct ayah
   as a hint, like a teacher who stops the student.
-- Every flag has **"This is wrong"**. It saves the clip (with consent) to the review queue for the sheikh. This is how
+- Every flag has **"This is wrong"**. It saves the clip (with consent) to the review queue for the sheikha. This is how
   we find false flags in real use.
 
 ### 1.8 Safeguards against false flags
@@ -101,7 +101,7 @@ today's cost. GPU only makes sense after there are enough concurrent users to ke
    release.
 4. Onboarding Al-Fatiha uses follow mode only (no live mistake marks) until the false-flag gate is met on that surah.
 5. Accept the known valid variations: pausing and restarting a word, repeating an ayah, a different but valid waqf.
-   The sheikh helps us list these.
+   The sheikha helps us list these.
 6. Track `false_flag_reports / live_flags` per surah in PostHog; alert above 5%.
 
 ## 2. Tajweed
@@ -110,7 +110,7 @@ today's cost. GPU only makes sense after there are enough concurrent users to ke
 
 Before any rule: **riwayah and tariq** (we assume Hafs 'an 'Asim, tariq ash-Shatibiyyah), and **the accepted
 ranges**, for example munfasil 4 or 5 harakat (and whether 2 is accepted), 'arid lil-sukun 2/4/6, and whether the user
-must be consistent within one recitation. This is the sheikh's decision, and it changes what the code accepts.
+must be consistent within one recitation. This is the sheikha's decision, and it changes what the code accepts.
 
 ### 2.2 Which rules first
 
@@ -121,7 +121,7 @@ must be consistent within one recitation. This is the sheikh's decision, and it 
 | **Qalqalah** (q, t, b, j, d with sukun) | Acoustic release/burst after the letter; tajweed-v2 and qdat_bench both cover it | Medium | **3** |
 | **Ikhfa, idgham, iqlab, izhar** of nun sakinah/tanween | Phoneme sequence: was the nun pronounced clearly or merged/hidden | Medium; ikhfa is subtle and varies by reciter | 4 |
 | Tafkhim/tarqiq, sifat, makharij | Fine acoustics | Hard; research-grade | Later |
-| Waqf and ibtida | From text plus pause positions | Text part is easy; judging meaning is the sheikh's area | Later |
+| Waqf and ibtida | From text plus pause positions | Text part is easy; judging meaning is the sheikha's area | Later |
 
 ### 2.3 How we would detect them
 
@@ -131,7 +131,7 @@ must be consistent within one recitation. This is the sheikh's decision, and it 
      (Apache-2.0; Montreal Forced Aligner model for Hafs, self-reported 10–20 ms boundary jitter, ships a tajweed rule
      index). Server-side only (MFA is a heavy tool). Useful to cross-check the on-device model.
 2. **Rule positions from the text.** Each word's Uthmani text tells us where each rule applies. We precompute a
-   `tajweed_positions` table (ayah, word, letter, rule, expected length) and the sheikh reviews a sample of it.
+   `tajweed_positions` table (ayah, word, letter, rule, expected length) and the sheikha reviews a sample of it.
 3. **Rule check.** Compare measured length (in the user's harakah units) to the accepted range, with a "not sure"
    band where we say nothing.
 4. **Only report confident cases.** A tajweed remark is a suggestion ("قد تكون المدّة أقصر من المطلوب"), with a link
@@ -148,21 +148,21 @@ must be consistent within one recitation. This is the sheikh's decision, and it 
 | Crowdsourced Quranic audio (arXiv 2405.02675) | Not stated | Do not use |
 
 Gap: nothing public covers our users (mixed ages, phone mics, Gulf and Levant accents, children) across many surahs.
-So **our own labelled data is required**, and the sheikh is the only person who can label tajweed.
+So **our own labelled data is required**, and the sheikha is the only person who can label tajweed.
 
 ### 2.5 Labelled data we need
 
-- **Gold set v1 (word mistakes):** 300 clips from PR #11's recorder, labelled by the sheikh. Also used for tajweed
+- **Gold set v1 (word mistakes):** 300 clips from PR #11's recorder, labelled by the sheikha. Also used for tajweed
   timing checks later.
 - **Per tajweed rule:** about 200 occurrences correct + 100 with the mistake, from at least 30 different reciters,
-  labelled by the sheikh. For madd that is roughly 80–120 short clips (each clip has several madd positions).
-- **Double labelling:** 10% of clips labelled twice (sheikh plus a second qualified teacher, or the sheikh again a
+  labelled by the sheikha. For madd that is roughly 80–120 short clips (each clip has several madd positions).
+- **Double labelling:** 10% of clips labelled twice (sheikha plus a second qualified teacher, or the sheikha again a
   week later) to measure agreement. If two experts agree less than ~85% on a rule, the model cannot be held to a
   higher bar and the rule is not ready.
 
-## 3. The sheikh's role
+## 3. The sheikha's role
 
-### 3.1 What he decides (authority)
+### 3.1 What she decides (authority)
 
 1. The standard: riwayah, tariq, accepted madd lengths and variants (section 2.1).
 2. The mistake taxonomy and the Arabic wording of every message the app shows about recitation (about 25 strings).
@@ -176,19 +176,19 @@ A small web page (no app install), served from the existing `site/` or a protect
 - Lists clips from `benchmark_clips` (PR #11) and from "This is wrong" reports, oldest first.
 - Plays the clip with the Uthmani text shown word by word; tapping a word cycles: correct → wrong → skipped →
   tajweed issue (then pick the rule and "short / long / missing").
-- Shows what the app said, so he can mark "app was right / app was wrong".
+- Shows what the app said, so she can mark "app was right / app was wrong".
 - Keyboard and phone friendly; about 1 minute per short clip.
 - Saves to a new `expert_labels` table (clip, labeller, labels JSON, version, created_at), separate from the
   volunteer's own labels so we can compare.
 - Access: a dedicated Supabase account with an `expert` role; RLS so only experts read clips.
 
-Effort: about 1 week to build. **Until it exists, he can start with a spreadsheet and audio files** (section 3.3).
+Effort: about 1 week to build. **Until it exists, she can start with a spreadsheet and audio files** (section 3.3).
 
-### 3.3 What to ask him to do first (in order)
+### 3.3 What to ask her to do first (in order)
 
 1. **One meeting (1 hour):** confirm riwayah/tariq and accepted ranges; review the list of mistake types and our
-   Arabic messages; agree on how he wants to be credited.
-2. **Listen to 20 app results** (we send recordings plus what the app said). He marks which flags are wrong. This
+   Arabic messages; agree on how she wants to be credited.
+2. **Listen to 20 app results** (we send recordings plus what the app said). She marks which flags are wrong. This
    gives a first, honest read on false flags before any engineering.
 3. **Label 50 clips** (spreadsheet or the tool) as a pilot, then the full 300.
 4. **Review the madd and ghunna positions** precomputed for Al-Fatiha and Juz 'Amma.
@@ -198,29 +198,29 @@ Rough time: steps 1–2 ≈ 2–3 hours; 300 clips ≈ 6–8 hours; per tajweed 
 
 ### 3.4 Credit, agreement and ijazah
 
-- **Credit** only with his written permission, in the form he chooses (name, title, or anonymous). Suggested place: an
-  "Scholarly review" page in Settings and on asmi3ni.com, stating exactly what he reviewed and when.
+- **Credit** only with her written permission, in the form she chooses (name, title, or anonymous). Suggested place: an
+  "Scholarly review" page in Settings and on asmi3ni.com, stating exactly what she reviewed and when.
 - **Compensation:** agree it up front (paid per hour or per batch, or voluntary). Put it in a one-page written
   agreement that also covers data use (clips stay private, used only to improve the app) and that the app may not
-  imply more endorsement than he gave.
-- **Ijazah:** the app must never claim to grant ijazah or to replace a teacher. His ijazah and sanad can be mentioned
-  as his qualification for reviewing, if he agrees. His approval is **per version**: when the model or thresholds
-  change, the gold set is re-run and he re-confirms before the store text keeps saying "reviewed".
-- Content beyond recitation (Ask the Quran answers, adhkar texts): out of scope for this plan, but if he is willing,
+  imply more endorsement than she gave.
+- **Ijazah:** the app must never claim to grant ijazah or to replace a teacher. Her ijazah and sanad can be mentioned
+  as her qualification for reviewing, if she agrees. Her approval is **per version**: when the model or thresholds
+  change, the gold set is re-run and she re-confirms before the store text keeps saying "reviewed".
+- Content beyond recitation (Ask the Quran answers, adhkar texts): out of scope for this plan, but if she is willing,
   a separate review of adhkar sources and the Ask disclaimer is cheap and valuable.
 
 ## 4. Milestones
 
-Estimates assume one developer working with Claude, and the sheikh's availability of a few hours a week.
+Estimates assume one developer working with Claude, and the sheikha's availability of a few hours a week.
 
 | # | Milestone | Effort | Depends on | Done when |
 |---|---|---|---|---|
-| M0 | Merge PR #11, deploy ASR, collect 300 clips; sheikh meeting and 20-result review | 1–2 weeks | Volunteers, sheikh | Benchmark report on the real gold set |
+| M0 | Merge PR #11, deploy ASR, collect 300 clips; sheikha meeting and 20-result review | 1–2 weeks | Volunteers, sheikha | Benchmark report on the real gold set |
 | M1 | Fix whatever M0 shows (thresholds via `--sweep`, alignment tweaks); meet the existing launch gates | 1–3 weeks | M0 | Gates pass on gold set |
-| M2 | Review tool for the sheikh (`expert_labels`) | 1 week | can start now | He labels in it |
+| M2 | Review tool for the sheikha (`expert_labels`) | 1 week | can start now | She labels in it |
 | M3 | Live spike: tajweed-v2 ONNX in Flutter, measure speed on 3 phones, tracking accuracy on gold set; option B as baseline | 2 weeks | M1 | Go/no-go with numbers |
 | M4 | Live correction beta: follow mode + amber flags, kill switch, "This is wrong" reports, offline queue | 3–4 weeks | M3 | Internal beta (TestFlight / Play internal) |
-| M5 | Tajweed madd: positions table, harakah-relative timing, sheikh labels, threshold tuning | 3–4 weeks | M1, sheikh labels | Rule gate met, sheikh sign-off |
+| M5 | Tajweed madd: positions table, harakah-relative timing, sheikha labels, threshold tuning | 3–4 weeks | M1, sheikha labels | Rule gate met, sheikha sign-off |
 | M6 | Ghunna, then qalqalah | 2–3 weeks each | M5 | Same |
 | M7 | Ikhfa / idgham / iqlab | 4+ weeks, uncertain | M6 | Same, or dropped if experts disagree too much |
 
@@ -232,12 +232,12 @@ months**, mostly gated by labelled data, not code.
 | Risk | Impact | Mitigation |
 |---|---|---|
 | Base accuracy is worse than expected (M0) | Everything shifts | That is why M0 is first; try whisper-small or tajweed-v2 on the server before live work |
-| False flags on correct recitation | Users leave, bad reviews, religious sensitivity | Gates, two-decode rule, follow-only onboarding, kill switch, sheikh-reviewed reports |
+| False flags on correct recitation | Users leave, bad reviews, religious sensitivity | Gates, two-decode rule, follow-only onboarding, kill switch, sheikha-reviewed reports |
 | Children, women and non-native speakers under-represented in training data | Unequal accuracy | Benchmark breaks results down by group (already in PR #11); do not launch a feature that fails one group |
 | Self-reported model claims don't hold | Spike fails | Every model is scored on our gold set before adoption |
 | License terms change or are misunderstood | Legal | Pin model revisions and keep copies of licenses in `docs/licenses/`; avoid NC and custom licenses unless reviewed |
-| Sheikh's time is limited | Tajweed stalls | Start with madd only; spreadsheet first; second teacher for double labelling |
-| Valid variants marked as mistakes | Wrong teaching | Sheikh defines accepted ranges; "not sure" band where the app says nothing |
+| Sheikha's time is limited | Tajweed stalls | Start with madd only; spreadsheet first; second teacher for double labelling |
+| Valid variants marked as mistakes | Wrong teaching | Sheikha defines accepted ranges; "not sure" band where the app says nothing |
 | Privacy of kept clips | Trust and store review | Consent screen, delete-all, privacy page update before any public collection |
 | GPU cost if we go server-side | Budget | On-device first; GPU only with enough concurrent users |
 
@@ -245,7 +245,7 @@ months**, mostly gated by labelled data, not code.
 
 **Live correction**
 - Benchmark gates met in **live mode** (not just the final check): ≤ 5% of clean recitations get any live flag,
-  ≥ 80% of real mistakes caught, on the sheikh's gold set, and no group (child, woman, non-native) more than 2 points
+  ≥ 80% of real mistakes caught, on the sheikha's gold set, and no group (child, woman, non-native) more than 2 points
   worse.
 - p90 flag latency ≤ 1.5 s on a mid-range Android phone; works offline.
 - Internal beta of at least 2 weeks with false-flag reports under 5%.
@@ -253,12 +253,12 @@ months**, mostly gated by labelled data, not code.
   teacher", "certified".
 
 **Tajweed (per rule)**
-- On the sheikh's labels: ≥ 90% of the app's tajweed remarks are correct (precision), ≥ 70% of real mistakes caught,
+- On the sheikha's labels: ≥ 90% of the app's tajweed remarks are correct (precision), ≥ 70% of real mistakes caught,
   and expert agreement on that rule ≥ 85%.
-- Written sign-off from the sheikh for that rule and that model version.
+- Written sign-off from the sheikha for that rule and that model version.
 - Shown in the app as "تنبيهات تجويد (تجريبي)" until it has been public for a while with low report rates.
 - Store text names only the rules that passed ("ينبّهك على المدود والغنّة"), never "full tajweed correction".
-- Mention the scholarly review only in the wording he approved.
+- Mention the scholarly review only in the wording she approved.
 
 ## 7. Sources checked (2026-11-25)
 
