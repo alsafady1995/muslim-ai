@@ -208,7 +208,7 @@ void main() {
     });
   });
 
-  Future<void> openSheet(WidgetTester tester, bool allowUpgrade, {bool budget = false}) async {
+  Future<void> openSheet(WidgetTester tester, bool allowUpgrade, {bool budget = false, String tier = 'free'}) async {
     await tester.pumpWidget(
       MaterialApp(
         locale: const Locale('en'),
@@ -225,7 +225,7 @@ void main() {
               onPressed: () => budget
                   ? showAiBudgetExhausted(
                       context,
-                      AiBudgetExhausted('recitation', premium: false, tier: 'free', resetsAt: DateTime(2026, 12, 1)),
+                      AiBudgetExhausted('recitation', premium: false, tier: tier, resetsAt: DateTime(2026, 12, 1)),
                       allowUpgrade: allowUpgrade,
                     )
                   : showLimitSheet(
@@ -259,6 +259,24 @@ void main() {
     addTearDown(tester.view.reset);
     await openSheet(tester, true, budget: true);
     expect(find.byType(FilledButton), findsOneWidget);
+  });
+
+  testWidgets('AI budget sheet: guests are asked to create a free account, not to pay', (tester) async {
+    tester.view.physicalSize = const Size(1170, 2532);
+    addTearDown(tester.view.reset);
+    await openSheet(tester, true, budget: true, tier: 'guest');
+    expect(find.text('Create a free account to continue'), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, 'Create a free account'), findsOneWidget);
+    expect(find.byType(FilledButton), findsOneWidget);
+  });
+
+  testWidgets('AI budget sheet: a busy free pool never sells Premium', (tester) async {
+    tester.view.physicalSize = const Size(1170, 2532);
+    addTearDown(tester.view.reset);
+    await openSheet(tester, true, budget: true, tier: 'busy');
+    expect(find.text('Free AI features are busy today'), findsOneWidget);
+    expect(find.byType(FilledButton), findsNothing);
+    expect(find.byType(OutlinedButton), findsOneWidget);
   });
 
   testWidgets('AI budget sheet: no Premium offer during onboarding', (tester) async {

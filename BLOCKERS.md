@@ -50,7 +50,7 @@ Apple: Subscription → Subscription Prices → Add pricing → pick the storefr
 
 | Tier | Model | Cost per answer* | Weekly Ask limit | Hard AI budget (all AI features) |
 |---|---|---|---|---|
-| Free | Claude Haiku 5.5 | ≈ $0.001 | 15 questions | $0.15 / month |
+| Free | Claude Haiku 5.5 | ≈ $0.001 | 15 questions | $0.05 / month (guests: onboarding check only), plus a $20/day pool for all free users |
 | Trial (7 days) | Claude Sonnet 5.5 | ≈ $0.02 | 100 questions (fair use) | $0.25 for the trial |
 | Premium | Claude Sonnet 5.5, then Haiku near the limit | ≈ $0.02 | 100 questions (fair use) | 50% of what the user paid |
 
@@ -69,8 +69,8 @@ All weekly limits are in `ARCHITECTURE.md` ("AI limits"); they renew every Frida
 
 After that, premium answers continue on Haiku until the budget is fully used, then AI pauses with a friendly
 message until the next monthly window. Tune with SQL, no release needed:
-`update ai_budget_settings set value = 0.15 where key = 'free_monthly_usd';` (keys: `cost_share`, `free_monthly_usd`,
-`trial_budget_usd`, `promo_monthly_usd`, `fallback_net_monthly_usd`, `core_share`, `annual_pace_multiple`). Watch `ai_spend` for how many users hit the cap.
+`update ai_budget_settings set value = 0.05 where key = 'free_monthly_usd';` (keys: `cost_share`, `free_monthly_usd`, `guest_monthly_usd`, `free_daily_pool_usd`,
+`trial_budget_usd`, `promo_monthly_usd`, `fallback_net_monthly_usd`, `core_share`, `annual_pace_multiple`). Watch `ai_spend` for how many users hit the cap, and `ai_free_pool` (`used_usd`, `refused`) for days the free pool filled up.
 
 Before launch, run the answer-quality eval described in `docs/` on Haiku. If it fails, raise the free model with
 `supabase secrets set CLAUDE_MODEL=claude-sonnet-5-5` and re-check this table.

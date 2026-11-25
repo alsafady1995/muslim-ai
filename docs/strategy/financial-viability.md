@@ -388,11 +388,11 @@ the founder's time, not cash.
 
 ## 10. Top 10 actions, ranked by long-term profit impact
 
-1. **Close the free-AI exposure before launch.** Lower the free monthly AI budget from $0.15 to $0.03 (still ≈ 30
-   Haiku answers or 30–60 recitation minutes), require a signed-in account (not guest) for AI after the onboarding
-   Fatiha check, and add a **global daily free-tier ceiling** in `ai_budget_settings` (for example $20/day) that
-   degrades free AI to "back tomorrow" when hit. Also set spend alerts on Anthropic, Google Cloud and Supabase.
-   *Prevents the only bankruptcy path.*
+1. **Close the free-AI exposure before launch. (Done in this PR.)** The free monthly AI budget goes from $0.15 to
+   $0.05 (enough for the full free weekly recitation allowance at the conservative ASR rate), guests get only the
+   onboarding Fatiha check and are asked to create a free account for anything else, and a **global daily
+   free-tier ceiling** (`free_daily_pool_usd`, $20/day) pauses free AI until midnight UTC when hit. Still to do by
+   hand: spend alerts on Anthropic, Google Cloud and Supabase. *Prevents the only bankruptcy path.*
 2. **Prove recitation accuracy (PR #11) and launch Gulf-first.** Nothing else matters if the coach is wrong. Lead
    with KSA/UAE storefronts and Arabic ASO; the full-price payer share is the second biggest lever in the model.
 3. **Build halaqa mode and async tasmee' for teachers, free.** The only acquisition channel with near-zero cost and
