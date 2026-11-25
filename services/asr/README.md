@@ -19,7 +19,7 @@ supabase secrets set ASR_SERVICE_URL=<that url> ASR_SERVICE_TOKEN=<same token>
 ```
 
 Or from GitHub: add repository secrets `MODAL_TOKEN_ID` and `MODAL_TOKEN_SECRET` (modal.com →
-Settings → API tokens) and run the **Deploy ASR** workflow; it also redeploys when `services/asr/` changes on `main`.
+Settings → API tokens) and `ASR_SERVICE_TOKEN` (the workflow stores it in the Modal secret) and run the **Deploy ASR** workflow; it also redeploys when `services/asr/` changes on `main`.
 
 Settings in `modal_app.py`: 1 physical core, 2 GiB, 2 requests per container, at most 10 containers,
 warm for 60 s after the last request. Cost: about $0.0000175 per container-second (Modal list price,
