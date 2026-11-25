@@ -50,6 +50,9 @@ class _CoachScreenState extends ConsumerState<CoachScreen> {
   bool get _returnsResult => widget.source == 'onboarding' || widget.hifzMode;
   String get _feature => widget.hifzMode ? 'hifz' : 'recitation';
 
+  /// No Premium offers during onboarding (the router would bounce /paywall back to onboarding).
+  bool get _canOffer => widget.source != 'onboarding';
+
   /// Free checks stop at 60 s, Premium/trial at 3 min (server enforces the same).
   Duration get _maxDuration {
     final q = ref.read(weeklyQuotaProvider).value;
@@ -104,8 +107,9 @@ class _CoachScreenState extends ConsumerState<CoachScreen> {
     final freeOnboarding = widget.source == 'onboarding' && quota.onboardingCheckAvailable;
     if (!freeOnboarding && quota.raw.isNotEmpty && quota.remaining(_feature) <= 0) {
       if (mounted) {
-        await showLimitSheet(context,
-            QuotaExceeded(_feature, premium: quota.premium, limit: quota.limit(_feature), resetsAt: quota.resetsAt));
+        await showLimitSheet(
+            context, QuotaExceeded(_feature, premium: quota.premium, limit: quota.limit(_feature), resetsAt: quota.resetsAt),
+            allowUpgrade: _canOffer);
       }
       return;
     }
@@ -162,6 +166,7 @@ class _CoachScreenState extends ConsumerState<CoachScreen> {
     final uid = db.auth.currentUser!.id;
     final id = const Uuid().v4();
     final storagePath = '$uid/$id.m4a';
+    var uploaded = false;
     try {
       if (AppConfig.demoMode) {
         // Preview: nothing is uploaded; the simulated analysis only needs the range.
@@ -177,6 +182,7 @@ class _CoachScreenState extends ConsumerState<CoachScreen> {
       }
       await db.storage.from('recitations').upload(storagePath, File(path),
           fileOptions: const FileOptions(contentType: 'audio/mp4'));
+      uploaded = true;
       await db.from('recitation_sessions').insert({
         'id': id,
         'user_id': uid,
@@ -191,15 +197,21 @@ class _CoachScreenState extends ConsumerState<CoachScreen> {
           .call('recitation-analyze', {'session_id': id, 'source': widget.source});
       _showResult(RecitationResult(res));
     } on AiBudgetExhausted catch (e) {
+      if (!mounted) return;
       setState(() => _phase = _Phase.ready);
-      if (mounted) showAiBudgetExhausted(context, e);
+      showAiBudgetExhausted(context, e, allowUpgrade: _canOffer);
     } on QuotaExceeded catch (e) {
-      setState(() => _phase = _Phase.ready);
       ref.invalidate(weeklyQuotaProvider);
-      if (mounted) await showLimitSheet(context, e);
-    } catch (_) {
+      if (!mounted) return;
       setState(() => _phase = _Phase.ready);
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(context.l10n.analysisFailed)));
+      await showLimitSheet(context, e, allowUpgrade: _canOffer);
+    } catch (_) {
+      // If the upload worked but the session insert or the call failed before the server
+      // took over, the recording would stay in storage: remove it (privacy promise).
+      if (uploaded) db.storage.from('recitations').remove([storagePath]).ignore();
+      if (!mounted) return;
+      setState(() => _phase = _Phase.ready);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(context.l10n.analysisFailed)));
     } finally {
       if (!kIsWeb) {
         File(path).delete().ignore();
@@ -252,7 +264,7 @@ class _CoachScreenState extends ConsumerState<CoachScreen> {
             onContinue: _returnsResult ? _finish : null,
             notes: [
               // A plain line, not a popup: never sell right after someone recited.
-              if (_result!.clipped && !premium)
+              if (_result!.clipped && !premium && _canOffer)
                 Padding(
                   padding: const EdgeInsets.only(top: 12),
                   child: TextButton(

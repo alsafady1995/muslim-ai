@@ -9,7 +9,8 @@ String _date(BuildContext context, DateTime? d) =>
     MaterialLocalizations.of(context).formatMediumDate((d ?? DateTime.now().add(const Duration(days: 30))).toLocal());
 
 /// Friendly sheet shown when the server says this period's AI allowance is used up.
-Future<void> showAiBudgetExhausted(BuildContext context, AiBudgetExhausted e) {
+/// [allowUpgrade] is false where Premium must not be offered (e.g. during onboarding).
+Future<void> showAiBudgetExhausted(BuildContext context, AiBudgetExhausted e, {bool allowUpgrade = true}) {
   Analytics.track(Events.quotaHit, {'feature': e.feature, 'kind': 'ai_budget', 'tier': e.tier});
   final l10n = context.l10n;
   final date = _date(context, e.resetsAt);
@@ -31,7 +32,7 @@ Future<void> showAiBudgetExhausted(BuildContext context, AiBudgetExhausted e) {
           const SizedBox(height: 8),
           Text(body, textAlign: TextAlign.center),
           const SizedBox(height: 20),
-          if (e.tier == 'free') ...[
+          if (e.tier == 'free' && allowUpgrade) ...[
             FilledButton(
               onPressed: () {
                 Navigator.of(sheet).pop();

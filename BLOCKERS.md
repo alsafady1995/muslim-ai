@@ -87,6 +87,15 @@ Before launch, run the answer-quality eval described in `docs/` on Haiku. If it 
 | 25 | **RevenueCat offering:** make sure `default` lists `$rc_annual` first and both products are attached to entitlement `premium`. | The paywall shows whatever the offering returns. |
 | 26 | **PostHog dashboards** for the funnel in `docs/full-audit.md` §7 (onboarding → first recitation → day-3 value gate → paywall view → trial → paid). | All events are already sent; you only need to build the charts. |
 
+## 5b. From the end-to-end verification (24 Nov 2026)
+
+| # | What | Why |
+|---|---|---|
+| 27 | **Apple: enable "Sign in with Apple" on the App ID `app.muslimai.mobile`**, then regenerate the match profile once: `cd app/ios && bundle exec fastlane match appstore --force` (needs the match repo). | The app now ships the Sign in with Apple entitlement (it was missing, so the Apple button failed on iOS). A profile without the capability fails the release build. |
+| 28 | **`GOOGLE_IOS_CLIENT_ID` must be in `APP_ENV_PROD_JSON`.** The iOS release job turns it into the URL scheme Google Sign-In needs and stops with an error if it is missing. For local iOS runs add the reversed id (`com.googleusercontent.apps.…`) to `CFBundleURLTypes` in `ios/Runner/Info.plist` yourself. | Without that URL scheme Google Sign-In aborts the app on iOS. |
+| 29 | **Supabase → Auth → Apple: "Client IDs" must list both the Services ID and the bundle id `app.muslimai.mobile`** (comma-separated). Google: list the Web, iOS and Android client ids. | Native iOS Apple tokens carry the bundle id as audience; Supabase rejects them otherwise. |
+| 30 | **Google: register the Play app-signing SHA-1 and the upload-key SHA-1** on the Android OAuth client. | Google Sign-In on Android fails with error 10 otherwise. |
+
 ## 6. Not verified in this build environment
 
 

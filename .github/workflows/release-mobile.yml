@@ -43,6 +43,15 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with: { ruby-version: "3.3", bundler-cache: true, working-directory: app }
       - run: echo '${{ secrets.APP_ENV_PROD_JSON }}' > env/prod.json
+      - name: Register the Google Sign-In URL scheme (reversed iOS client id)
+        # google_sign_in on iOS aborts the app if this URL scheme is missing from Info.plist.
+        run: |
+          CID=$(jq -r '.GOOGLE_IOS_CLIENT_ID // empty' env/prod.json)
+          if [ -z "$CID" ]; then echo "::error::GOOGLE_IOS_CLIENT_ID missing from APP_ENV_PROD_JSON"; exit 1; fi
+          REV=$(echo "$CID" | awk -F. '{for (i = NF; i > 0; i--) printf "%s%s", $i, (i > 1 ? "." : "")}')
+          /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:1 dict" \
+            -c "Add :CFBundleURLTypes:1:CFBundleURLSchemes array" \
+            -c "Add :CFBundleURLTypes:1:CFBundleURLSchemes:0 string $REV" ios/Runner/Info.plist
       - run: flutter build ios --release --no-codesign --dart-define-from-file=env/prod.json --build-number=${{ github.run_number }}
       - name: Sign and upload to TestFlight
         env:
