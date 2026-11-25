@@ -14,7 +14,7 @@ Deploy (from the repo root):
     modal secret create asmi3ni-asr ASR_SERVICE_TOKEN=<random-64-chars>
     modal deploy services/asr/modal_app.py
 
-The deploy prints a URL like https://<workspace>--asmi3ni-asr-web.modal.run. Then:
+The deploy prints a URL like https://<workspace>--asmi3ni-asr-web.<region>.modal.run. Then:
     supabase secrets set ASR_SERVICE_URL=<that url> ASR_SERVICE_TOKEN=<same token>
 """
 

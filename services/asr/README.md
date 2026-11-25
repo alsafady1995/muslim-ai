@@ -14,7 +14,7 @@ address must be contracted through the reseller CNTXT, which needs a business co
 pip install modal
 modal setup                                     # once: sign this computer in to Modal
 modal secret create asmi3ni-asr ASR_SERVICE_TOKEN=<random-64-chars>
-modal deploy services/asr/modal_app.py           # prints https://<workspace>--asmi3ni-asr-web.modal.run
+modal deploy services/asr/modal_app.py           # prints https://<workspace>--asmi3ni-asr-web.<region>.modal.run
 supabase secrets set ASR_SERVICE_URL=<that url> ASR_SERVICE_TOKEN=<same token>
 ```
 
