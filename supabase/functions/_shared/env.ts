@@ -17,8 +17,9 @@ export const env = {
   claudeEffort: () => (Deno.env.get("CLAUDE_EFFORT") ?? "low") as "low" | "medium" | "high",
   voyageKey: () => required("VOYAGE_API_KEY"),
   voyageModel: () => Deno.env.get("VOYAGE_MODEL") ?? "voyage-3.5",
-  asrUrl: () => required("ASR_SERVICE_URL"),
-  asrToken: () => required("ASR_SERVICE_TOKEN"),
+  // Tolerate a trailing slash or stray whitespace pasted into the dashboard.
+  asrUrl: () => required("ASR_SERVICE_URL").trim().replace(/\/+$/, ""),
+  asrToken: () => required("ASR_SERVICE_TOKEN").trim(),
   revenuecatWebhookAuth: () => required("REVENUECAT_WEBHOOK_AUTH"),
   revenuecatEntitlement: () => Deno.env.get("REVENUECAT_ENTITLEMENT_ID") ?? "premium",
   posthogKey: () => Deno.env.get("POSTHOG_API_KEY"),
