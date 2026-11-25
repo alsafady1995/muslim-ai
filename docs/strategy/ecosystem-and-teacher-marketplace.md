@@ -31,6 +31,12 @@ marked **(inference)**.
 4. **دوائر المتابعة الخاصة** (٢–١٠ أشخاص بدعوة فقط): ترتيب بالمواظبة لا بالدرجة، بلا محادثة مفتوحة.
 5. **ملف المعلّم الموثّق** (برابط خاص، ليس سوقًا): بداية بناء جانب العرض والتحقق من الإجازات.
 
+**ما تغيّر بعد مذكرة المستثمرين وخطة التصحيح المباشر (PR #13):** الإعلانات المدفوعة خاسرة (صافي المشترك السنوي
+≈ ٢٢$، والتحويل الواقعي ≈ ٢٠٪)، فالنمو يجب أن يأتي عبر المعلّمين والجمعيات. لذلك صار **وضع الحلقة وباقة الجمعيات
+قلب الخطة**، وهما أيضًا "النسخة الأقرب للتمويل" بحسب المذكرة. وتصحيحات المعلّم في التسميع غير المتزامن تُحفظ في
+نفس جدول تصنيفات الشيخ (`expert_labels`)، فيصبح كل معلّم مصدر بيانات تدريب. ولا يبدأ أي عمل اجتماعي قبل نسخة
+التصحيح المباشر التجريبية، لأن المطوّر واحد.
+
 **التسعير لا يتغيّر:** ٤٫٩٩$ شهريًا و٢٩٫٩٩$ سنويًا مع تجربة ٧ أيام. يُضاف: خطة عائلة سنوية، وباقة للمؤسسات
 (حلقات وجمعيات) تُفوتر مباشرة، ولاحقًا عمولة ١٥٪ على الجلسات الفردية المدفوعة.
 
@@ -47,6 +53,8 @@ marked **(inference)**.
 | Recitation accuracy unmeasured | PR #11 (benchmark tooling, open), `competitive-analysis.md` | Any teacher who sees a wrong AI flag in front of a student will drop us publicly |
 | Solo founder, very limited capital | Brief | Every feature that needs humans on call (moderation, support, payouts, disputes) costs founder hours, not money |
 | Brief frames $10M committed | Brief | §13 shows what changes if it arrives: timing and staffing, not the order |
+| Investor memo: realistic trial conversion ≈ 20% (plan assumed 55%), net ≈ $22 per annual subscriber, so paid ads lose money; most fundable version is a tool for tahfiz schools | Investor memo (summary) | Acquisition must be organic and through teachers. That makes halaqa mode and the institution plan the core of the plan, not an add-on (§15) |
+| A sheikh is available a few hours a week; live correction public in ≈ 2–3 months, first tajweed rule in ≈ 3–4 months | PR #13 | He is the first member of the scholar panel; Phase 2 starts after the live-correction beta (§15) |
 | Pricing fixed: $4.99/mo, $29.99/yr, 7-day trial on annual | `BLOCKERS.md` | Nothing here changes it |
 | Positioning: "a practice partner between lessons with your teacher, not a replacement" | `docs/marketing/01`, `03`, `05` | The brand already promises to sit beside teachers. Building *for* teachers is on-brand; competing *with* them is not |
 | D7 18% / D30 9% first-cohort targets | `full-audit.md` §6 | The gates in §12 use these |
@@ -217,7 +225,7 @@ learners who tapped "find me a teacher" ≥ 3× supply hours **(targets are infe
 
 **Unit economics of one 30-minute session at $15 (inference):** commission $2.25; payment processing ≈ 3% ($0.45,
 inference); video ≈ 60 participant-minutes ≈ $0.03 on LiveKit Ship overage or $0.24 on Daily; AI co-listener ASR
-reserved via `begin_ai_call` as today. Net ≈ $1.75. About 15 sessions ≈ one annual subscriber's net revenue. The
+reserved via `begin_ai_call` as today. Net ≈ $1.75. About 13 sessions ≈ one annual subscriber's net revenue (≈ $22/year, investor memo). The
 marketplace is a **retention and positioning** product first, a revenue line second.
 
 ### 6.4 Payments and payouts
@@ -366,12 +374,13 @@ The order is set by **what must be true before the next thing is worth building.
 
 | Option | Cost for 1:1 30 min (2 people = 60 participant-min) | Pros | Cons |
 |---|---|---|---|
-| **LiveKit Cloud** | Ship plan $50/mo incl. 150,000 WebRTC participant-min, then $0.0005/min ≈ **$0.03** | Open source (self-host later); same stack can stream audio to our ASR for the **AI co-listener** and for live test mode | We build the UI |
+| **LiveKit Cloud** | Ship plan $50/mo incl. 150,000 WebRTC participant-min, then $0.0005/min ≈ **$0.03** | Open source (self-host later); the session's audio track can be fed to the same live tracker that PR #13 plans (on-device model or server CTC) for the **AI co-listener** | We build the UI |
 | Daily | 10,000 free/mo, then $0.004/min ≈ **$0.24** | Prebuilt UI, simple | 8× the cost; less control of the audio pipeline |
 | Zoom SDK | Not priced here | Familiar to teachers | Heavier SDK, brand mixing, harder to tap audio |
 
-**Choice: LiveKit**, audio-first (video optional and off by default for minors), because the same infrastructure
-serves the live-correction roadmap. The differentiator in a session: the AI listens alongside the teacher, highlights
+**Choice: LiveKit**, audio-first (video optional and off by default for minors), because it gives us the raw audio
+track. Live correction for solo practice does not need it: PR #13 plans an on-device model or a WebSocket CTC tracker.
+The co-listener reuses that tracker on the session audio. The differentiator in a session: the AI listens alongside the teacher, highlights
 likely slips on the teacher's screen only, and after the call writes the teacher-confirmed mistakes into the
 student's SM-2 queue. No other tutoring platform can do that.
 
@@ -422,6 +431,23 @@ communities. Each one either needs demand we do not have yet or adds risk we can
 
 ---
 
+## 15. What the live-correction plan (PR #13) and the investor memo change
+
+The investor memo itself was not in the repository or project files; this section uses its summary (relayed in the
+project): correction engine is Tarteel's open model with unmeasured accuracy, no users or device build yet, the plan
+assumed 55% trial conversion against ≈ 20% regionally, net ≈ $22 per annual subscriber so paid ads lose money, users
+are used to free Quran apps, and the most fundable version is a tool for tahfiz schools.
+
+| Finding | Change to this plan |
+|---|---|
+| Paid acquisition loses money at ≈ $22 net per annual subscriber | Teachers and institutions are not one channel among several; they are **the** acquisition channel. Halaqa mode stays #1 and the institution pilot moves into the first Phase 2 sprint, with a named target: 2–3 tahfiz associations, ≥ 300 student seats |
+| "Most fundable version is a tool for tahfiz schools" | The fundraising story becomes *paid institutional seats + retention of halaqa students*, not consumer subscribers alone. Add to the Phase 2 exit gate: ≥ 1 association paying per seat |
+| Users are used to free Quran apps | Confirms: teachers free, community features free, students on the existing free tier. Premium sells more coaching and the family plan, never access to your teacher |
+| PR #13: the sheikh's review tool writes to an `expert_labels` table (clip, labeller, labels, version) | **Async tasmee' writes to the same table**, with labeller role `teacher` instead of `expert`. Same word-tap UI, same consent. Teacher marks become training and evaluation data, weighted below the sheikh's gold labels. This makes feature #2 cheaper (≈ reuse of M2) and turns every halaqa into a labelling source |
+| PR #13: the sheikh decides standard, taxonomy, gold labels, per-version sign-off; has a few hours a week | He is scholar-panel member #1 (§7) and answers the open norms question for minors (§5). Do **not** spend his hours on ijazah checks at scale; for level 3 verification recruit 2 more reviewers in Phase 3 |
+| PR #13: live correction public in ≈ 2–3 months, madd in ≈ 3–4 months, one developer | Phase 2 starts after M4 (live correction beta), not before. If the Ramadan circles lite competes with M4 for time, **drop circles lite, keep M4**: the coach is the product |
+| PR #13: "the app must never claim to grant ijazah or to replace a teacher" | Same rule for teacher profiles: we show *the teacher's* verified ijazah; the app never issues certificates or ijazahs, even in halaqa mode |
+
 ## Sources
 
 Checked on 25 November 2026.
@@ -442,6 +468,8 @@ Checked on 25 November 2026.
 - Maryland Islamic tutor case (FOX 5 DC, 27 Aug 2024): https://fox5dc.com/news/maryland-islamic-tutor-accused-sexually-abusing-teen-while-she-read-quran
 - LiveKit Cloud pricing: https://livekit.com/pricing.md
 - Daily video SDK pricing: https://www.daily.co/pricing/video-sdk/
+- Live correction and tajweed plan: PR #13 (`roadmap/live-correction-and-tajweed.md`)
+- Investor memo: summary relayed in the project; the file itself was not found
 
 Caveats: Preply's full commission tier table could not be read (the 18% floor and 33% start are from its text).
 Saudipedia does not state whether the e-maqra'a is free. The Apple 3.1.3(c) wording is recalled, not re-read.
