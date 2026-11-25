@@ -444,6 +444,22 @@ Rough year-1 allocation **(inference)**: 45% people (ASR/ML weighted), 15% data 
    got wrong and adds a voice note; the marks feed the student's schedule. *Why:* the "teacher-led" idea without
    scheduling, video or payments; works across time zones; every review is a human-labelled clip that improves the
    AI (the data moat).
+   **Extension: "Want feedback from a verified teacher?"** (founder's idea, 25 Nov) shown on the result screen
+   ("AI score 87% (beta) · Ask a verified teacher"). Under the no-lawyer, no-subscription rule it works only as:
+   - **Your own teacher first.** If the user is in a halaqa, the request goes to their teacher.
+   - **Otherwise a pool of volunteer verified teachers** (recitation verified by the sheikh). No payment to teachers
+     (payouts would need a provider and legal setup); they get free Premium, a "reviews given" count on their profile,
+     and the intention of teaching the Quran. Never sell the review itself: charging users for volunteers' work is
+     both an ethics and a trust problem.
+   - **Same-gender routing by default**, one-way only (teacher marks words and may leave a voice note; no messaging,
+     no contact details, first name only). Minors' clips go only to their own halaqa teacher, never to the pool.
+   - **Shown when it matters, not on every result:** when the AI has "unclear" words, a score in a borderline band
+     (e.g. 70–90%), or a surah milestone. Free: 1 request a week; Premium: 1 a day **(inference; tune to supply)**.
+   - **Honest wait time:** "usually within 48 hours" only once the pool meets it; otherwise "a teacher will review it
+     when available". A teacher review takes about 1 minute per short clip (PR #13), so 20 volunteers giving 20
+     minutes a day cover about 400 reviews a day.
+   - Marks are saved to `expert_labels` with role `teacher`, and a disagreement with the AI goes to the sheikh's
+     queue. Every request therefore improves accuracy too.
 3. **Family plan + parent dashboard.** Up to 5 profiles, guardian-created child profiles, parent sees each child's
    progress. *Why:* biggest new revenue line (`full-audit.md` G4), PDPL-compliant path for children, and how hifz
    actually happens in Gulf homes.
