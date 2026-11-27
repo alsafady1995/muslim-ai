@@ -1658,6 +1658,36 @@ abstract class AppLocalizations {
   /// **'You\'ve used the AI allowance included in your free trial. It renews when your subscription starts on {date}.'**
   String aiBudgetTrial(String date);
 
+  /// No description provided for @aiGuestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a free account to continue'**
+  String get aiGuestTitle;
+
+  /// No description provided for @aiGuestBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The AI coach works with a free account. It takes a few seconds, and your progress, streak and hifz plan stay with you.'**
+  String get aiGuestBody;
+
+  /// No description provided for @createFreeAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a free account'**
+  String get createFreeAccount;
+
+  /// No description provided for @aiBusyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Free AI features are busy today'**
+  String get aiBusyTitle;
+
+  /// No description provided for @aiBusyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Many people are using the free AI coach today, so it pauses until {time}. Reading, listening, keyword search, adhkar and your hifz reviews keep working.'**
+  String aiBusyBody(String time);
+
   /// No description provided for @aiLighterMode.
   ///
   /// In en, this message translates to:

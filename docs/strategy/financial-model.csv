@@ -1,0 +1,25 @@
+Case,Line (USD per year),1000 MAU,10000 MAU,100000 MAU,1000000 MAU
+conservative,Paying subscribers,20,200,2000,20000
+conservative,Subscription revenue (net),407,4071,40711,407108
+conservative,Tips + supporters + sponsor-a-student (net),68,676,6760,67601
+conservative,Total net revenue,475,4747,47471,474709
+conservative,AI (Claude + ASR + embeddings),206,2057,20568,205680
+conservative,"Infrastructure (Supabase, ASR floor, analytics)",360,420,5646,80202
+conservative,RevenueCat,0,0,632,6318
+conservative,Store accounts + domain,139,139,139,139
+conservative,Paid help (not founder),0,0,12000,120000
+conservative,Total operating cost,705,2616,38985,412339
+conservative,Profit before founder pay,-230,2131,8486,62370
+conservative,Profit after founder pay ($30k/yr),-30230,-27869,-21514,32370
+plan works,Paying subscribers,40,400,4000,40000
+plan works,Subscription revenue (net),1013,10133,101327,1013272
+plan works,Tips + supporters + sponsor-a-student (net),68,676,6760,67601
+plan works,Total net revenue,1081,10809,108087,1080873
+plan works,AI (Claude + ASR + embeddings),287,2873,28728,287280
+plan works,"Infrastructure (Supabase, ASR floor, analytics)",360,420,5646,80202
+plan works,RevenueCat,0,0,1438,14377
+plan works,Store accounts + domain,139,139,139,139
+plan works,Paid help (not founder),0,0,12000,120000
+plan works,Total operating cost,786,3432,47951,501998
+plan works,Profit before founder pay,295,7377,60137,578875
+plan works,Profit after founder pay ($30k/yr),-29705,-22623,30137,548875

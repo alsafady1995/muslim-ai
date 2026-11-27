@@ -4,6 +4,7 @@ import { db, env, getJson } from "./lib.ts";
 
 const MODEL = env("VOYAGE_MODEL", "voyage-3.5");
 const BATCH = 96;
+const INSERT_BATCH = 16;
 const client = db();
 
 async function embedBatch(texts: string[]): Promise<number[][]> {
@@ -74,10 +75,24 @@ async function run(type: Chunk["source_type"], chunks: Chunk[]) {
   for (let i = 0; i < todo.length; i += BATCH) {
     const batch = todo.slice(i, i + BATCH);
     const vectors = await embedBatch(batch.map((c) => c.chunk));
-    const { error } = await client.from("content_embeddings").insert(
-      batch.map((c, k) => ({ ...c, embedding: `[${vectors[k].join(",")}]` })),
-    );
-    if (error) throw error;
+    const rows = batch.map((c, k) => ({
+      ...c,
+      embedding: `[${vectors[k].join(",")}]`,
+    }));
+    // Small inserts with retry: each row updates the vector index, and a 96-row insert can hit
+    // the API's statement timeout (57014) on small compute once the index is large.
+    for (let j = 0; j < rows.length; j += INSERT_BATCH) {
+      for (let attempt = 1;; attempt++) {
+        const { error } = await client.from("content_embeddings").insert(
+          rows.slice(j, j + INSERT_BATCH),
+        );
+        if (!error) break;
+        const retryable = error.code === "57014" ||
+          /abort|timed? ?out|fetch failed|connection/i.test(error.message ?? "");
+        if (!retryable || attempt >= 5) throw error;
+        await new Promise((r) => setTimeout(r, 2000 * attempt));
+      }
+    }
     if ((i / BATCH) % 10 === 0) {
       console.log(`  ${type} ${i + batch.length}/${todo.length}`);
     }

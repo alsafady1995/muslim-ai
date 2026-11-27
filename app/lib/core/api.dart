@@ -16,7 +16,7 @@ class AiBudgetExhausted implements Exception {
   AiBudgetExhausted(this.feature, {required this.premium, required this.tier, this.resetsAt});
   final String feature;
   final bool premium;
-  final String tier; // free | trial | premium | promo
+  final String tier; // free | guest | busy | trial | premium | promo
   final DateTime? resetsAt;
 }
 

@@ -205,21 +205,22 @@ do $$
 declare r jsonb; i int;
 begin
   insert into auth.users (id, raw_user_meta_data) values ('00000000-0000-0000-0000-000000000003', '{"timezone":"UTC"}');
-  -- budget 0.15: a 0.04 reservation fits three times, the fourth is refused
-  for i in 1..3 loop
-    r := public.begin_ai_call('00000000-0000-0000-0000-000000000003', 'recitation', 0.04);
+  -- budget 0.05: a 0.02 reservation fits twice, the third is refused
+  for i in 1..2 loop
+    r := public.begin_ai_call('00000000-0000-0000-0000-000000000003', 'recitation', 0.02);
     assert (r ->> 'allowed')::boolean, 'free call within budget ' || r::text;
     assert r ->> 'tier' = 'free', 'free tier';
   end loop;
-  r := public.begin_ai_call('00000000-0000-0000-0000-000000000003', 'recitation', 0.04);
+  assert (r ->> 'budget_usd')::numeric = 0.05, 'free budget is 0.05 ' || r::text;
+  r := public.begin_ai_call('00000000-0000-0000-0000-000000000003', 'recitation', 0.02);
   assert not (r ->> 'allowed')::boolean and r ->> 'reason' = 'budget', 'free budget enforced ' || r::text;
   -- settling at the real (lower) cost frees the rest of the budget
   perform public.finish_ai_call((select id from public.ai_calls where user_id = '00000000-0000-0000-0000-000000000003' order by id limit 1), 0.001, 'test');
-  r := public.begin_ai_call('00000000-0000-0000-0000-000000000003', 'recitation', 0.04);
+  r := public.begin_ai_call('00000000-0000-0000-0000-000000000003', 'recitation', 0.02);
   assert (r ->> 'allowed')::boolean, 'settled cost releases reservation ' || r::text;
   -- cancelling refunds the reservation and the daily count
   perform public.cancel_ai_call((r ->> 'call_id')::bigint);
-  assert (select count from public.ai_usage where user_id = '00000000-0000-0000-0000-000000000003' and feature = 'recitation') = 3,
+  assert (select count from public.ai_usage where user_id = '00000000-0000-0000-0000-000000000003' and feature = 'recitation') = 2,
     'weekly count refunded on cancel';
   -- free users always reserve with the cheap model (fallback) and are not "degraded"
   r := public.begin_ai_call('00000000-0000-0000-0000-000000000003', 'ask', 10, 0.001);
@@ -290,6 +291,60 @@ begin
   assert r ->> 'tier' = 'trial' and (r ->> 'budget_usd')::numeric = 0.25, 'trial budget ' || r::text;
 end $$;
 
+-- Free-tier guard (20261125000001): guests, and the global daily pool
+do $$
+declare r jsonb; v_used numeric; v_call bigint;
+begin
+  -- guest: only the uncounted onboarding check, then "create an account"
+  insert into auth.users (id, raw_user_meta_data, is_anonymous)
+  values ('00000000-0000-0000-0000-000000000007', '{"timezone":"UTC"}', true);
+  r := public.begin_ai_call('00000000-0000-0000-0000-000000000007', 'ask', 0.0001);
+  assert not (r ->> 'allowed')::boolean and r ->> 'reason' = 'sign_in' and r ->> 'tier' = 'guest', 'guest ask needs sign-in ' || r::text;
+  r := public.begin_ai_call('00000000-0000-0000-0000-000000000007', 'search', 0.0001);
+  assert r ->> 'reason' = 'sign_in', 'guest search needs sign-in ' || r::text;
+  r := public.begin_ai_call('00000000-0000-0000-0000-000000000007', 'recitation', 0.003, null, false);
+  assert (r ->> 'allowed')::boolean and r ->> 'tier' = 'guest' and (r ->> 'budget_usd')::numeric = 0.01,
+    'guest onboarding check allowed ' || r::text;
+  perform public.finish_ai_call((r ->> 'call_id')::bigint, 0.001);
+  r := public.begin_ai_call('00000000-0000-0000-0000-000000000007', 'recitation', 0.02, null, false);
+  assert not (r ->> 'allowed')::boolean and r ->> 'reason' = 'budget', 'guest budget is tiny ' || r::text;
+  -- linking the account (no longer anonymous) moves them to the free tier, same month's spend
+  update auth.users set is_anonymous = false where id = '00000000-0000-0000-0000-000000000007';
+  r := public.begin_ai_call('00000000-0000-0000-0000-000000000007', 'ask', 0.0001);
+  assert (r ->> 'allowed')::boolean and r ->> 'tier' = 'free' and (r ->> 'spent_usd')::numeric > 0.001,
+    'linked guest is free tier and keeps spend ' || r::text;
+  perform public.cancel_ai_call((r ->> 'call_id')::bigint);
+
+  -- pool: every free/guest call is charged to today's pool, settled at real cost
+  select used_usd into v_used from public.ai_free_pool where day = (now() at time zone 'UTC')::date;
+  assert v_used > 0, 'free calls are charged to the daily pool';
+  r := public.begin_ai_call('00000000-0000-0000-0000-000000000007', 'recitation', 0.01);
+  v_call := (r ->> 'call_id')::bigint;
+  assert (select used_usd from public.ai_free_pool where day = (now() at time zone 'UTC')::date) = v_used + 0.01, 'reserved in pool';
+  perform public.finish_ai_call(v_call, 0.002);
+  assert (select used_usd from public.ai_free_pool where day = (now() at time zone 'UTC')::date) = v_used + 0.002, 'pool settles at cost';
+  v_used := v_used + 0.002;
+
+  -- pool full: free AI pauses until midnight UTC, the weekly count is untouched
+  update public.ai_budget_settings set value = v_used + 0.005 where key = 'free_daily_pool_usd';
+  r := public.begin_ai_call('00000000-0000-0000-0000-000000000007', 'recitation', 0.01);
+  assert not (r ->> 'allowed')::boolean and r ->> 'reason' = 'free_pool', 'pool ceiling enforced ' || r::text;
+  assert (r ->> 'resets_at')::timestamptz = ((now() at time zone 'UTC')::date + 1)::timestamp at time zone 'UTC',
+    'pool resets at midnight UTC ' || r::text;
+  assert (select count from public.ai_usage where user_id = '00000000-0000-0000-0000-000000000007' and feature = 'recitation') = 1,
+    'refused pool call is not counted';
+  assert (select refused from public.ai_free_pool where day = (now() at time zone 'UTC')::date) = 1, 'refusals recorded';
+  r := public.begin_ai_call('00000000-0000-0000-0000-000000000007', 'recitation', 0.004);
+  assert (r ->> 'allowed')::boolean, 'small call still fits the pool ' || r::text;
+  perform public.cancel_ai_call((r ->> 'call_id')::bigint);
+  assert (select used_usd from public.ai_free_pool where day = (now() at time zone 'UTC')::date) = v_used, 'cancel releases pool';
+  -- paying users never touch the pool
+  r := public.begin_ai_call('00000000-0000-0000-0000-000000000004', 'search', 0.0001);
+  assert r ->> 'tier' = 'trial' and (r ->> 'allowed')::boolean, 'trial unaffected by a full pool ' || r::text;
+  assert (select pool_day from public.ai_calls where id = (r ->> 'call_id')::bigint) is null, 'paid calls not in pool';
+  update public.ai_budget_settings set value = 20 where key = 'free_daily_pool_usd';
+end $$;
+
 -- Stale reservations (crashed function) are counted as spent
 do $$
 declare r jsonb;
@@ -318,6 +373,11 @@ begin
   begin
     perform count(*) from public.ai_calls;
     raise exception 'ai_calls should be hidden';
+  exception when insufficient_privilege then null;
+  end;
+  begin
+    perform count(*) from public.ai_free_pool;
+    raise exception 'ai_free_pool should be hidden';
   exception when insufficient_privilege then null;
   end;
 end $$;

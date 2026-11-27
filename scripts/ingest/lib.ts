@@ -7,9 +7,16 @@ export function env(name: string, fallback?: string): string {
   return v;
 }
 
+// Every request gets a deadline so a stalled connection fails (and is retried) instead of
+// hanging the run forever.
+const TIMEOUT_MS = 90_000;
+export const timedFetch: typeof fetch = (input, init) =>
+  fetch(input, { ...init, signal: AbortSignal.timeout(TIMEOUT_MS) });
+
 export const db = () =>
   createClient(env("SUPABASE_URL"), env("SUPABASE_SERVICE_ROLE_KEY"), {
     auth: { persistSession: false },
+    global: { fetch: timedFetch },
   });
 
 export async function getJson<T = any>(
@@ -18,7 +25,14 @@ export async function getJson<T = any>(
   tries = 4,
 ): Promise<T> {
   for (let i = 0;; i++) {
-    const res = await fetch(url, init);
+    let res: Response;
+    try {
+      res = await timedFetch(url, init);
+    } catch (e) {
+      if (i >= tries - 1) throw e;
+      await new Promise((r) => setTimeout(r, 1000 * 2 ** i));
+      continue;
+    }
     if (res.ok) return await res.json();
     if (i >= tries - 1 || (res.status < 500 && res.status !== 429)) {
       throw new Error(`${res.status} ${url}: ${await res.text()}`);

@@ -848,6 +848,24 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get aiGuestTitle => 'أنشئ حسابًا مجانيًا للمتابعة';
+
+  @override
+  String get aiGuestBody =>
+      'يعمل المدرّب الذكي مع حساب مجاني. يستغرق إنشاؤه ثوانيَ، ويبقى تقدّمك وسلسلتك وخطة حفظك كما هي.';
+
+  @override
+  String get createFreeAccount => 'إنشاء حساب مجاني';
+
+  @override
+  String get aiBusyTitle => 'ميزات الذكاء الاصطناعي المجانية مشغولة اليوم';
+
+  @override
+  String aiBusyBody(String time) {
+    return 'يستخدم كثيرون المدرّب الذكي المجاني اليوم، لذا يتوقف مؤقتًا حتى $time. القراءة والاستماع والبحث بالكلمات والأذكار ومراجعة الحفظ تعمل كالمعتاد.';
+  }
+
+  @override
   String aiLighterMode(String date) {
     return 'اقتربت من رصيد الذكاء الاصطناعي لهذه الفترة، لذا تُستخدم إجابات أخف حتى $date.';
   }

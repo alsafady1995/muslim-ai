@@ -854,6 +854,24 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get aiGuestTitle => 'Create a free account to continue';
+
+  @override
+  String get aiGuestBody =>
+      'The AI coach works with a free account. It takes a few seconds, and your progress, streak and hifz plan stay with you.';
+
+  @override
+  String get createFreeAccount => 'Create a free account';
+
+  @override
+  String get aiBusyTitle => 'Free AI features are busy today';
+
+  @override
+  String aiBusyBody(String time) {
+    return 'Many people are using the free AI coach today, so it pauses until $time. Reading, listening, keyword search, adhkar and your hifz reviews keep working.';
+  }
+
+  @override
   String aiLighterMode(String date) {
     return 'You\'re near this month\'s AI allowance, so answers use a lighter model until $date.';
   }

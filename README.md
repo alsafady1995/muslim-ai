@@ -15,7 +15,7 @@ Product and launch documentation lives in [`docs/`](docs/). This README covers t
 | `supabase/migrations/` | Postgres schema, RLS, business-logic RPCs, reference data |
 | `supabase/functions/` | Deno Edge Functions: `ask-quran`, `assistant`, `quran-search`, `recitation-analyze`, `revenuecat-webhook`, `delete-account` |
 | `supabase/tests/` | Database behaviour tests (run against plain Postgres + pgvector in CI) |
-| `services/asr/` | Quran-tuned Whisper service returning words with timestamps (Docker, Cloud Run) |
+| `services/asr/` | Quran-tuned Whisper service returning words with timestamps (Docker, deployed on Modal) |
 | `scripts/ingest/` | Loads Quran text, words, translation, tafsir, hadith and builds embeddings |
 | `tools/gen_arb.py` | Single source for app strings; generates `app_en.arb` / `app_ar.arb` |
 | `.github/workflows/` | CI, backend deploy, mobile release (Fastlane) |

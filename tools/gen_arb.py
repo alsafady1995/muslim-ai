@@ -139,6 +139,11 @@ t("aiBudgetTitle", "This month's AI allowance is used up", "انتهى رصيد 
 t("aiBudgetPremium", "To keep Premium affordable for everyone, AI features pause until {date}. Reading, listening, keyword search, adhkar and your hifz reviews keep working as usual.", "حتى يبقى بريميوم بسعر في متناول الجميع، تتوقف ميزات الذكاء الاصطناعي حتى {date}. القراءة والاستماع والبحث بالكلمات والأذكار ومراجعة الحفظ تعمل كالمعتاد.", date="String")
 t("aiBudgetFree", "Free AI features renew on {date}. Premium includes a much larger allowance. Meanwhile, reading, listening and your hifz reviews keep working.", "تتجدد ميزات الذكاء الاصطناعي المجانية في {date}. يتضمن بريميوم رصيدًا أكبر بكثير. وحتى ذلك الحين تعمل القراءة والاستماع ومراجعة الحفظ كالمعتاد.", date="String")
 t("aiBudgetTrial", "You've used the AI allowance included in your free trial. It renews when your subscription starts on {date}.", "استهلكت رصيد الذكاء الاصطناعي المضمَّن في الفترة التجريبية. يتجدد عند بدء اشتراكك في {date}.", date="String")
+t("aiGuestTitle", "Create a free account to continue", "أنشئ حسابًا مجانيًا للمتابعة")
+t("aiGuestBody", "The AI coach works with a free account. It takes a few seconds, and your progress, streak and hifz plan stay with you.", "يعمل المدرّب الذكي مع حساب مجاني. يستغرق إنشاؤه ثوانيَ، ويبقى تقدّمك وسلسلتك وخطة حفظك كما هي.")
+t("createFreeAccount", "Create a free account", "إنشاء حساب مجاني")
+t("aiBusyTitle", "Free AI features are busy today", "ميزات الذكاء الاصطناعي المجانية مشغولة اليوم")
+t("aiBusyBody", "Many people are using the free AI coach today, so it pauses until {time}. Reading, listening, keyword search, adhkar and your hifz reviews keep working.", "يستخدم كثيرون المدرّب الذكي المجاني اليوم، لذا يتوقف مؤقتًا حتى {time}. القراءة والاستماع والبحث بالكلمات والأذكار ومراجعة الحفظ تعمل كالمعتاد.", time="String")
 t("aiLighterMode", "You're near this month's AI allowance, so answers use a lighter model until {date}.", "اقتربت من رصيد الذكاء الاصطناعي لهذه الفترة، لذا تُستخدم إجابات أخف حتى {date}.", date="String")
 
 # ---------------------------------------------------------------------------
