@@ -1,0 +1,764 @@
+-- Khatma groups: private, invite-only groups that share a khatma (30 juz'), cheer each other
+-- on, write short messages and compete on a leaderboard that only members can see.
+--
+-- App Store guideline 1.2 (user-generated content) is met here, on the server:
+--   * terms:   a user must accept the community rules before posting (profiles.community_terms_at)
+--   * filter:  every name and message goes through _community_text_ok(): offensive terms
+--              (banned_terms, normalised Arabic + English) and links / phone numbers / handles
+--   * report:  report_content() on a message or a member; the reporter stops seeing it at once,
+--              two reports from different members hide a message for everyone
+--   * block:   block_user() hides everything the blocked user writes, in every group
+--   * remove:  the group owner can delete messages and remove (and ban) members
+--   * review:  content_reports is the moderation queue; moderate_report() (service role) closes a
+--              report and can remove the message or ban the user from all community features
+--
+-- All writes go through SECURITY DEFINER functions; clients can only read, through RLS.
+
+alter table public.profiles
+  add column if not exists community_terms_at timestamptz,
+  add column if not exists community_banned_at timestamptz;
+
+-- ---------------------------------------------------------------------------
+-- Text filter
+-- ---------------------------------------------------------------------------
+create table public.banned_terms (
+  term text primary key,
+  created_at timestamptz not null default now()
+);
+alter table public.banned_terms enable row level security;
+revoke all on public.banned_terms from anon, authenticated;
+
+-- Lower-case, strip Arabic diacritics and tatweel, unify alef / ya / ta marbuta / hamza forms,
+-- turn everything that is not a letter into one space, and squash repeated letters to one
+-- ("fuuuck", "كلبببب"). Terms go through the same function, so both sides match.
+create or replace function public._community_normalize(p text) returns text
+language sql immutable set search_path = public as $$
+  select btrim(regexp_replace(regexp_replace(
+    translate(regexp_replace(lower(coalesce(p, '')), '[ً-ٰٟـ]', '', 'g'),
+              'أإآٱىةؤئ', 'اااايهوي'),
+    '[^[:alpha:]]+', ' ', 'g'), '([[:alpha:]])\1+', '\1', 'g'))
+$$;
+
+-- 'ok', or why the text is refused: 'empty', 'too_long', 'offensive', 'contact'.
+create or replace function public._community_text_check(p text, p_max int) returns text
+language plpgsql stable security definer set search_path = public as $$
+declare
+  v_text text := btrim(coalesce(p, ''));
+  v_norm text;
+begin
+  if v_text = '' then return 'empty'; end if;
+  if char_length(v_text) > p_max then return 'too_long'; end if;
+  -- Links, e-mail addresses, @handles and phone numbers: keeps strangers from moving a
+  -- conversation (possibly with a child) off the app.
+  if v_text ~* '(https?://|www\.|[a-z0-9-]+\.(com|net|org|io|me|ly|gg|app|co|info|link|xyz)\M|t\.me|wa\.me|@[a-z0-9_.]{3,})'
+     or regexp_replace(v_text, '[٠-٩]', '0', 'g') ~ '[0-9+][0-9 ()\-]{6,}[0-9]' then
+    return 'contact';
+  end if;
+  v_norm := ' ' || public._community_normalize(v_text) || ' ';
+  if exists (
+    select 1
+    from public.banned_terms b
+    cross join lateral (select public._community_normalize(b.term) as t) n
+    where n.t <> ''
+      and (
+        -- multi-word phrase, or a single word on its own
+        position(' ' || n.t || ' ' in v_norm) > 0
+        -- a single word of 4+ letters with common Arabic prefixes / Arabic and English suffixes
+        -- (shorter words only match alone: زب must not catch زبون)
+        or (position(' ' in n.t) = 0 and char_length(n.t) >= 4 and v_norm ~ (
+              ' (و|ف|ب|ل|يا|ال|وال|بال|فال|لل|ويا)?' || n.t || '(ه|ها|ك|كم|هم|ين|ون|ات|ة|s|es|ed|er|ers|ing|in)? '))
+      )
+  ) then
+    return 'offensive';
+  end if;
+  return 'ok';
+end $$;
+
+-- Raises 'community:<reason>' so the app can show a specific message.
+create or replace function public._community_require_text(p text, p_max int) returns text
+language plpgsql stable security definer set search_path = public as $$
+declare v_reason text := public._community_text_check(p, p_max);
+begin
+  if v_reason <> 'ok' then raise exception 'community:%', v_reason using errcode = '22023'; end if;
+  return btrim(p);
+end $$;
+
+-- A starting list; extend it with SQL (no release needed):
+--   insert into public.banned_terms (term) values ('...') on conflict do nothing;
+insert into public.banned_terms (term) values
+  -- English
+  ('fuck'), ('fucker'), ('fucking'), ('motherfucker'), ('shit'), ('bullshit'), ('bitch'), ('bastard'),
+  ('cunt'), ('pussy'), ('whore'), ('slut'), ('asshole'), ('faggot'), ('fag'),
+  ('nigger'), ('nigga'), ('retard'), ('porn'), ('nude'), ('nudes'), ('sex'), ('sexy'), ('kill yourself'), ('kys'),
+  -- Arabic (normalised forms are generated by _community_normalize). Words that also occur in the
+  -- Quran (كلب، حمار، خنزير، يلعن، الزاني، الكافرون...) are listed only as insults ("يا كلب"), so
+  -- members can still quote and discuss ayahs.
+  ('يا كلب'), ('يا حمار'), ('يا حيوان'), ('يا خنزير'), ('يا غبي'), ('يا كافر'), ('ابن الكلب'), ('ابن الحرام'),
+  ('يلعن ابوك'), ('يلعن امك'), ('يلعن دينك'), ('يلعن اختك'),
+  ('زباله'), ('حقير'), ('واطي'), ('تافه'), ('اهبل'),
+  ('منيك'), ('منيوك'), ('نيك'), ('انيك'), ('ينيك'), ('نياك'), ('شرموط'), ('شرموطه'),
+  ('عاهره'), ('قحبه'), ('لوطي'), ('متناك'),
+  ('كس'), ('كسمك'), ('كس امك'), ('كس اختك'), ('طيز'), ('زب'), ('زبي'),
+  ('تفو'), ('خرا'), ('خره'), ('سكس'), ('اباحي'), ('اباحيه'),
+  ('ديوث'), ('مخنث'), ('عرص'), ('معرص')
+on conflict do nothing;
+
+-- ---------------------------------------------------------------------------
+-- Groups
+-- ---------------------------------------------------------------------------
+create table public.khatma_groups (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  invite_code text not null unique,
+  created_by uuid references public.profiles (id) on delete set null,
+  round int not null default 1,
+  khatmas_completed int not null default 0,
+  max_members int not null default 50,
+  created_at timestamptz not null default now()
+);
+
+create table public.khatma_members (
+  group_id uuid not null references public.khatma_groups (id) on delete cascade,
+  user_id uuid not null references public.profiles (id) on delete cascade,
+  display_name text not null,
+  role text not null default 'member' check (role in ('owner', 'member')),
+  joined_at timestamptz not null default now(),
+  primary key (group_id, user_id)
+);
+create index khatma_members_user_idx on public.khatma_members (user_id);
+
+create table public.khatma_bans (
+  group_id uuid not null references public.khatma_groups (id) on delete cascade,
+  user_id uuid not null references public.profiles (id) on delete cascade,
+  created_at timestamptz not null default now(),
+  primary key (group_id, user_id)
+);
+
+-- One row per juz' per round. Status is derived: done_at set = done, assignee set = taken, else open.
+create table public.khatma_parts (
+  group_id uuid not null references public.khatma_groups (id) on delete cascade,
+  round int not null,
+  juz smallint not null check (juz between 1 and 30),
+  assignee uuid references public.profiles (id) on delete set null,
+  assigned_at timestamptz,
+  done_by uuid references public.profiles (id) on delete set null,
+  done_at timestamptz,
+  primary key (group_id, round, juz)
+);
+create index khatma_parts_done_by_idx on public.khatma_parts (done_by) where done_at is not null;
+
+-- kind: 'text' (free text, filtered), 'cheer' (a preset phrase key, rendered by the app),
+-- 'system' (event key in body + meta, e.g. juz_done, khatma_done, joined).
+create table public.khatma_messages (
+  id bigint generated always as identity primary key,
+  group_id uuid not null references public.khatma_groups (id) on delete cascade,
+  user_id uuid references public.profiles (id) on delete cascade,
+  kind text not null default 'text' check (kind in ('text', 'cheer', 'system')),
+  body text not null,
+  meta jsonb not null default '{}'::jsonb,
+  hidden_at timestamptz,
+  hidden_reason text check (hidden_reason in ('author', 'owner', 'reports', 'moderator')),
+  created_at timestamptz not null default now()
+);
+create index khatma_messages_group_idx on public.khatma_messages (group_id, id desc);
+create index khatma_messages_user_idx on public.khatma_messages (user_id, created_at desc);
+
+create table public.user_blocks (
+  blocker_id uuid not null references public.profiles (id) on delete cascade,
+  blocked_id uuid not null references public.profiles (id) on delete cascade,
+  created_at timestamptz not null default now(),
+  primary key (blocker_id, blocked_id),
+  check (blocker_id <> blocked_id)
+);
+
+-- Moderation queue. Snapshot of the reported text so a deleted message can still be reviewed.
+create table public.content_reports (
+  id bigint generated always as identity primary key,
+  reporter_id uuid references public.profiles (id) on delete set null,
+  reported_user_id uuid references public.profiles (id) on delete set null,
+  group_id uuid references public.khatma_groups (id) on delete set null,
+  message_id bigint references public.khatma_messages (id) on delete set null,
+  reason text not null check (reason in ('offensive', 'harassment', 'spam', 'inappropriate', 'other')),
+  message_body text,
+  status text not null default 'open' check (status in ('open', 'actioned', 'dismissed')),
+  created_at timestamptz not null default now(),
+  reviewed_at timestamptz
+);
+create unique index content_reports_once_per_message on public.content_reports (reporter_id, message_id)
+  where message_id is not null;
+create index content_reports_open_idx on public.content_reports (created_at) where status = 'open';
+
+-- ---------------------------------------------------------------------------
+-- Helpers
+-- ---------------------------------------------------------------------------
+-- Used by RLS policies (a policy on khatma_members cannot query khatma_members itself).
+create or replace function public.is_khatma_member(p_group uuid) returns boolean
+language sql stable security definer set search_path = public as $$
+  select exists (select 1 from public.khatma_members where group_id = p_group and user_id = auth.uid())
+$$;
+
+create or replace function public._khatma_role(p_group uuid, p_user uuid) returns text
+language sql stable security definer set search_path = public as $$
+  select role from public.khatma_members where group_id = p_group and user_id = p_user
+$$;
+
+create or replace function public._khatma_require_member(p_group uuid) returns uuid
+language plpgsql stable security definer set search_path = public as $$
+declare v_user uuid := auth.uid();
+begin
+  if v_user is null then raise exception 'not authenticated'; end if;
+  if public._khatma_role(p_group, v_user) is null then raise exception 'community:not_member' using errcode = '42501'; end if;
+  return v_user;
+end $$;
+
+create or replace function public._khatma_require_owner(p_group uuid) returns uuid
+language plpgsql stable security definer set search_path = public as $$
+declare v_user uuid := public._khatma_require_member(p_group);
+begin
+  if public._khatma_role(p_group, v_user) <> 'owner' then raise exception 'community:not_owner' using errcode = '42501'; end if;
+  return v_user;
+end $$;
+
+create or replace function public._khatma_new_code() returns text
+language plpgsql volatile set search_path = public as $$
+declare
+  v_alphabet constant text := 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  v_bytes bytea;
+  v_code text;
+begin
+  loop
+    v_bytes := uuid_send(gen_random_uuid());
+    v_code := '';
+    for i in 0..7 loop
+      v_code := v_code || substr(v_alphabet, (get_byte(v_bytes, i) % 32) + 1, 1);
+    end loop;
+    exit when not exists (select 1 from public.khatma_groups where invite_code = v_code);
+  end loop;
+  return v_code;
+end $$;
+
+create or replace function public._khatma_system_message(p_group uuid, p_user uuid, p_event text, p_meta jsonb)
+returns void language sql security definer set search_path = public as $$
+  insert into public.khatma_messages (group_id, user_id, kind, body, meta) values (p_group, p_user, 'system', p_event, p_meta)
+$$;
+
+-- When a member leaves, is removed or deletes their account: release their unfinished juz',
+-- hand ownership to the longest-standing member, and delete the group once it is empty.
+create or replace function public._khatma_member_left() returns trigger
+language plpgsql security definer set search_path = public as $$
+declare v_next uuid;
+begin
+  update public.khatma_parts p set assignee = null, assigned_at = null
+  from public.khatma_groups g
+  where p.group_id = old.group_id and g.id = p.group_id and p.round = g.round
+    and p.assignee = old.user_id and p.done_at is null;
+  if old.role = 'owner' then
+    select user_id into v_next from public.khatma_members
+    where group_id = old.group_id order by joined_at, user_id limit 1;
+    if v_next is null then
+      delete from public.khatma_groups where id = old.group_id;
+    else
+      update public.khatma_members set role = 'owner' where group_id = old.group_id and user_id = v_next;
+    end if;
+  end if;
+  return old;
+end $$;
+create trigger khatma_member_left after delete on public.khatma_members
+  for each row execute function public._khatma_member_left();
+
+-- ---------------------------------------------------------------------------
+-- RLS: members read their groups; nothing is writable directly.
+-- ---------------------------------------------------------------------------
+alter table public.khatma_groups enable row level security;
+alter table public.khatma_members enable row level security;
+alter table public.khatma_bans enable row level security;
+alter table public.khatma_parts enable row level security;
+alter table public.khatma_messages enable row level security;
+alter table public.user_blocks enable row level security;
+alter table public.content_reports enable row level security;
+
+create policy khatma_groups_member_read on public.khatma_groups for select to authenticated
+  using (public.is_khatma_member(id));
+create policy khatma_members_member_read on public.khatma_members for select to authenticated
+  using (public.is_khatma_member(group_id));
+create policy khatma_parts_member_read on public.khatma_parts for select to authenticated
+  using (public.is_khatma_member(group_id));
+-- Hidden messages, messages from people I blocked and messages I reported never reach me.
+create or replace function public.khatma_message_visible_to_me(p_message bigint, p_author uuid) returns boolean
+language sql stable security definer set search_path = public as $$
+  select (p_author is null or not exists (
+            select 1 from public.user_blocks b where b.blocker_id = auth.uid() and b.blocked_id = p_author))
+     and not exists (select 1 from public.content_reports r where r.reporter_id = auth.uid() and r.message_id = p_message)
+$$;
+create policy khatma_messages_member_read on public.khatma_messages for select to authenticated
+  using (public.is_khatma_member(group_id) and hidden_at is null and public.khatma_message_visible_to_me(id, user_id));
+create policy user_blocks_own_read on public.user_blocks for select to authenticated using (blocker_id = auth.uid());
+
+revoke insert, update, delete on public.khatma_groups, public.khatma_members, public.khatma_bans, public.khatma_parts,
+  public.khatma_messages, public.user_blocks, public.content_reports from anon, authenticated;
+revoke select on public.khatma_bans, public.content_reports from anon, authenticated;
+revoke all on public.khatma_groups, public.khatma_members, public.khatma_parts, public.khatma_messages, public.user_blocks
+  from anon;
+-- Only the columns the app needs; hidden_* stay server-side.
+revoke select on public.khatma_messages from authenticated;
+grant select (id, group_id, user_id, kind, body, meta, created_at) on public.khatma_messages to authenticated;
+revoke select on public.khatma_groups from authenticated;
+grant select (id, name, invite_code, round, khatmas_completed, max_members, created_at) on public.khatma_groups to authenticated;
+
+-- ---------------------------------------------------------------------------
+-- RPCs: terms
+-- ---------------------------------------------------------------------------
+create or replace function public.accept_community_terms() returns void
+language plpgsql security definer set search_path = public as $$
+begin
+  if auth.uid() is null then raise exception 'not authenticated'; end if;
+  update public.profiles set community_terms_at = coalesce(community_terms_at, now()) where id = auth.uid();
+end $$;
+
+create or replace function public._community_require_poster() returns uuid
+language plpgsql stable security definer set search_path = public as $$
+declare v_user uuid := auth.uid(); v_p record;
+begin
+  if v_user is null then raise exception 'not authenticated'; end if;
+  select community_terms_at, community_banned_at into v_p from public.profiles where id = v_user;
+  if v_p.community_banned_at is not null then raise exception 'community:banned' using errcode = '42501'; end if;
+  if v_p.community_terms_at is null then raise exception 'community:terms' using errcode = '42501'; end if;
+  return v_user;
+end $$;
+
+-- ---------------------------------------------------------------------------
+-- RPCs: groups and membership
+-- ---------------------------------------------------------------------------
+create or replace function public.create_khatma_group(p_name text, p_display_name text) returns jsonb
+language plpgsql security definer set search_path = public as $$
+declare
+  v_user uuid := public._community_require_poster();
+  v_name text := public._community_require_text(p_name, 40);
+  v_display text := public._community_require_text(p_display_name, 30);
+  v_group uuid;
+  v_code text := public._khatma_new_code();
+begin
+  if (select count(*) from public.khatma_members where user_id = v_user) >= 20 then
+    raise exception 'community:too_many_groups' using errcode = '22023';
+  end if;
+  insert into public.khatma_groups (name, invite_code, created_by) values (v_name, v_code, v_user) returning id into v_group;
+  insert into public.khatma_members (group_id, user_id, display_name, role) values (v_group, v_user, v_display, 'owner');
+  insert into public.khatma_parts (group_id, round, juz) select v_group, 1, g from generate_series(1, 30) g;
+  return jsonb_build_object('id', v_group, 'invite_code', v_code);
+end $$;
+
+create or replace function public.join_khatma_group(p_code text, p_display_name text) returns uuid
+language plpgsql security definer set search_path = public as $$
+declare
+  v_user uuid := public._community_require_poster();
+  v_display text := public._community_require_text(p_display_name, 30);
+  v_group public.khatma_groups;
+begin
+  select * into v_group from public.khatma_groups where invite_code = upper(btrim(p_code)) for update;
+  if v_group.id is null then raise exception 'community:invalid_code' using errcode = '22023'; end if;
+  if exists (select 1 from public.khatma_members where group_id = v_group.id and user_id = v_user) then return v_group.id; end if;
+  if exists (select 1 from public.khatma_bans where group_id = v_group.id and user_id = v_user) then
+    raise exception 'community:invalid_code' using errcode = '22023';
+  end if;
+  if (select count(*) from public.khatma_members where group_id = v_group.id) >= v_group.max_members then
+    raise exception 'community:group_full' using errcode = '22023';
+  end if;
+  if (select count(*) from public.khatma_members where user_id = v_user) >= 20 then
+    raise exception 'community:too_many_groups' using errcode = '22023';
+  end if;
+  insert into public.khatma_members (group_id, user_id, display_name) values (v_group.id, v_user, v_display);
+  perform public._khatma_system_message(v_group.id, v_user, 'joined', '{}'::jsonb);
+  return v_group.id;
+end $$;
+
+create or replace function public.leave_khatma_group(p_group uuid) returns void
+language plpgsql security definer set search_path = public as $$
+declare v_user uuid := public._khatma_require_member(p_group);
+begin
+  delete from public.khatma_members where group_id = p_group and user_id = v_user;
+end $$;
+
+create or replace function public.rename_khatma_group(p_group uuid, p_name text) returns void
+language plpgsql security definer set search_path = public as $$
+declare v_user uuid := public._khatma_require_owner(p_group);
+begin
+  perform public._community_require_poster();
+  update public.khatma_groups set name = public._community_require_text(p_name, 40) where id = p_group;
+end $$;
+
+create or replace function public.set_khatma_display_name(p_group uuid, p_display_name text) returns void
+language plpgsql security definer set search_path = public as $$
+declare v_user uuid := public._khatma_require_member(p_group);
+begin
+  perform public._community_require_poster();
+  update public.khatma_members set display_name = public._community_require_text(p_display_name, 30)
+  where group_id = p_group and user_id = v_user;
+end $$;
+
+create or replace function public.regenerate_khatma_invite(p_group uuid) returns text
+language plpgsql security definer set search_path = public as $$
+declare v_user uuid := public._khatma_require_owner(p_group); v_code text := public._khatma_new_code();
+begin
+  update public.khatma_groups set invite_code = v_code where id = p_group;
+  return v_code;
+end $$;
+
+create or replace function public.remove_khatma_member(p_group uuid, p_user uuid, p_ban boolean default true) returns void
+language plpgsql security definer set search_path = public as $$
+declare v_owner uuid := public._khatma_require_owner(p_group);
+begin
+  if p_user = v_owner then raise exception 'community:cannot_remove_self' using errcode = '22023'; end if;
+  delete from public.khatma_members where group_id = p_group and user_id = p_user;
+  if p_ban then
+    insert into public.khatma_bans (group_id, user_id) values (p_group, p_user) on conflict do nothing;
+  end if;
+end $$;
+
+-- Groups I belong to, with progress of the current round.
+create or replace function public.get_my_khatma_groups() returns jsonb
+language sql stable security definer set search_path = public as $$
+  select coalesce(jsonb_agg(x order by x ->> 'last_activity' desc), '[]'::jsonb) from (
+    select jsonb_build_object(
+      'id', g.id, 'name', g.name, 'round', g.round, 'khatmas_completed', g.khatmas_completed,
+      'role', m.role,
+      'member_count', (select count(*) from public.khatma_members mm where mm.group_id = g.id),
+      'done_count', (select count(*) from public.khatma_parts p where p.group_id = g.id and p.round = g.round and p.done_at is not null),
+      'my_juz', coalesce((select jsonb_agg(p.juz order by p.juz) from public.khatma_parts p
+                          where p.group_id = g.id and p.round = g.round and p.assignee = m.user_id and p.done_at is null), '[]'::jsonb),
+      'last_activity', coalesce((select max(km.created_at) from public.khatma_messages km where km.group_id = g.id), g.created_at)
+    ) as x
+    from public.khatma_members m join public.khatma_groups g on g.id = m.group_id
+    where m.user_id = auth.uid()
+  ) s
+$$;
+
+-- ---------------------------------------------------------------------------
+-- RPCs: dividing and finishing juz'
+-- ---------------------------------------------------------------------------
+create or replace function public._khatma_part_for_update(p_group uuid, p_juz int) returns public.khatma_parts
+language plpgsql security definer set search_path = public as $$
+declare v_part public.khatma_parts;
+begin
+  select p.* into v_part from public.khatma_parts p join public.khatma_groups g on g.id = p.group_id
+  where p.group_id = p_group and p.round = g.round and p.juz = p_juz for update of p;
+  if v_part.group_id is null then raise exception 'community:invalid_juz' using errcode = '22023'; end if;
+  return v_part;
+end $$;
+
+create or replace function public.claim_khatma_juz(p_group uuid, p_juz int) returns void
+language plpgsql security definer set search_path = public as $$
+declare v_user uuid := public._khatma_require_member(p_group); v_part public.khatma_parts;
+begin
+  v_part := public._khatma_part_for_update(p_group, p_juz);
+  if v_part.done_at is not null or (v_part.assignee is not null and v_part.assignee <> v_user) then
+    raise exception 'community:juz_taken' using errcode = '22023';
+  end if;
+  update public.khatma_parts set assignee = v_user, assigned_at = now()
+  where group_id = v_part.group_id and round = v_part.round and juz = v_part.juz;
+end $$;
+
+-- Owner assigns a juz' to a member (or clears it with p_user = null).
+create or replace function public.assign_khatma_juz(p_group uuid, p_juz int, p_user uuid) returns void
+language plpgsql security definer set search_path = public as $$
+declare v_owner uuid := public._khatma_require_owner(p_group); v_part public.khatma_parts;
+begin
+  if p_user is not null and public._khatma_role(p_group, p_user) is null then
+    raise exception 'community:not_member' using errcode = '22023';
+  end if;
+  v_part := public._khatma_part_for_update(p_group, p_juz);
+  if v_part.done_at is not null then raise exception 'community:juz_taken' using errcode = '22023'; end if;
+  update public.khatma_parts set assignee = p_user, assigned_at = case when p_user is null then null else now() end
+  where group_id = v_part.group_id and round = v_part.round and juz = v_part.juz;
+end $$;
+
+-- The assignee gives a juz' back; the owner can release anyone's.
+create or replace function public.release_khatma_juz(p_group uuid, p_juz int) returns void
+language plpgsql security definer set search_path = public as $$
+declare v_user uuid := public._khatma_require_member(p_group); v_part public.khatma_parts;
+begin
+  v_part := public._khatma_part_for_update(p_group, p_juz);
+  if v_part.done_at is not null then raise exception 'community:juz_taken' using errcode = '22023'; end if;
+  if v_part.assignee is distinct from v_user and public._khatma_role(p_group, v_user) <> 'owner' then
+    raise exception 'community:not_owner' using errcode = '42501';
+  end if;
+  update public.khatma_parts set assignee = null, assigned_at = null
+  where group_id = v_part.group_id and round = v_part.round and juz = v_part.juz;
+end $$;
+
+-- Owner shares every open juz' among the members, fewest-assigned first.
+create or replace function public.distribute_khatma_juz(p_group uuid) returns int
+language plpgsql security definer set search_path = public as $$
+declare
+  v_owner uuid := public._khatma_require_owner(p_group);
+  v_round int;
+  v_part record;
+  v_user uuid;
+  v_count int := 0;
+begin
+  select round into v_round from public.khatma_groups where id = p_group for update;
+  for v_part in
+    select juz from public.khatma_parts where group_id = p_group and round = v_round and assignee is null and done_at is null order by juz
+  loop
+    select m.user_id into v_user
+    from public.khatma_members m
+    left join public.khatma_parts p on p.group_id = m.group_id and p.round = v_round and p.assignee = m.user_id and p.done_at is null
+    where m.group_id = p_group
+    group by m.user_id, m.joined_at
+    order by count(p.juz), m.joined_at, m.user_id
+    limit 1;
+    update public.khatma_parts set assignee = v_user, assigned_at = now()
+    where group_id = p_group and round = v_round and juz = v_part.juz;
+    v_count := v_count + 1;
+  end loop;
+  return v_count;
+end $$;
+
+-- Mark a juz' as read. An open juz' is taken by whoever finishes it. When all 30 are done the
+-- khatma is complete, the group starts the next round and everyone sees a celebration.
+create or replace function public.complete_khatma_juz(p_group uuid, p_juz int) returns jsonb
+language plpgsql security definer set search_path = public as $$
+declare
+  v_user uuid := public._khatma_require_member(p_group);
+  v_part public.khatma_parts;
+  v_left int;
+  v_group public.khatma_groups;
+begin
+  select * into v_group from public.khatma_groups where id = p_group for update;
+  v_part := public._khatma_part_for_update(p_group, p_juz);
+  if v_part.done_at is not null then return jsonb_build_object('khatma_completed', false, 'duplicate', true); end if;
+  if v_part.assignee is not null and v_part.assignee <> v_user then
+    raise exception 'community:juz_taken' using errcode = '22023';
+  end if;
+  update public.khatma_parts set assignee = v_user, assigned_at = coalesce(assigned_at, now()), done_by = v_user, done_at = now()
+  where group_id = p_group and round = v_part.round and juz = p_juz;
+  perform public._khatma_system_message(p_group, v_user, 'juz_done', jsonb_build_object('juz', p_juz));
+
+  select count(*) into v_left from public.khatma_parts where group_id = p_group and round = v_group.round and done_at is null;
+  if v_left = 0 then
+    update public.khatma_groups set round = round + 1, khatmas_completed = khatmas_completed + 1 where id = p_group;
+    insert into public.khatma_parts (group_id, round, juz) select p_group, v_group.round + 1, g from generate_series(1, 30) g;
+    perform public._khatma_system_message(p_group, null, 'khatma_done', jsonb_build_object('number', v_group.khatmas_completed + 1));
+    return jsonb_build_object('khatma_completed', true, 'number', v_group.khatmas_completed + 1);
+  end if;
+  return jsonb_build_object('khatma_completed', false, 'left', v_left);
+end $$;
+
+-- Undo a mis-tap (whoever finished it, or the owner), current round only.
+create or replace function public.uncomplete_khatma_juz(p_group uuid, p_juz int) returns void
+language plpgsql security definer set search_path = public as $$
+declare v_user uuid := public._khatma_require_member(p_group); v_part public.khatma_parts;
+begin
+  v_part := public._khatma_part_for_update(p_group, p_juz);
+  if v_part.done_at is null then return; end if;
+  if v_part.done_by is distinct from v_user and public._khatma_role(p_group, v_user) <> 'owner' then
+    raise exception 'community:not_owner' using errcode = '42501';
+  end if;
+  update public.khatma_parts set done_at = null, done_by = null
+  where group_id = p_group and round = v_part.round and juz = p_juz;
+end $$;
+
+-- In-group competition: juz' finished (this khatma and all time), ayahs read in the last 7 days
+-- and current streak. Only members of the group can call it, and only for that group.
+create or replace function public.get_khatma_leaderboard(p_group uuid) returns jsonb
+language plpgsql stable security definer set search_path = public as $$
+declare v_user uuid := public._khatma_require_member(p_group);
+begin
+  return (
+    select coalesce(jsonb_agg(row_to_json(t)::jsonb order by t.juz_this_round desc, t.ayahs_7d desc, t.display_name), '[]'::jsonb)
+    from (
+      select m.user_id, m.display_name, m.role,
+        (select count(*) from public.khatma_parts p where p.group_id = g.id and p.round = g.round and p.done_by = m.user_id and p.done_at is not null) as juz_this_round,
+        (select count(*) from public.khatma_parts p where p.group_id = g.id and p.done_by = m.user_id and p.done_at is not null) as juz_total,
+        coalesce((select sum(d.ayahs_read) from public.daily_activity d
+                  where d.user_id = m.user_id and d.activity_date > public._user_today(m.user_id) - 7), 0) as ayahs_7d,
+        case when pr.last_active_date >= public._user_today(m.user_id) - 1 then pr.current_streak else 0 end as streak
+      from public.khatma_members m
+      join public.khatma_groups g on g.id = m.group_id
+      join public.profiles pr on pr.id = m.user_id
+      where m.group_id = p_group
+    ) t
+  );
+end $$;
+
+-- ---------------------------------------------------------------------------
+-- RPCs: messages
+-- ---------------------------------------------------------------------------
+create or replace function public._khatma_rate_limit(p_user uuid) returns void
+language plpgsql stable security definer set search_path = public as $$
+begin
+  if (select count(*) from public.khatma_messages where user_id = p_user and kind <> 'system' and created_at > now() - interval '1 minute') >= 6
+     or (select count(*) from public.khatma_messages where user_id = p_user and kind <> 'system' and created_at > now() - interval '1 day') >= 200 then
+    raise exception 'community:slow_down' using errcode = '22023';
+  end if;
+end $$;
+
+create or replace function public.post_khatma_message(p_group uuid, p_body text) returns bigint
+language plpgsql security definer set search_path = public as $$
+declare
+  v_user uuid := public._khatma_require_member(p_group);
+  v_body text;
+  v_id bigint;
+begin
+  perform public._community_require_poster();
+  v_body := public._community_require_text(p_body, 500);
+  perform public._khatma_rate_limit(v_user);
+  insert into public.khatma_messages (group_id, user_id, kind, body) values (p_group, v_user, 'text', v_body) returning id into v_id;
+  return v_id;
+end $$;
+
+-- Preset encouragement, optionally to one member. The app renders the phrase in the reader's language.
+create or replace function public.send_khatma_cheer(p_group uuid, p_cheer text, p_to uuid default null) returns bigint
+language plpgsql security definer set search_path = public as $$
+declare
+  v_user uuid := public._khatma_require_member(p_group);
+  v_id bigint;
+begin
+  perform public._community_require_poster();
+  if p_cheer not in ('barakallah', 'mashallah', 'keep_going', 'dua', 'jazakallah', 'together') then
+    raise exception 'community:invalid_cheer' using errcode = '22023';
+  end if;
+  if p_to is not null and (p_to = v_user or public._khatma_role(p_group, p_to) is null) then
+    raise exception 'community:not_member' using errcode = '22023';
+  end if;
+  perform public._khatma_rate_limit(v_user);
+  insert into public.khatma_messages (group_id, user_id, kind, body, meta)
+  values (p_group, v_user, 'cheer', p_cheer, case when p_to is null then '{}'::jsonb else jsonb_build_object('to', p_to) end)
+  returning id into v_id;
+  return v_id;
+end $$;
+
+-- The author deletes their own message; the owner deletes any message in the group.
+create or replace function public.delete_khatma_message(p_message bigint) returns void
+language plpgsql security definer set search_path = public as $$
+declare v_msg public.khatma_messages; v_user uuid := auth.uid();
+begin
+  select * into v_msg from public.khatma_messages where id = p_message;
+  if v_msg.id is null then return; end if;
+  perform public._khatma_require_member(v_msg.group_id);
+  if v_msg.user_id = v_user then
+    update public.khatma_messages set hidden_at = now(), hidden_reason = 'author' where id = p_message;
+  elsif public._khatma_role(v_msg.group_id, v_user) = 'owner' then
+    update public.khatma_messages set hidden_at = now(), hidden_reason = 'owner' where id = p_message;
+  else
+    raise exception 'community:not_owner' using errcode = '42501';
+  end if;
+end $$;
+
+-- ---------------------------------------------------------------------------
+-- RPCs: report and block
+-- ---------------------------------------------------------------------------
+-- Report a message (p_message) or a member (p_user + p_group). The reporter stops seeing a
+-- reported message immediately; two reports from different people hide it for everyone.
+create or replace function public.report_content(p_reason text, p_message bigint default null, p_user uuid default null, p_group uuid default null)
+returns void language plpgsql security definer set search_path = public as $$
+declare
+  v_user uuid := auth.uid();
+  v_msg public.khatma_messages;
+begin
+  if v_user is null then raise exception 'not authenticated'; end if;
+  if p_reason not in ('offensive', 'harassment', 'spam', 'inappropriate', 'other') then
+    raise exception 'community:invalid_reason' using errcode = '22023';
+  end if;
+  if p_message is not null then
+    select * into v_msg from public.khatma_messages where id = p_message;
+    if v_msg.id is null or v_msg.user_id is null then raise exception 'community:not_found' using errcode = '22023'; end if;
+    perform public._khatma_require_member(v_msg.group_id);
+    if v_msg.user_id = v_user then raise exception 'community:not_found' using errcode = '22023'; end if;
+    insert into public.content_reports (reporter_id, reported_user_id, group_id, message_id, reason, message_body)
+    values (v_user, v_msg.user_id, v_msg.group_id, v_msg.id, p_reason, v_msg.body)
+    on conflict (reporter_id, message_id) where message_id is not null do nothing;
+    if (select count(distinct reporter_id) from public.content_reports where message_id = v_msg.id) >= 2 then
+      update public.khatma_messages set hidden_at = coalesce(hidden_at, now()), hidden_reason = coalesce(hidden_reason, 'reports')
+      where id = v_msg.id;
+    end if;
+  elsif p_user is not null and p_group is not null then
+    perform public._khatma_require_member(p_group);
+    if public._khatma_role(p_group, p_user) is null or p_user = v_user then
+      raise exception 'community:not_found' using errcode = '22023';
+    end if;
+    insert into public.content_reports (reporter_id, reported_user_id, group_id, reason, message_body)
+    values (v_user, p_user, p_group, p_reason,
+            (select display_name from public.khatma_members where group_id = p_group and user_id = p_user));
+  else
+    raise exception 'community:not_found' using errcode = '22023';
+  end if;
+end $$;
+
+create or replace function public.block_user(p_user uuid) returns void
+language plpgsql security definer set search_path = public as $$
+begin
+  if auth.uid() is null then raise exception 'not authenticated'; end if;
+  if p_user is null or p_user = auth.uid() then return; end if;
+  -- Only people I share a group with (no probing of arbitrary user ids).
+  if not exists (select 1 from public.khatma_members a join public.khatma_members b on a.group_id = b.group_id
+                 where a.user_id = auth.uid() and b.user_id = p_user) then
+    raise exception 'community:not_found' using errcode = '22023';
+  end if;
+  insert into public.user_blocks (blocker_id, blocked_id) values (auth.uid(), p_user) on conflict do nothing;
+end $$;
+
+create or replace function public.unblock_user(p_user uuid) returns void
+language sql security definer set search_path = public as $$
+  delete from public.user_blocks where blocker_id = auth.uid() and blocked_id = p_user
+$$;
+
+-- People I blocked, with the name they use in a group we share (if any).
+create or replace function public.get_my_blocks() returns jsonb
+language sql stable security definer set search_path = public as $$
+  select coalesce(jsonb_agg(jsonb_build_object(
+    'user_id', b.blocked_id,
+    'display_name', (select m.display_name from public.khatma_members m where m.user_id = b.blocked_id order by m.joined_at limit 1),
+    'created_at', b.created_at) order by b.created_at desc), '[]'::jsonb)
+  from public.user_blocks b where b.blocker_id = auth.uid()
+$$;
+
+-- ---------------------------------------------------------------------------
+-- Moderation (service role: Supabase dashboard / SQL editor). Review open reports within 24 h:
+--   select * from content_reports where status = 'open' order by created_at;
+--   select moderate_report(<id>, 'remove_message' | 'ban_user' | 'dismiss');
+-- ---------------------------------------------------------------------------
+create or replace function public.moderate_report(p_report bigint, p_action text) returns void
+language plpgsql security definer set search_path = public as $$
+declare v_r public.content_reports;
+begin
+  select * into v_r from public.content_reports where id = p_report for update;
+  if v_r.id is null then raise exception 'report % not found', p_report; end if;
+  if p_action not in ('dismiss', 'remove_message', 'ban_user') then raise exception 'unknown action %', p_action; end if;
+  if p_action in ('remove_message', 'ban_user') and v_r.message_id is not null then
+    update public.khatma_messages set hidden_at = coalesce(hidden_at, now()), hidden_reason = 'moderator' where id = v_r.message_id;
+  end if;
+  if p_action = 'ban_user' and v_r.reported_user_id is not null then
+    update public.profiles set community_banned_at = now() where id = v_r.reported_user_id;
+    update public.khatma_messages set hidden_at = coalesce(hidden_at, now()), hidden_reason = coalesce(hidden_reason, 'moderator')
+    where user_id = v_r.reported_user_id;
+  end if;
+  update public.content_reports set status = case when p_action = 'dismiss' then 'dismissed' else 'actioned' end, reviewed_at = now()
+  where id = p_report or (p_action <> 'dismiss' and message_id = v_r.message_id and status = 'open');
+end $$;
+
+-- ---------------------------------------------------------------------------
+-- Permissions
+-- ---------------------------------------------------------------------------
+revoke execute on all functions in schema public from public, anon, authenticated;
+grant execute on function
+  public.level_for_xp(int), public.xp_for_level(int), public.hifz_retention(int, timestamptz),
+  public.search_ayahs_keyword(text, int, int)
+  to anon, authenticated;
+grant execute on function
+  public.log_activity(text, int, text), public.log_prayer(public.prayer_name, boolean, date),
+  public.complete_dhikr(smallint, int), public.create_hifz_plan(int, int, smallint, text),
+  public.get_hifz_queue(), public.hifz_record_review(bigint, smallint), public.get_hifz_stats(),
+  public.get_my_quota(), public.get_dashboard(), public.apply_referral(text), public.get_my_ai_budget(),
+  public.seed_known_surahs(int[], text), public.get_weekly_summary(), public.get_weak_words(int),
+  -- community
+  public.is_khatma_member(uuid), public.khatma_message_visible_to_me(bigint, uuid), public.accept_community_terms(),
+  public.create_khatma_group(text, text), public.join_khatma_group(text, text), public.leave_khatma_group(uuid),
+  public.rename_khatma_group(uuid, text), public.set_khatma_display_name(uuid, text),
+  public.regenerate_khatma_invite(uuid), public.remove_khatma_member(uuid, uuid, boolean),
+  public.get_my_khatma_groups(), public.claim_khatma_juz(uuid, int), public.assign_khatma_juz(uuid, int, uuid),
+  public.release_khatma_juz(uuid, int), public.distribute_khatma_juz(uuid), public.complete_khatma_juz(uuid, int),
+  public.uncomplete_khatma_juz(uuid, int), public.get_khatma_leaderboard(uuid),
+  public.post_khatma_message(uuid, text), public.send_khatma_cheer(uuid, text, uuid), public.delete_khatma_message(bigint),
+  public.report_content(text, bigint, uuid, uuid), public.block_user(uuid), public.unblock_user(uuid), public.get_my_blocks()
+  to authenticated;
+grant execute on all functions in schema public to service_role;

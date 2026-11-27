@@ -1211,4 +1211,381 @@ class AppLocalizationsEn extends AppLocalizations {
   String weakWordsCardBody(int n) {
     return '$n words to polish';
   }
+
+  @override
+  String get qiblaTitle => 'Qibla';
+
+  @override
+  String get qiblaHint => 'Find the direction of Makkah';
+
+  @override
+  String get qiblaFacing => 'You are facing the Qibla';
+
+  @override
+  String qiblaTurnRight(int deg) {
+    return 'Turn right $deg°';
+  }
+
+  @override
+  String qiblaTurnLeft(int deg) {
+    return 'Turn left $deg°';
+  }
+
+  @override
+  String qiblaNoSensor(int deg) {
+    return 'This phone has no compass. Face $deg° from north.';
+  }
+
+  @override
+  String qiblaBearing(int deg) {
+    return 'Qibla: $deg° from north';
+  }
+
+  @override
+  String qiblaDistance(int km) {
+    return '$km km to Makkah';
+  }
+
+  @override
+  String get qiblaCalibrate =>
+      'Keep the phone flat and away from metal. If the direction looks off, move the phone in a figure 8.';
+
+  @override
+  String get qiblaPrivacy => 'Your location stays on your phone.';
+
+  @override
+  String get qiblaLocationOff => 'Turn on location services to find the Qibla.';
+
+  @override
+  String get qiblaPermission =>
+      'Allow location access so we can work out the Qibla from where you are.';
+
+  @override
+  String get qiblaLocationError =>
+      'We couldn\'t get your location. Try again outdoors or near a window.';
+
+  @override
+  String get openSettings => 'Open settings';
+
+  @override
+  String get khatmaGroups => 'Khatma groups';
+
+  @override
+  String get khatmaGroupsHint => 'Finish the Quran together';
+
+  @override
+  String get khatmaGroupsEmptyTitle => 'Finish the Quran together';
+
+  @override
+  String get khatmaGroupsEmptyBody =>
+      'Create a private group for your family or friends, share the 30 juz\', encourage each other and see who reads the most.';
+
+  @override
+  String get createGroup => 'Create a group';
+
+  @override
+  String get joinGroup => 'Join';
+
+  @override
+  String get joinWithCode => 'Join with a code';
+
+  @override
+  String get groupName => 'Group name';
+
+  @override
+  String get yourNameInGroup => 'Your name in the group';
+
+  @override
+  String groupMembersN(int n) {
+    return '$n members';
+  }
+
+  @override
+  String khatmasCompletedN(int n) {
+    return '$n khatmas completed';
+  }
+
+  @override
+  String myJuzList(String list) {
+    return 'My juz\': $list';
+  }
+
+  @override
+  String khatmaNumber(int n) {
+    return 'Khatma $n';
+  }
+
+  @override
+  String get juzTapHint => 'Tap a juz\' to take it or mark it as read.';
+
+  @override
+  String get juzDone => 'Read';
+
+  @override
+  String get juzMine => 'Mine';
+
+  @override
+  String get juzTaken => 'Taken';
+
+  @override
+  String get juzOpen => 'Open';
+
+  @override
+  String juzN(int n) {
+    return 'Juz\' $n';
+  }
+
+  @override
+  String get juzMarkRead => 'I\'ve read it';
+
+  @override
+  String get juzClaim => 'I\'ll read it';
+
+  @override
+  String get juzRelease => 'Give it back';
+
+  @override
+  String get juzAssign => 'Assign to a member';
+
+  @override
+  String get juzUndo => 'Undo';
+
+  @override
+  String get khatmaCompleteTitle => 'The khatma is complete!';
+
+  @override
+  String get khatmaCompleteBody =>
+      'May Allah accept it from all of you. A new khatma has started for the group.';
+
+  @override
+  String get tabJuz => 'Juz\'';
+
+  @override
+  String get tabMessages => 'Messages';
+
+  @override
+  String get tabLeaderboard => 'Competition';
+
+  @override
+  String get inviteToGroup => 'Invite';
+
+  @override
+  String groupInviteMessage(String name, String code) {
+    return 'Join our khatma \"$name\" on Asmi3ni. Group code: $code';
+  }
+
+  @override
+  String get groupMembers => 'Members';
+
+  @override
+  String get groupOwner => 'Group admin';
+
+  @override
+  String get distributeJuz => 'Share open juz\' among members';
+
+  @override
+  String distributedN(int n) {
+    return '$n juz\' shared out';
+  }
+
+  @override
+  String get renameGroup => 'Rename group';
+
+  @override
+  String get newInviteCode => 'New invite code';
+
+  @override
+  String newInviteCodeDone(String code) {
+    return 'New code: $code. The old one no longer works.';
+  }
+
+  @override
+  String get leaveGroup => 'Leave group';
+
+  @override
+  String get leaveGroupConfirm =>
+      'Leave this group? Juz\' you haven\'t finished go back to the group.';
+
+  @override
+  String get messagesEmpty => 'No messages yet. Send a word of encouragement!';
+
+  @override
+  String get messageHint => 'Write a message';
+
+  @override
+  String get sendCheer => 'Send encouragement';
+
+  @override
+  String get formerMember => 'Former member';
+
+  @override
+  String sysJoined(String name) {
+    return '$name joined the group';
+  }
+
+  @override
+  String sysJuzDone(String name, int juz) {
+    return '$name finished juz\' $juz';
+  }
+
+  @override
+  String sysKhatmaDone(int n) {
+    return 'Khatma $n is complete. Allahumma taqabbal!';
+  }
+
+  @override
+  String get cheerBarakallah => 'Barakallahu feek';
+
+  @override
+  String get cheerMashallah => 'Masha\'Allah!';
+
+  @override
+  String get cheerKeepGoing => 'Keep going, you\'re almost there';
+
+  @override
+  String get cheerDua => 'I made dua for you';
+
+  @override
+  String get cheerJazakallah => 'Jazakallahu khayran';
+
+  @override
+  String get cheerTogether => 'Let\'s finish it together';
+
+  @override
+  String get leaderKhatma => 'This khatma';
+
+  @override
+  String get leaderWeek => 'This week';
+
+  @override
+  String leaderKhatmaLine(int round, int total) {
+    return '$round juz\' this khatma · $total in total';
+  }
+
+  @override
+  String leaderWeekLine(int ayahs, int streak) {
+    return '$ayahs ayahs in 7 days · $streak-day streak';
+  }
+
+  @override
+  String get leaderboardNote =>
+      'Only members of this group see this. Compete in good deeds, and keep your intention for Allah.';
+
+  @override
+  String get removeFromGroup => 'Remove from group';
+
+  @override
+  String get communityRulesTitle => 'Group rules';
+
+  @override
+  String get communityRule1 =>
+      'Speak kindly. No insults, swearing, hate, or sexual content. There is zero tolerance for abuse.';
+
+  @override
+  String get communityRule2 =>
+      'No links, phone numbers or accounts from other apps, to keep everyone (especially children) safe.';
+
+  @override
+  String get communityRule3 =>
+      'You can report any message or member and block anyone. We review reports within 24 hours.';
+
+  @override
+  String get communityRule4 =>
+      'Content that breaks these rules is removed, and whoever posts it is banned from groups.';
+
+  @override
+  String get communityAgree => 'I agree';
+
+  @override
+  String get report => 'Report';
+
+  @override
+  String get reportWhy => 'Why are you reporting this?';
+
+  @override
+  String get reportOffensive => 'Offensive or abusive';
+
+  @override
+  String get reportHarassment => 'Harassment or bullying';
+
+  @override
+  String get reportSpam => 'Spam';
+
+  @override
+  String get reportInappropriate => 'Inappropriate content';
+
+  @override
+  String get reportOther => 'Something else';
+
+  @override
+  String get reportThanks => 'Thanks, we\'ll review it';
+
+  @override
+  String reportAlsoBlock(String name) {
+    return 'Do you also want to block $name? You won\'t see anything they write.';
+  }
+
+  @override
+  String get block => 'Block';
+
+  @override
+  String get unblock => 'Unblock';
+
+  @override
+  String blockName(String name) {
+    return 'Block $name';
+  }
+
+  @override
+  String blockTitle(String name) {
+    return 'Block $name?';
+  }
+
+  @override
+  String get blockBody =>
+      'You won\'t see their messages in any group. They won\'t be told.';
+
+  @override
+  String get blockedUsers => 'Blocked people';
+
+  @override
+  String get blockedUsersEmpty => 'You haven\'t blocked anyone.';
+
+  @override
+  String get communityErrOffensive =>
+      'This contains words that aren\'t allowed. Please rephrase it kindly.';
+
+  @override
+  String get communityErrContact =>
+      'Links, phone numbers and accounts aren\'t allowed in groups.';
+
+  @override
+  String get communityErrTooLong => 'That\'s too long.';
+
+  @override
+  String get communityErrEmpty => 'Write something first.';
+
+  @override
+  String get communityErrSlowDown =>
+      'You\'re sending messages too fast. Wait a moment.';
+
+  @override
+  String get communityErrInvalidCode => 'That code doesn\'t match a group.';
+
+  @override
+  String get communityErrGroupFull => 'This group is full.';
+
+  @override
+  String get communityErrTooManyGroups =>
+      'You\'re in the maximum number of groups.';
+
+  @override
+  String get communityErrJuzTaken => 'Someone else has this juz\'.';
+
+  @override
+  String get communityErrBanned =>
+      'Your access to groups has been suspended for breaking the rules.';
+
+  @override
+  String get communityErrNotAllowed => 'Only the group admin can do that.';
 }

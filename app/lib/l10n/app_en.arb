@@ -755,5 +755,270 @@
         "type": "int"
       }
     }
-  }
+  },
+  "qiblaTitle": "Qibla",
+  "qiblaHint": "Find the direction of Makkah",
+  "qiblaFacing": "You are facing the Qibla",
+  "qiblaTurnRight": "Turn right {deg}°",
+  "@qiblaTurnRight": {
+    "placeholders": {
+      "deg": {
+        "type": "int"
+      }
+    }
+  },
+  "qiblaTurnLeft": "Turn left {deg}°",
+  "@qiblaTurnLeft": {
+    "placeholders": {
+      "deg": {
+        "type": "int"
+      }
+    }
+  },
+  "qiblaNoSensor": "This phone has no compass. Face {deg}° from north.",
+  "@qiblaNoSensor": {
+    "placeholders": {
+      "deg": {
+        "type": "int"
+      }
+    }
+  },
+  "qiblaBearing": "Qibla: {deg}° from north",
+  "@qiblaBearing": {
+    "placeholders": {
+      "deg": {
+        "type": "int"
+      }
+    }
+  },
+  "qiblaDistance": "{km} km to Makkah",
+  "@qiblaDistance": {
+    "placeholders": {
+      "km": {
+        "type": "int"
+      }
+    }
+  },
+  "qiblaCalibrate": "Keep the phone flat and away from metal. If the direction looks off, move the phone in a figure 8.",
+  "qiblaPrivacy": "Your location stays on your phone.",
+  "qiblaLocationOff": "Turn on location services to find the Qibla.",
+  "qiblaPermission": "Allow location access so we can work out the Qibla from where you are.",
+  "qiblaLocationError": "We couldn't get your location. Try again outdoors or near a window.",
+  "openSettings": "Open settings",
+  "khatmaGroups": "Khatma groups",
+  "khatmaGroupsHint": "Finish the Quran together",
+  "khatmaGroupsEmptyTitle": "Finish the Quran together",
+  "khatmaGroupsEmptyBody": "Create a private group for your family or friends, share the 30 juz', encourage each other and see who reads the most.",
+  "createGroup": "Create a group",
+  "joinGroup": "Join",
+  "joinWithCode": "Join with a code",
+  "groupName": "Group name",
+  "yourNameInGroup": "Your name in the group",
+  "groupMembersN": "{n} members",
+  "@groupMembersN": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "khatmasCompletedN": "{n} khatmas completed",
+  "@khatmasCompletedN": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "myJuzList": "My juz': {list}",
+  "@myJuzList": {
+    "placeholders": {
+      "list": {
+        "type": "String"
+      }
+    }
+  },
+  "khatmaNumber": "Khatma {n}",
+  "@khatmaNumber": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "juzTapHint": "Tap a juz' to take it or mark it as read.",
+  "juzDone": "Read",
+  "juzMine": "Mine",
+  "juzTaken": "Taken",
+  "juzOpen": "Open",
+  "juzN": "Juz' {n}",
+  "@juzN": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "juzMarkRead": "I've read it",
+  "juzClaim": "I'll read it",
+  "juzRelease": "Give it back",
+  "juzAssign": "Assign to a member",
+  "juzUndo": "Undo",
+  "khatmaCompleteTitle": "The khatma is complete!",
+  "khatmaCompleteBody": "May Allah accept it from all of you. A new khatma has started for the group.",
+  "tabJuz": "Juz'",
+  "tabMessages": "Messages",
+  "tabLeaderboard": "Competition",
+  "inviteToGroup": "Invite",
+  "groupInviteMessage": "Join our khatma \"{name}\" on Asmi3ni. Group code: {code}",
+  "@groupInviteMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "groupMembers": "Members",
+  "groupOwner": "Group admin",
+  "distributeJuz": "Share open juz' among members",
+  "distributedN": "{n} juz' shared out",
+  "@distributedN": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "renameGroup": "Rename group",
+  "newInviteCode": "New invite code",
+  "newInviteCodeDone": "New code: {code}. The old one no longer works.",
+  "@newInviteCodeDone": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "leaveGroup": "Leave group",
+  "leaveGroupConfirm": "Leave this group? Juz' you haven't finished go back to the group.",
+  "messagesEmpty": "No messages yet. Send a word of encouragement!",
+  "messageHint": "Write a message",
+  "sendCheer": "Send encouragement",
+  "formerMember": "Former member",
+  "sysJoined": "{name} joined the group",
+  "@sysJoined": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "sysJuzDone": "{name} finished juz' {juz}",
+  "@sysJuzDone": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "juz": {
+        "type": "int"
+      }
+    }
+  },
+  "sysKhatmaDone": "Khatma {n} is complete. Allahumma taqabbal!",
+  "@sysKhatmaDone": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "cheerBarakallah": "Barakallahu feek",
+  "cheerMashallah": "Masha'Allah!",
+  "cheerKeepGoing": "Keep going, you're almost there",
+  "cheerDua": "I made dua for you",
+  "cheerJazakallah": "Jazakallahu khayran",
+  "cheerTogether": "Let's finish it together",
+  "leaderKhatma": "This khatma",
+  "leaderWeek": "This week",
+  "leaderKhatmaLine": "{round} juz' this khatma · {total} in total",
+  "@leaderKhatmaLine": {
+    "placeholders": {
+      "round": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "leaderWeekLine": "{ayahs} ayahs in 7 days · {streak}-day streak",
+  "@leaderWeekLine": {
+    "placeholders": {
+      "ayahs": {
+        "type": "int"
+      },
+      "streak": {
+        "type": "int"
+      }
+    }
+  },
+  "leaderboardNote": "Only members of this group see this. Compete in good deeds, and keep your intention for Allah.",
+  "removeFromGroup": "Remove from group",
+  "communityRulesTitle": "Group rules",
+  "communityRule1": "Speak kindly. No insults, swearing, hate, or sexual content. There is zero tolerance for abuse.",
+  "communityRule2": "No links, phone numbers or accounts from other apps, to keep everyone (especially children) safe.",
+  "communityRule3": "You can report any message or member and block anyone. We review reports within 24 hours.",
+  "communityRule4": "Content that breaks these rules is removed, and whoever posts it is banned from groups.",
+  "communityAgree": "I agree",
+  "report": "Report",
+  "reportWhy": "Why are you reporting this?",
+  "reportOffensive": "Offensive or abusive",
+  "reportHarassment": "Harassment or bullying",
+  "reportSpam": "Spam",
+  "reportInappropriate": "Inappropriate content",
+  "reportOther": "Something else",
+  "reportThanks": "Thanks, we'll review it",
+  "reportAlsoBlock": "Do you also want to block {name}? You won't see anything they write.",
+  "@reportAlsoBlock": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "block": "Block",
+  "unblock": "Unblock",
+  "blockName": "Block {name}",
+  "@blockName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "blockTitle": "Block {name}?",
+  "@blockTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "blockBody": "You won't see their messages in any group. They won't be told.",
+  "blockedUsers": "Blocked people",
+  "blockedUsersEmpty": "You haven't blocked anyone.",
+  "communityErrOffensive": "This contains words that aren't allowed. Please rephrase it kindly.",
+  "communityErrContact": "Links, phone numbers and accounts aren't allowed in groups.",
+  "communityErrTooLong": "That's too long.",
+  "communityErrEmpty": "Write something first.",
+  "communityErrSlowDown": "You're sending messages too fast. Wait a moment.",
+  "communityErrInvalidCode": "That code doesn't match a group.",
+  "communityErrGroupFull": "This group is full.",
+  "communityErrTooManyGroups": "You're in the maximum number of groups.",
+  "communityErrJuzTaken": "Someone else has this juz'.",
+  "communityErrBanned": "Your access to groups has been suspended for breaking the rules.",
+  "communityErrNotAllowed": "Only the group admin can do that."
 }

@@ -1200,4 +1200,379 @@ class AppLocalizationsAr extends AppLocalizations {
   String weakWordsCardBody(int n) {
     return '$n كلمات تحتاج إتقانًا';
   }
+
+  @override
+  String get qiblaTitle => 'القبلة';
+
+  @override
+  String get qiblaHint => 'اتجاه الكعبة من مكانك';
+
+  @override
+  String get qiblaFacing => 'أنت باتجاه القبلة';
+
+  @override
+  String qiblaTurnRight(int deg) {
+    return 'استدر يمينًا $deg°';
+  }
+
+  @override
+  String qiblaTurnLeft(int deg) {
+    return 'استدر يسارًا $deg°';
+  }
+
+  @override
+  String qiblaNoSensor(int deg) {
+    return 'لا توجد بوصلة في هذا الهاتف. اتجه $deg° من الشمال.';
+  }
+
+  @override
+  String qiblaBearing(int deg) {
+    return 'القبلة: $deg° من الشمال';
+  }
+
+  @override
+  String qiblaDistance(int km) {
+    return '$km كم إلى مكة';
+  }
+
+  @override
+  String get qiblaCalibrate =>
+      'ضع الهاتف مستويًا وبعيدًا عن المعادن. إذا بدا الاتجاه غير دقيق، حرّك الهاتف على شكل الرقم ٨.';
+
+  @override
+  String get qiblaPrivacy => 'موقعك يبقى على هاتفك ولا يُرسل لأي جهة.';
+
+  @override
+  String get qiblaLocationOff => 'فعّل خدمات الموقع لتحديد القبلة.';
+
+  @override
+  String get qiblaPermission =>
+      'اسمح بالوصول إلى الموقع حتى نحدّد القبلة من مكانك.';
+
+  @override
+  String get qiblaLocationError =>
+      'تعذّر تحديد موقعك. حاول مرة أخرى في مكان مفتوح أو قرب نافذة.';
+
+  @override
+  String get openSettings => 'فتح الإعدادات';
+
+  @override
+  String get khatmaGroups => 'مجموعات الختمة';
+
+  @override
+  String get khatmaGroupsHint => 'اختموا القرآن معًا';
+
+  @override
+  String get khatmaGroupsEmptyTitle => 'اختموا القرآن معًا';
+
+  @override
+  String get khatmaGroupsEmptyBody =>
+      'أنشئ مجموعة خاصة لعائلتك أو أصدقائك، ووزّعوا الأجزاء الثلاثين، وشجّعوا بعضكم، وتنافسوا في الخير.';
+
+  @override
+  String get createGroup => 'إنشاء مجموعة';
+
+  @override
+  String get joinGroup => 'انضمام';
+
+  @override
+  String get joinWithCode => 'الانضمام برمز';
+
+  @override
+  String get groupName => 'اسم المجموعة';
+
+  @override
+  String get yourNameInGroup => 'اسمك في المجموعة';
+
+  @override
+  String groupMembersN(int n) {
+    return '$n أعضاء';
+  }
+
+  @override
+  String khatmasCompletedN(int n) {
+    return '$n ختمات مكتملة';
+  }
+
+  @override
+  String myJuzList(String list) {
+    return 'أجزائي: $list';
+  }
+
+  @override
+  String khatmaNumber(int n) {
+    return 'الختمة رقم $n';
+  }
+
+  @override
+  String get juzTapHint => 'اضغط على جزء لتأخذه أو لتعلّم أنك قرأته.';
+
+  @override
+  String get juzDone => 'مقروء';
+
+  @override
+  String get juzMine => 'لي';
+
+  @override
+  String get juzTaken => 'محجوز';
+
+  @override
+  String get juzOpen => 'متاح';
+
+  @override
+  String juzN(int n) {
+    return 'الجزء $n';
+  }
+
+  @override
+  String get juzMarkRead => 'قرأته';
+
+  @override
+  String get juzClaim => 'سأقرؤه';
+
+  @override
+  String get juzRelease => 'إلغاء الحجز';
+
+  @override
+  String get juzAssign => 'إسناده لعضو';
+
+  @override
+  String get juzUndo => 'تراجع';
+
+  @override
+  String get khatmaCompleteTitle => 'تمّت الختمة!';
+
+  @override
+  String get khatmaCompleteBody =>
+      'تقبّل الله منكم جميعًا. بدأت ختمة جديدة للمجموعة.';
+
+  @override
+  String get tabJuz => 'الأجزاء';
+
+  @override
+  String get tabMessages => 'الرسائل';
+
+  @override
+  String get tabLeaderboard => 'المنافسة';
+
+  @override
+  String get inviteToGroup => 'دعوة';
+
+  @override
+  String groupInviteMessage(String name, String code) {
+    return 'انضم إلى ختمتنا «$name» على تطبيق أسمِعني. رمز المجموعة: $code';
+  }
+
+  @override
+  String get groupMembers => 'الأعضاء';
+
+  @override
+  String get groupOwner => 'مشرف المجموعة';
+
+  @override
+  String get distributeJuz => 'توزيع الأجزاء المتاحة على الأعضاء';
+
+  @override
+  String distributedN(int n) {
+    return 'تم توزيع $n أجزاء';
+  }
+
+  @override
+  String get renameGroup => 'تغيير اسم المجموعة';
+
+  @override
+  String get newInviteCode => 'رمز دعوة جديد';
+
+  @override
+  String newInviteCodeDone(String code) {
+    return 'الرمز الجديد: $code. الرمز القديم لم يعد يعمل.';
+  }
+
+  @override
+  String get leaveGroup => 'مغادرة المجموعة';
+
+  @override
+  String get leaveGroupConfirm =>
+      'مغادرة المجموعة؟ الأجزاء التي لم تُنهها تعود متاحة للمجموعة.';
+
+  @override
+  String get messagesEmpty => 'لا رسائل بعد. أرسل كلمة تشجيع!';
+
+  @override
+  String get messageHint => 'اكتب رسالة';
+
+  @override
+  String get sendCheer => 'أرسل تشجيعًا';
+
+  @override
+  String get formerMember => 'عضو سابق';
+
+  @override
+  String sysJoined(String name) {
+    return 'انضم $name إلى المجموعة';
+  }
+
+  @override
+  String sysJuzDone(String name, int juz) {
+    return 'أنهى $name الجزء $juz';
+  }
+
+  @override
+  String sysKhatmaDone(int n) {
+    return 'اكتملت الختمة رقم $n. اللهم تقبّل!';
+  }
+
+  @override
+  String get cheerBarakallah => 'بارك الله فيك';
+
+  @override
+  String get cheerMashallah => 'ما شاء الله!';
+
+  @override
+  String get cheerKeepGoing => 'استمر، اقتربت!';
+
+  @override
+  String get cheerDua => 'دعوتُ لك';
+
+  @override
+  String get cheerJazakallah => 'جزاك الله خيرًا';
+
+  @override
+  String get cheerTogether => 'هيا نختمها معًا';
+
+  @override
+  String get leaderKhatma => 'هذه الختمة';
+
+  @override
+  String get leaderWeek => 'هذا الأسبوع';
+
+  @override
+  String leaderKhatmaLine(int round, int total) {
+    return '$round أجزاء في هذه الختمة · $total إجمالًا';
+  }
+
+  @override
+  String leaderWeekLine(int ayahs, int streak) {
+    return '$ayahs آية في ٧ أيام · سلسلة $streak يوم';
+  }
+
+  @override
+  String get leaderboardNote =>
+      'لا يرى هذه القائمة إلا أعضاء المجموعة. تنافسوا في الخير، واجعلوا النية لله.';
+
+  @override
+  String get removeFromGroup => 'إزالة من المجموعة';
+
+  @override
+  String get communityRulesTitle => 'قواعد المجموعات';
+
+  @override
+  String get communityRule1 =>
+      'تكلّم بلطف. لا شتائم ولا إساءة ولا كراهية ولا محتوى جنسي. لا تهاون مطلقًا مع الإساءة.';
+
+  @override
+  String get communityRule2 =>
+      'لا روابط ولا أرقام هواتف ولا حسابات من تطبيقات أخرى، حفاظًا على سلامة الجميع وخاصة الأطفال.';
+
+  @override
+  String get communityRule3 =>
+      'يمكنك التبليغ عن أي رسالة أو عضو، وحظر أي شخص. نراجع البلاغات خلال ٢٤ ساعة.';
+
+  @override
+  String get communityRule4 =>
+      'يُحذف المحتوى المخالف، ويُمنع صاحبه من المجموعات.';
+
+  @override
+  String get communityAgree => 'أوافق';
+
+  @override
+  String get report => 'تبليغ';
+
+  @override
+  String get reportWhy => 'ما سبب التبليغ؟';
+
+  @override
+  String get reportOffensive => 'مسيء أو جارح';
+
+  @override
+  String get reportHarassment => 'تحرّش أو تنمّر';
+
+  @override
+  String get reportSpam => 'رسائل مزعجة';
+
+  @override
+  String get reportInappropriate => 'محتوى غير لائق';
+
+  @override
+  String get reportOther => 'سبب آخر';
+
+  @override
+  String get reportThanks => 'شكرًا، سنراجع البلاغ';
+
+  @override
+  String reportAlsoBlock(String name) {
+    return 'هل تريد أيضًا حظر $name؟ لن ترى أي شيء يكتبه.';
+  }
+
+  @override
+  String get block => 'حظر';
+
+  @override
+  String get unblock => 'إلغاء الحظر';
+
+  @override
+  String blockName(String name) {
+    return 'حظر $name';
+  }
+
+  @override
+  String blockTitle(String name) {
+    return 'حظر $name؟';
+  }
+
+  @override
+  String get blockBody => 'لن ترى رسائله في أي مجموعة، ولن يُبلَّغ بذلك.';
+
+  @override
+  String get blockedUsers => 'المحظورون';
+
+  @override
+  String get blockedUsersEmpty => 'لم تحظر أحدًا.';
+
+  @override
+  String get communityErrOffensive =>
+      'النص يحتوي على كلمات غير مسموحة. أعد صياغته بلطف.';
+
+  @override
+  String get communityErrContact =>
+      'الروابط وأرقام الهواتف والحسابات غير مسموحة في المجموعات.';
+
+  @override
+  String get communityErrTooLong => 'النص طويل جدًا.';
+
+  @override
+  String get communityErrEmpty => 'اكتب شيئًا أولًا.';
+
+  @override
+  String get communityErrSlowDown => 'ترسل الرسائل بسرعة كبيرة. انتظر قليلًا.';
+
+  @override
+  String get communityErrInvalidCode => 'هذا الرمز لا يطابق أي مجموعة.';
+
+  @override
+  String get communityErrGroupFull => 'هذه المجموعة ممتلئة.';
+
+  @override
+  String get communityErrTooManyGroups =>
+      'وصلت إلى الحد الأقصى لعدد المجموعات.';
+
+  @override
+  String get communityErrJuzTaken => 'هذا الجزء محجوز لعضو آخر.';
+
+  @override
+  String get communityErrBanned =>
+      'تم إيقاف وصولك إلى المجموعات بسبب مخالفة القواعد.';
+
+  @override
+  String get communityErrNotAllowed => 'هذا متاح لمشرف المجموعة فقط.';
 }
