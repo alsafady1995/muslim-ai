@@ -5,9 +5,6 @@ import 'package:go_router/go_router.dart';
 import '../features/adhkar/adhkar_screen.dart';
 import '../features/ask/ask_screen.dart';
 import '../features/auth/sign_in_screen.dart';
-import '../features/community/blocked_users_screen.dart';
-import '../features/community/group_screen.dart';
-import '../features/community/groups_screen.dart';
 import '../features/coach/coach_screen.dart';
 import '../features/goals/goals_screen.dart';
 import '../features/hifz/hifz_screen.dart';
@@ -95,9 +92,6 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/goals', builder: (_, _) => const GoalsScreen()),
       GoRoute(path: '/settings', builder: (_, _) => const SettingsScreen()),
       GoRoute(path: '/qibla', builder: (_, _) => const QiblaScreen()),
-      GoRoute(path: '/groups', builder: (_, _) => const GroupsScreen()),
-      GoRoute(path: '/groups/:id', builder: (_, s) => GroupScreen(groupId: s.pathParameters['id']!)),
-      GoRoute(path: '/blocked', builder: (_, _) => const BlockedUsersScreen()),
       GoRoute(
         path: '/paywall',
         pageBuilder: (_, s) => MaterialPage(

@@ -406,7 +406,6 @@ class _QuickActions extends StatelessWidget {
       (Icons.nights_stay, l10n.adhkar, adhkarId == 1 ? l10n.morningAdhkar : (adhkarId == 2 ? l10n.eveningAdhkar : l10n.sleepAdhkar), '/adhkar/$adhkarId'),
       (Icons.mic, l10n.reciteWithAi, l10n.aiCoachHint, '/coach?source=home_grid'),
       (Icons.auto_awesome, l10n.askTheQuran, l10n.askHint, '/ask'),
-      (Icons.groups_2_outlined, l10n.khatmaGroups, l10n.khatmaGroupsHint, '/groups'),
       (Icons.explore_outlined, l10n.qiblaTitle, l10n.qiblaHint, '/qibla'),
     ];
     return GridView.count(

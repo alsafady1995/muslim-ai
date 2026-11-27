@@ -96,14 +96,12 @@ Before launch, run the answer-quality eval described in `docs/` on Haiku. If it 
 | 29 | **Supabase → Auth → Apple: "Client IDs" must list both the Services ID and the bundle id `app.muslimai.mobile`** (comma-separated). Google: list the Web, iOS and Android client ids. | Native iOS Apple tokens carry the bundle id as audience; Supabase rejects them otherwise. |
 | 30 | **Google: register the Play app-signing SHA-1 and the upload-key SHA-1** on the Android OAuth client. | Google Sign-In on Android fails with error 10 otherwise. |
 
-## 5c. Khatma groups and Qibla (27 Nov 2026)
+## 5c. Qibla (27 Nov 2026)
 
 | # | What | Why |
 |---|---|---|
-| 31 | **Review reports within 24 hours.** Supabase → SQL editor: `select * from content_reports where status = 'open' order by created_at;` then `select moderate_report(<id>, 'remove_message' \| 'ban_user' \| 'dismiss');`. Optional: Supabase → Database → Webhooks → on insert into `content_reports` → send yourself an e-mail or Slack message. | Apple guideline 1.2 requires acting on reports within 24 hours. Two reports already hide a message automatically, but a human has to close each report. |
-| 32 | **App Review notes:** say that groups are private and invite-only, that users accept the rules before joining, and where Report and Block are (long-press a message, or Members → ⋮). Give the reviewer an invite code to a test group. | Reviewers reject UGC apps when they can't find these controls. |
-| 33 | **App Privacy / Data safety:** add "User content (messages)" linked to the user, used for app functionality. Location: **not collected** (the Qibla bearing is computed on the phone). | The policies on asmi3ni.com were updated to match. |
-| 34 | **Extend the word filter without a release:** `insert into banned_terms (term) values ('...') on conflict do nothing;` | Ships with a starting Arabic + English list; words that also occur in the Quran are only blocked as insults ("يا كلب"). |
+| 31 | **Khatma groups postponed (decided 27 Nov 2026).** Not in this release. The full feature (groups, messages, leaderboard, filter, report, block) is kept in commit `6e66a4c` on PR #16. Before shipping it later, decide who reviews reports within 24 hours (Apple guideline 1.2), then restore that commit's files. | Apple rejects apps with user messages unless reports are acted on within 24 hours. |
+| 32 | **App Privacy / Data safety:** Location is **not collected** (the Qibla bearing is computed on the phone). Nothing to add. | |
 
 ## 6. Not verified in this build environment
 

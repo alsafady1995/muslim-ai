@@ -13,7 +13,7 @@ Flutter app ──(supabase-js: Auth, PostgREST + RLS, RPC, Storage)──▶ Su
      └──▶ local notifications (adhkar, hifz, streak reminders)
 ```
 
-## Data model (43 tables)
+## Data model (35 tables)
 
 Content (public read): `surahs`, `ayahs`, `ayah_words`, `translations`, `ayah_translations`, `tafsir_sources`,
 `ayah_tafsir`, `reciters`, `hadith_collections`, `hadiths`, `adhkar_categories`, `adhkar`, `content_embeddings`.
@@ -21,9 +21,6 @@ Content (public read): `surahs`, `ayahs`, `ayah_words`, `translations`, `ayah_tr
 User: `profiles`, `goals`, `daily_activity`, `xp_events`, `user_achievements`, `prayer_logs`, `adhkar_progress`,
 `reading_progress`, `bookmarks`, `hifz_plans`, `hifz_items`, `hifz_reviews`, `recitation_sessions`,
 `ai_conversations`, `ai_messages`, `ai_usage`, `subscriptions`, `referrals`.
-
-Community: `khatma_groups`, `khatma_members`, `khatma_parts`, `khatma_messages`, `khatma_bans`, `user_blocks`,
-`content_reports` (moderation queue), `banned_terms` (word filter).
 
 Config: `xp_rules`, `achievements`, `plan_limits`. Audit: `billing_events`.
 
@@ -38,22 +35,9 @@ Service-role only: `begin_ai_call`, `finish_ai_call`, `cancel_ai_call`, `match_c
 Profiles only accept IANA time zones (`Asia/Riyadh`); anything else (`AST`, `+03`) is replaced by a trigger, because
 Postgres reads those abbreviations with the wrong offset and every "today" would roll over hours early.
 
-## Khatma groups (user-generated content)
+## Qibla
 
-Private, invite-only groups (8-character code, max 50 members, 20 groups per user). Each round has 30 `khatma_parts`;
-members claim a juz', the admin can assign or share them out, and when all 30 are read the group starts the next
-khatma. Messages are free text (≤ 500 chars) or preset cheers. The leaderboard (juz' read, ayahs in 7 days, streak)
-is visible to members of that group only. Finishing a group juz' gives no XP, because it can't be verified.
-
-Moderation, enforced in Postgres (App Store guideline 1.2): rules accepted once (`profiles.community_terms_at`);
-`_community_text_check()` refuses offensive terms (Arabic normalised: diacritics, tatweel, alef/ya/ta marbuta forms,
-repeated letters) and links, phone numbers and @handles; 6 messages a minute / 200 a day; report (the reporter stops
-seeing the message, 2 reports hide it for everyone); block (hides the user's messages in every group); the admin
-deletes messages and removes + bans members; `moderate_report()` (service role) removes content or bans a user from
-all groups (`profiles.community_banned_at`). Every write is an RPC; clients only read through RLS.
-
-The chat polls every 10 s while open (no realtime connection). Qibla is computed on the device (great-circle bearing
-from `geolocator` + `flutter_compass`); the location never leaves the phone.
+Computed on the device (great-circle bearing from `geolocator` + `flutter_compass`); the location never leaves the phone.
 
 ## Gamification rules
 

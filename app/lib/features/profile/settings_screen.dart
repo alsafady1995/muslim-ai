@@ -196,7 +196,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         SectionTitle(l10n.account),
         if (user?.isAnonymous == true)
           ListTile(leading: const Icon(Icons.cloud_upload_outlined), title: Text(l10n.saveProgress), onTap: () => context.push('/sign-in?link=1')),
-        ListTile(leading: const Icon(Icons.block), title: Text(l10n.blockedUsers), onTap: () => context.push('/blocked')),
         ListTile(
           leading: const Icon(Icons.privacy_tip_outlined),
           title: Text(l10n.privacyPolicy),
