@@ -18,7 +18,7 @@ t("onboardingSubtitle", "Recite with an AI coach, memorize with a smart plan, an
 t("getStarted", "Get started", "ابدأ الآن"); t("haveAccount", "I already have an account", "لدي حساب بالفعل")
 t("pickDailyGoal", "How much Quran a day?", "كم آية تقرأ يوميًا؟")
 t("goalCasual", "Casual", "خفيف"); t("goalRegular", "Regular", "منتظم"); t("goalSerious", "Serious", "جاد"); t("goalIntense", "Intense", "مكثف")
-t("ayahsPerDay", "{n} ayahs/day", "{n} آيات يوميًا", n="int")
+t("ayahsPerDay", "{n, plural, =1{1 ayah/day} other{{n} ayahs/day}}", "{n, plural, =1{آية يوميًا} =2{آيتان يوميًا} few{{n} آيات يوميًا} other{{n} آية يوميًا}}", n="int")
 t("remindersTitle", "Gentle reminders", "تذكيرات لطيفة")
 t("remindersBody", "We'll remind you of morning and evening adhkar and to keep your streak.", "سنذكّرك بأذكار الصباح والمساء وبالمحافظة على سلسلتك.")
 t("enableReminders", "Enable reminders", "تفعيل التذكيرات"); t("notNow", "Not now", "ليس الآن")
@@ -47,7 +47,7 @@ t("reciteWithAi", "Recite with AI", "رتّل مع الذكاء الاصطناع
 t("adhkar", "Adhkar", "الأذكار"); t("morningAdhkar", "Morning adhkar", "أذكار الصباح"); t("eveningAdhkar", "Evening adhkar", "أذكار المساء"); t("sleepAdhkar", "Sleep adhkar", "أذكار النوم")
 t("askTheQuran", "Ask the Quran", "اسأل القرآن"); t("askHint", "Guidance for life", "إرشاد لحياتك"); t("searchQuran", "Search the Quran", "البحث في القرآن"); t("searchHint", "Search by meaning", "ابحث بالمعنى")
 # quran
-t("findSurah", "Find a surah", "ابحث عن سورة"); t("ayahCount", "{n} ayahs", "{n} آية", n="int"); t("makki", "Makki", "مكية"); t("madani", "Madani", "مدنية")
+t("findSurah", "Find a surah", "ابحث عن سورة"); t("ayahCount", "{n, plural, =1{1 ayah} other{{n} ayahs}}", "{n, plural, =1{آية واحدة} =2{آيتان} few{{n} آيات} other{{n} آية}}", n="int"); t("makki", "Makki", "مكية"); t("madani", "Madani", "مدنية")
 t("ayahN", "Ayah {key}", "آية {key}", key="String"); t("speed", "Speed", "السرعة"); t("repeatRange", "Repeat", "تكرار")
 t("playFromHere", "Play from here", "تشغيل من هنا"); t("repeatAyah3", "Repeat this ayah (memorization)", "كرر هذه الآية (للحفظ)")
 t("quranRef", "Quran {key}", "القرآن {key}", key="String"); t("sharedFromApp", "Shared from Asmi3ni", "عبر تطبيق أسمِعني")

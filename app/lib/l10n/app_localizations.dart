@@ -263,7 +263,7 @@ abstract class AppLocalizations {
   /// No description provided for @ayahsPerDay.
   ///
   /// In en, this message translates to:
-  /// **'{n} ayahs/day'**
+  /// **'{n, plural, =1{1 ayah/day} other{{n} ayahs/day}}'**
   String ayahsPerDay(int n);
 
   /// No description provided for @remindersTitle.
@@ -629,7 +629,7 @@ abstract class AppLocalizations {
   /// No description provided for @ayahCount.
   ///
   /// In en, this message translates to:
-  /// **'{n} ayahs'**
+  /// **'{n, plural, =1{1 ayah} other{{n} ayahs}}'**
   String ayahCount(int n);
 
   /// No description provided for @makki.
