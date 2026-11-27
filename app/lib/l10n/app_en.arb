@@ -41,7 +41,7 @@
   "goalRegular": "Regular",
   "goalSerious": "Serious",
   "goalIntense": "Intense",
-  "ayahsPerDay": "{n} ayahs/day",
+  "ayahsPerDay": "{n, plural, =1{1 ayah/day} other{{n} ayahs/day}}",
   "@ayahsPerDay": {
     "placeholders": {
       "n": {
@@ -140,7 +140,7 @@
   "searchQuran": "Search the Quran",
   "searchHint": "Search by meaning",
   "findSurah": "Find a surah",
-  "ayahCount": "{n} ayahs",
+  "ayahCount": "{n, plural, =1{1 ayah} other{{n} ayahs}}",
   "@ayahCount": {
     "placeholders": {
       "n": {

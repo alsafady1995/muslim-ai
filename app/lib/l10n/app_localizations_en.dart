@@ -97,7 +97,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String ayahsPerDay(int n) {
-    return '$n ayahs/day';
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n ayahs/day',
+      one: '1 ayah/day',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -294,7 +300,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String ayahCount(int n) {
-    return '$n ayahs';
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n ayahs',
+      one: '1 ayah',
+    );
+    return '$_temp0';
   }
 
   @override

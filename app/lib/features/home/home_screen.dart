@@ -209,6 +209,8 @@ class _TodayCard extends ConsumerWidget {
           ),
           if (cta != null && path != null)
             FilledButton(
+              // The theme makes filled buttons full width; inside this Row that is an infinite width.
+              style: FilledButton.styleFrom(minimumSize: const Size(0, 44)),
               onPressed: () async {
                 // Straight into the session: one tap from Home to the first card.
                 if ((action == NextAction.review || action == NextAction.learnNew) && queue != null && !queue.isEmpty) {

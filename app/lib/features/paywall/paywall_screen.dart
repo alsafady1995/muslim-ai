@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/analytics.dart';
@@ -60,7 +61,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
         ref.invalidate(dashboardProvider);
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(context.l10n.welcomePremium)));
-        Navigator.of(context).pop();
+        _close();
       case PurchaseStatus.pending:
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(context.l10n.purchasePending)));
       case PurchaseStatus.cancelled:
@@ -81,6 +82,17 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
     Analytics.track(Events.trialReminderScheduled, {'days': days});
   }
 
+  /// The paywall is normally pushed, but a reload or a direct link on the web opens it as the only
+  /// page; popping that page leaves a blank screen, so go Home instead.
+  void _close() {
+    final nav = Navigator.of(context);
+    if (nav.canPop()) {
+      nav.pop();
+    } else {
+      context.go('/home');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -94,7 +106,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
       (Icons.auto_awesome, l10n.benefitBestAi),
     ];
     return Scaffold(
-      appBar: AppBar(leading: const CloseButton()),
+      appBar: AppBar(leading: CloseButton(onPressed: _close)),
       body: SafeArea(
         child: ListView(padding: const EdgeInsets.fromLTRB(20, 0, 20, 20), children: [
           const Icon(Icons.workspace_premium, size: 56, color: AppColors.gold),
@@ -157,7 +169,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                 // As visible as the buy button's neighbour, not a grey link hidden at the bottom.
                 TextButton(
                   style: TextButton.styleFrom(minimumSize: const Size.fromHeight(48)),
-                  onPressed: _busy ? null : () => Navigator.of(context).pop(),
+                  onPressed: _busy ? null : _close,
                   child: Text(l10n.continueFree),
                 ),
                 const SizedBox(height: 4),
@@ -176,7 +188,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                   _purchased = true;
                   Analytics.track(Events.purchaseRestored);
                   ref.invalidate(premiumProvider);
-                  if (context.mounted) Navigator.of(context).pop();
+                  if (context.mounted) _close();
                 } else if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.nothingToRestore)));
                 }
