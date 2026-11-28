@@ -103,6 +103,18 @@ Before launch, run the answer-quality eval described in `docs/` on Haiku. If it 
 | 31 | **Khatma groups postponed (decided 27 Nov 2026).** Not in this release. The full feature (groups, messages, leaderboard, filter, report, block) is kept in commit `6e66a4c` on PR #16. Before shipping it later, decide who reviews reports within 24 hours (Apple guideline 1.2), then restore that commit's files. | Apple rejects apps with user messages unless reports are acted on within 24 hours. |
 | 32 | **App Privacy / Data safety:** Location is **not collected** (the Qibla bearing is computed on the phone). Nothing to add. | |
 
+## 5d. Recitation accuracy benchmark (before public launch)
+
+Everything we sell depends on the coach not calling a correct recitation wrong. Steps and launch gates:
+[`docs/accuracy-benchmark.md`](docs/accuracy-benchmark.md).
+
+| # | What | Why |
+|---|---|---|
+| 33 | **Build an internal TestFlight / Play test build with `--dart-define=BENCHMARK_RECORDER=true`** (after items 8–12). | Adds Settings → Accuracy recordings. Never in store builds. |
+| 34 | **Collect about 300 labelled clips from at least 30 people**: men, women, children with a parent, at least 30% non-native speakers, 60+ of Al-Fatiha, about 40% with deliberate mistakes. | The benchmark is only as good as its clips. |
+| 35 | **Run `deno task export` and `deno task run --sweep`** in `scripts/accuracy` (service role key + ASR service). | Gives the false-flag rate, mistakes caught and the best threshold. |
+| 36 | **Type Tarteel's results for about 50 of the same clips** into `tarteel.jsonl` and run with `--predictions`. | The only honest way to say "as accurate as Tarteel". |
+
 ## 6. Not verified in this build environment
 
 

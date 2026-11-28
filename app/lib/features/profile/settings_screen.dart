@@ -193,6 +193,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             }
           },
         ),
+        if (AppConfig.benchmarkRecorder && !AppConfig.demoMode)
+          ListTile(
+            leading: const Icon(Icons.graphic_eq),
+            title: Text(l10n.benchTitle),
+            onTap: () => context.push('/benchmark'),
+          ),
         SectionTitle(l10n.account),
         if (user?.isAnonymous == true)
           ListTile(leading: const Icon(Icons.cloud_upload_outlined), title: Text(l10n.saveProgress), onTap: () => context.push('/sign-in?link=1')),

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../features/adhkar/adhkar_screen.dart';
 import '../features/ask/ask_screen.dart';
 import '../features/auth/sign_in_screen.dart';
+import '../features/benchmark/benchmark_recorder_screen.dart';
 import '../features/coach/coach_screen.dart';
 import '../features/goals/goals_screen.dart';
 import '../features/hifz/hifz_screen.dart';
@@ -19,6 +20,7 @@ import '../features/quran/reader_screen.dart';
 import '../features/quran/surah_list_screen.dart';
 import '../features/search/search_screen.dart';
 import '../features/shell/app_shell.dart';
+import 'config.dart';
 import 'providers.dart';
 
 /// Set while the user is in onboarding. The guest account is created early (before the
@@ -91,6 +93,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/adhkar/:id', builder: (_, s) => AdhkarDetailScreen(categoryId: int.parse(s.pathParameters['id']!))),
       GoRoute(path: '/goals', builder: (_, _) => const GoalsScreen()),
       GoRoute(path: '/settings', builder: (_, _) => const SettingsScreen()),
+      if (AppConfig.benchmarkRecorder && !AppConfig.demoMode)
+        GoRoute(path: '/benchmark', builder: (_, _) => const BenchmarkRecorderScreen()),
       GoRoute(path: '/qibla', builder: (_, _) => const QiblaScreen()),
       GoRoute(
         path: '/paywall',

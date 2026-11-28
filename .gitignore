@@ -8,3 +8,5 @@ __pycache__/
 app/android/key.properties
 app/android/*.jks
 app/android/play-service-account.json
+# accuracy benchmark recordings (people's voices) and results
+bench-data/

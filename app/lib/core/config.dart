@@ -19,5 +19,9 @@ class AppConfig {
   /// Web preview with no backend: auth, AI and payments are simulated (lib/demo/).
   static const demoMode = bool.fromEnvironment('DEMO_MODE');
 
+  /// Internal builds only: Settings → Accuracy recordings, for the recitation accuracy
+  /// benchmark (scripts/accuracy). Never set in store builds.
+  static const benchmarkRecorder = bool.fromEnvironment('BENCHMARK_RECORDER');
+
   static bool get hasSupabase => supabaseUrl.isNotEmpty && supabaseAnonKey.isNotEmpty;
 }

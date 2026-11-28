@@ -1236,6 +1236,108 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get benchTitle => 'تسجيلات قياس الدقة';
+
+  @override
+  String get benchConsentTitle => 'ساعدنا نقيس دقة التصحيح';
+
+  @override
+  String get benchConsentBody =>
+      'سجّل تلاوتك، ثم حدّد أي أخطاء وقعت فيها، عمدًا أو سهوًا. على خلاف التصحيح العادي، تُحفظ هذه التسجيلات بشكل خاص ليختبر فريق أسمِعني دقة التطبيق في سماع التلاوة. لا يستطيع أحد غيرهم الاستماع إليها. يمكنك حذفها من هنا في أي وقت، وحذف حسابك يحذفها أيضًا.';
+
+  @override
+  String get benchConsentChild =>
+      'إذا كان القارئ طفلًا، يجب أن يوافق أحد والديه ويسجّل معه.';
+
+  @override
+  String get benchAgree => 'أوافق';
+
+  @override
+  String get benchSpeaker => 'من يتلو؟';
+
+  @override
+  String get benchMan => 'رجل';
+
+  @override
+  String get benchWoman => 'امرأة';
+
+  @override
+  String get benchChild => 'طفل (أقل من ١٥ سنة)';
+
+  @override
+  String get benchNative => 'العربية هي اللغة الأم للقارئ';
+
+  @override
+  String get benchEnvironment => 'أين تسجّل؟';
+
+  @override
+  String get benchQuiet => 'مكان هادئ';
+
+  @override
+  String get benchNoisy => 'يوجد بعض الضجيج';
+
+  @override
+  String get benchRecitePrompt =>
+      'اقرأ المقطع كاملًا. الأخطاء المتعمّدة مفيدة أيضًا: ستحدّدها في الخطوة التالية.';
+
+  @override
+  String get benchStartRecording => 'ابدأ التسجيل';
+
+  @override
+  String get benchStopRecording => 'إيقاف';
+
+  @override
+  String get benchLabelTitle => 'حدّد أخطاءك';
+
+  @override
+  String get benchLabelHint =>
+      'اضغط على الكلمة التي أخطأت فيها. اضغط مرة ثانية إذا تخطّيتها، ومرة ثالثة لإلغاء التحديد.';
+
+  @override
+  String get benchWrong => 'خطأ';
+
+  @override
+  String get benchSkipped => 'متروكة';
+
+  @override
+  String benchMistakesMarked(int n) {
+    return 'عدد الأخطاء المحددة: $n';
+  }
+
+  @override
+  String get benchNoMistakes => 'بدون أخطاء: قرأته صحيحًا';
+
+  @override
+  String get benchListenBack => 'استمع لتسجيلك';
+
+  @override
+  String get benchSave => 'احفظ التسجيل';
+
+  @override
+  String get benchDiscard => 'تجاهل';
+
+  @override
+  String get benchSaved => 'تم الحفظ. جزاك الله خيرًا!';
+
+  @override
+  String benchCount(int n) {
+    return 'عدد تسجيلاتك المحفوظة: $n';
+  }
+
+  @override
+  String get benchAnother => 'سجّل مقطعًا آخر';
+
+  @override
+  String get benchDeleteAll => 'احذف كل تسجيلاتي';
+
+  @override
+  String get benchDeleted => 'تم حذف تسجيلاتك.';
+
+  @override
+  String get benchSaveFailed =>
+      'تعذّر حفظ التسجيل. تحقّق من الاتصال وحاول مرة أخرى.';
+
+  @override
   String get qiblaTitle => 'القبلة';
 
   @override
