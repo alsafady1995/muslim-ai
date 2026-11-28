@@ -20,6 +20,8 @@ jobs:
       - name: Write build config and keystore
         run: |
           echo '${{ secrets.APP_ENV_PROD_JSON }}' > env/prod.json
+          # Public Firebase client config is committed; values in the secret win.
+          jq -s '.[0] * .[1]' env/firebase.json env/prod.json > env/merged.json && mv env/merged.json env/prod.json
           echo '${{ secrets.ANDROID_KEYSTORE_BASE64 }}' | base64 -d > android/upload.jks
           echo '${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}' > android/play-service-account.json
       - name: Build app bundle
@@ -42,7 +44,10 @@ jobs:
         with: { flutter-version: "3.35.7", channel: stable, cache: true }
       - uses: ruby/setup-ruby@v1
         with: { ruby-version: "3.3", bundler-cache: true, working-directory: app }
-      - run: echo '${{ secrets.APP_ENV_PROD_JSON }}' > env/prod.json
+      - name: Write build config
+        run: |
+          echo '${{ secrets.APP_ENV_PROD_JSON }}' > env/prod.json
+          jq -s '.[0] * .[1]' env/firebase.json env/prod.json > env/merged.json && mv env/merged.json env/prod.json
       - name: Register the Google Sign-In URL scheme (reversed iOS client id)
         # google_sign_in on iOS aborts the app if this URL scheme is missing from Info.plist.
         run: |
