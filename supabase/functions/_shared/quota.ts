@@ -1,12 +1,12 @@
 import { admin } from "./supabase.ts";
-import { HttpError } from "./http.ts";
+import { refusalError } from "./ai_refusal.ts";
 
 export type AiFeature = "recitation" | "hifz" | "ask" | "search";
 
 export interface AiCall {
   id: number;
   premium: boolean;
-  tier: "free" | "trial" | "premium" | "promo";
+  tier: "free" | "guest" | "trial" | "premium" | "promo";
   /** True when only the cheaper model fits the remaining budget; use it. */
   degraded: boolean;
   limit: number;
@@ -24,8 +24,8 @@ export interface BeginOptions {
 
 /**
  * Starts a paid AI call: checks the weekly fair-use count and reserves the worst-case cost
- * against the user's AI budget (server-side, atomic). Throws 402 `quota_exceeded` when the
- * weekly count is used up and 429 `ai_budget_exhausted` when the budget is.
+ * against the user's AI budget (server-side, atomic). Throws the errors described in
+ * `ai_refusal.ts` when the call is refused.
  *
  * `fallbackReserveUsd` is the worst case with a cheaper model; when the normal model no
  * longer fits but the cheaper one does, the call is allowed with `degraded: true`.
@@ -46,23 +46,7 @@ export async function beginAiCall(
   });
   if (error) throw error;
   const r = data as Record<string, any>;
-  if (!r.allowed) {
-    if (r.reason === "budget") {
-      throw new HttpError(429, "ai_budget_exhausted", "AI allowance for this period is used up", {
-        feature,
-        premium: r.premium,
-        tier: r.tier,
-        resets_at: r.resets_at,
-      });
-    }
-    throw new HttpError(402, "quota_exceeded", `Weekly ${feature} limit reached`, {
-      feature,
-      premium: r.premium,
-      limit: r.limit,
-      period: r.period ?? "week",
-      resets_at: r.resets_at ?? null,
-    });
-  }
+  if (!r.allowed) throw refusalError(feature, r);
   return {
     id: Number(r.call_id),
     premium: !!r.premium,

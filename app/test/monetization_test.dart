@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:muslim_ai/core/ai_budget.dart';
 import 'package:muslim_ai/core/api.dart';
 import 'package:muslim_ai/core/monetization.dart';
 import 'package:muslim_ai/data/models.dart';
@@ -207,7 +208,7 @@ void main() {
     });
   });
 
-  Future<void> openSheet(WidgetTester tester, bool allowUpgrade) async {
+  Future<void> openSheet(WidgetTester tester, bool allowUpgrade, {bool budget = false, String tier = 'free'}) async {
     await tester.pumpWidget(
       MaterialApp(
         locale: const Locale('en'),
@@ -221,11 +222,17 @@ void main() {
         home: Builder(
           builder: (context) => Scaffold(
             body: TextButton(
-              onPressed: () => showLimitSheet(
-                context,
-                QuotaExceeded('ask', premium: false, limit: 15, resetsAt: DateTime(2026, 11, 27)),
-                allowUpgrade: allowUpgrade,
-              ),
+              onPressed: () => budget
+                  ? showAiBudgetExhausted(
+                      context,
+                      AiBudgetExhausted('recitation', premium: false, tier: tier, resetsAt: DateTime(2026, 12, 1)),
+                      allowUpgrade: allowUpgrade,
+                    )
+                  : showLimitSheet(
+                      context,
+                      QuotaExceeded('ask', premium: false, limit: 15, resetsAt: DateTime(2026, 11, 27)),
+                      allowUpgrade: allowUpgrade,
+                    ),
               child: const Text('open'),
             ),
           ),
@@ -244,6 +251,39 @@ void main() {
 
   testWidgets('limit sheet: no upgrade button in sensitive moments', (tester) async {
     await openSheet(tester, false);
+    expect(find.byType(OutlinedButton), findsOneWidget);
+  });
+
+  testWidgets('AI budget sheet: free users are offered Premium', (tester) async {
+    tester.view.physicalSize = const Size(1170, 2532); // phone
+    addTearDown(tester.view.reset);
+    await openSheet(tester, true, budget: true);
+    expect(find.byType(FilledButton), findsOneWidget);
+  });
+
+  testWidgets('AI budget sheet: guests are asked to create a free account, not to pay', (tester) async {
+    tester.view.physicalSize = const Size(1170, 2532);
+    addTearDown(tester.view.reset);
+    await openSheet(tester, true, budget: true, tier: 'guest');
+    expect(find.text('Create a free account to continue'), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, 'Create a free account'), findsOneWidget);
+    expect(find.byType(FilledButton), findsOneWidget);
+  });
+
+  testWidgets('AI budget sheet: a busy free pool never sells Premium', (tester) async {
+    tester.view.physicalSize = const Size(1170, 2532);
+    addTearDown(tester.view.reset);
+    await openSheet(tester, true, budget: true, tier: 'busy');
+    expect(find.text('Free AI features are busy today'), findsOneWidget);
+    expect(find.byType(FilledButton), findsNothing);
+    expect(find.byType(OutlinedButton), findsOneWidget);
+  });
+
+  testWidgets('AI budget sheet: no Premium offer during onboarding', (tester) async {
+    tester.view.physicalSize = const Size(1170, 2532);
+    addTearDown(tester.view.reset);
+    await openSheet(tester, false, budget: true);
+    expect(find.byType(FilledButton), findsNothing);
     expect(find.byType(OutlinedButton), findsOneWidget);
   });
 }

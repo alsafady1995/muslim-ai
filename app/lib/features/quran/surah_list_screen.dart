@@ -45,12 +45,16 @@ class _SurahListScreenState extends ConsumerState<SurahListScreen> {
                 separatorBuilder: (_, _) => const Divider(height: 1, indent: 72),
                 itemBuilder: (_, i) {
                   final s = filtered[i];
+                  final arabic = context.isArabic;
+                  final place = s.revelationPlace == 'makkah' ? l10n.makki : l10n.madani;
                   return ListTile(
                     leading: CircleAvatar(child: Text('${s.id}')),
-                    title: Text(context.isArabic ? s.nameAr : s.transliteration),
-                    subtitle: Text('${context.isArabic ? s.nameEn : s.nameEn} · ${l10n.ayahCount(s.ayahCount)} · '
-                        '${s.revelationPlace == 'makkah' ? l10n.makki : l10n.madani}'),
-                    trailing: Text(s.nameAr, style: const TextStyle(fontSize: 20)),
+                    title: Text(arabic ? s.nameAr : s.transliteration),
+                    // In Arabic the title is already the Arabic name, so no English meaning and no second Arabic name.
+                    subtitle: Text(arabic
+                        ? '${l10n.ayahCount(s.ayahCount)} · $place'
+                        : '${s.nameEn} · ${l10n.ayahCount(s.ayahCount)} · $place'),
+                    trailing: arabic ? null : Text(s.nameAr, style: const TextStyle(fontSize: 20)),
                     onTap: () => context.go('/quran/${s.id}'),
                   );
                 },

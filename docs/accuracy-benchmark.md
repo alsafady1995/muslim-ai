@@ -2,7 +2,7 @@
 
 How we prove (or disprove) that Asmi3ni hears recitation correctly before launch, and how we compare it with Tarteel
 on the same recordings. Code: `scripts/accuracy/`, the in-app recorder in `app/lib/features/benchmark/`, and the
-`benchmark_clips` table (`supabase/migrations/20261124000010_accuracy_benchmark.sql`).
+`benchmark_clips` table (`supabase/migrations/20261128000001_accuracy_benchmark.sql`).
 
 ## ملخص بالعربية
 

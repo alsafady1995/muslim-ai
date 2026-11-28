@@ -35,6 +35,10 @@ Service-role only: `begin_ai_call`, `finish_ai_call`, `cancel_ai_call`, `match_c
 Profiles only accept IANA time zones (`Asia/Riyadh`); anything else (`AST`, `+03`) is replaced by a trigger, because
 Postgres reads those abbreviations with the wrong offset and every "today" would roll over hours early.
 
+## Qibla
+
+Computed on the device (great-circle bearing from `geolocator` + `flutter_compass`); the location never leaves the phone.
+
 ## Gamification rules
 
 - Level = floor(sqrt(xp / 50)) + 1.
@@ -74,12 +78,19 @@ Rule: no user may cost more in AI than half of what they pay. Weekly counts abov
 | Premium | 50% of the user's net payment (after store commission and tax) | Monthly from the purchase date. Annual plans pool the whole year, but any one month may spend at most 3× the monthly share |
 | Free trial (7 days) | $0.25 for the whole trial | Trial period |
 | Promotional grant | $0.15 | Calendar month |
-| Free | $0.15 | Calendar month (UTC) |
+| Free (signed-in account) | $0.05 | Calendar month (UTC) |
+| Guest (anonymous account) | $0.01, onboarding Al-Fatiha check only; any other AI call asks them to create a free account | Calendar month (UTC) |
+
+**Free-tier daily pool:** all free and guest AI together may spend at most `free_daily_pool_usd` ($20) per UTC day
+(`ai_free_pool`). When it is full, free AI pauses until midnight UTC with a "busy today" sheet (no Premium offer);
+paying users never touch the pool. Raise the setting as the user base grows: about $0.0005 per free monthly active user per day (≈ 1.5× the expected average use), so $20 covers ≈ 40k free MAU.
+Why: an average active user earns ≈ $0.04 a month, so the free budget must stay near that and total free spend must
+have a ceiling (`docs/strategy/financial-viability.md` §4.4).
 
 ```
 edge function ──begin_ai_call(user, feature, worst-case cost [, cheaper-model cost])──▶ Postgres
                  · locks ai_spend row, checks budget and ring-fence, then weekly count, reserves cost
-             ◀── allowed / degraded / 429 ai_budget_exhausted (resets_at)
+             ◀── allowed / degraded / 429 ai_budget_exhausted (tier, resets_at; tier guest = sign in, busy = pool full)
    …AI work (Claude / ASR / embeddings)…
 edge function ──finish_ai_call(call, measured cost) or cancel_ai_call(call)──▶ Postgres
 ```
@@ -98,5 +109,5 @@ edge function ──finish_ai_call(call, measured cost) or cancel_ai_call(call)�
 
 - Content queries are cacheable and read-only; move them behind a CDN or ship an offline bundle in Phase 2.
 - `content_embeddings` uses an HNSW index; ~60k vectors fit comfortably on the smallest Supabase compute.
-- The ASR service is stateless and scales to zero on Cloud Run; switch to GPU instances only if latency requires it.
+- The ASR service is stateless and scales to zero on Modal (`services/asr/modal_app.py`, per-second billing); the same Dockerfile runs on Cloud Run or any container host. Switch to GPU only if latency requires it.
 - Claude system prompt is byte-stable and cached (`cache_control`), so repeated calls mostly pay for the question and sources.

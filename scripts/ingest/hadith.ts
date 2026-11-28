@@ -53,15 +53,23 @@ for (const c of COLLECTIONS) {
   const enByNo = new Map(
     (en.hadiths as any[]).map((h) => [String(h.hadithnumber), h]),
   );
+  const seen = new Set<number>();
   const rows = (ar.hadiths as any[]).filter((h) => h.text?.trim()).map((h) => {
     const no = String(h.hadithnumber);
+    // number*10 is the stable id; sub-numbers like 3604.02 collide with 3604, so those few get a
+    // separate deterministic id range (+500000, number*100) instead of breaking the upsert batch.
+    let id = c.id * 1_000_000 + Math.round(Number(h.hadithnumber) * 10);
+    if (seen.has(id)) {
+      id = c.id * 1_000_000 + 500_000 + Math.round(Number(h.hadithnumber) * 100) % 500_000;
+    }
+    seen.add(id);
     const e = enByNo.get(no);
     const grade = (h.grades?.[0] ?? e?.grades?.[0]) as {
       name: string;
       grade: string;
     } | undefined;
     return {
-      id: c.id * 1_000_000 + Math.round(Number(h.hadithnumber) * 10),
+      id,
       collection_id: c.id,
       hadith_number: no,
       book: h.reference?.book != null ? String(h.reference.book) : null,

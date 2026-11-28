@@ -45,6 +45,8 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Asmi3ni uses your approximate location to point the Qibla compass towards Makkah. Your location stays on your phone.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Asmi3ni listens to your recitation so the AI coach can give you feedback.</string>
 	<key>CFBundleURLTypes</key>

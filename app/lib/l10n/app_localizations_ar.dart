@@ -96,7 +96,15 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String ayahsPerDay(int n) {
-    return '$n آيات يوميًا';
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n آية يوميًا',
+      few: '$n آيات يوميًا',
+      two: 'آيتان يوميًا',
+      one: 'آية يوميًا',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -291,7 +299,15 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String ayahCount(int n) {
-    return '$n آية';
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n آية',
+      few: '$n آيات',
+      two: 'آيتان',
+      one: 'آية واحدة',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -848,6 +864,24 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get aiGuestTitle => 'أنشئ حسابًا مجانيًا للمتابعة';
+
+  @override
+  String get aiGuestBody =>
+      'يعمل المدرّب الذكي مع حساب مجاني. يستغرق إنشاؤه ثوانيَ، ويبقى تقدّمك وسلسلتك وخطة حفظك كما هي.';
+
+  @override
+  String get createFreeAccount => 'إنشاء حساب مجاني';
+
+  @override
+  String get aiBusyTitle => 'ميزات الذكاء الاصطناعي المجانية مشغولة اليوم';
+
+  @override
+  String aiBusyBody(String time) {
+    return 'يستخدم كثيرون المدرّب الذكي المجاني اليوم، لذا يتوقف مؤقتًا حتى $time. القراءة والاستماع والبحث بالكلمات والأذكار ومراجعة الحفظ تعمل كالمعتاد.';
+  }
+
+  @override
   String aiLighterMode(String date) {
     return 'اقتربت من رصيد الذكاء الاصطناعي لهذه الفترة، لذا تُستخدم إجابات أخف حتى $date.';
   }
@@ -1302,4 +1336,59 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get benchSaveFailed =>
       'تعذّر حفظ التسجيل. تحقّق من الاتصال وحاول مرة أخرى.';
+
+  @override
+  String get qiblaTitle => 'القبلة';
+
+  @override
+  String get qiblaHint => 'اتجاه الكعبة من مكانك';
+
+  @override
+  String get qiblaFacing => 'أنت باتجاه القبلة';
+
+  @override
+  String qiblaTurnRight(int deg) {
+    return 'استدر يمينًا $deg°';
+  }
+
+  @override
+  String qiblaTurnLeft(int deg) {
+    return 'استدر يسارًا $deg°';
+  }
+
+  @override
+  String qiblaNoSensor(int deg) {
+    return 'لا توجد بوصلة في هذا الهاتف. اتجه $deg° من الشمال.';
+  }
+
+  @override
+  String qiblaBearing(int deg) {
+    return 'القبلة: $deg° من الشمال';
+  }
+
+  @override
+  String qiblaDistance(int km) {
+    return '$km كم إلى مكة';
+  }
+
+  @override
+  String get qiblaCalibrate =>
+      'ضع الهاتف مستويًا وبعيدًا عن المعادن. إذا بدا الاتجاه غير دقيق، حرّك الهاتف على شكل الرقم ٨.';
+
+  @override
+  String get qiblaPrivacy => 'موقعك يبقى على هاتفك ولا يُرسل لأي جهة.';
+
+  @override
+  String get qiblaLocationOff => 'فعّل خدمات الموقع لتحديد القبلة.';
+
+  @override
+  String get qiblaPermission =>
+      'اسمح بالوصول إلى الموقع حتى نحدّد القبلة من مكانك.';
+
+  @override
+  String get qiblaLocationError =>
+      'تعذّر تحديد موقعك. حاول مرة أخرى في مكان مفتوح أو قرب نافذة.';
+
+  @override
+  String get openSettings => 'فتح الإعدادات';
 }

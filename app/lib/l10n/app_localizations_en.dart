@@ -97,7 +97,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String ayahsPerDay(int n) {
-    return '$n ayahs/day';
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n ayahs/day',
+      one: '1 ayah/day',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -294,7 +300,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String ayahCount(int n) {
-    return '$n ayahs';
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n ayahs',
+      one: '1 ayah',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -854,6 +866,24 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get aiGuestTitle => 'Create a free account to continue';
+
+  @override
+  String get aiGuestBody =>
+      'The AI coach works with a free account. It takes a few seconds, and your progress, streak and hifz plan stay with you.';
+
+  @override
+  String get createFreeAccount => 'Create a free account';
+
+  @override
+  String get aiBusyTitle => 'Free AI features are busy today';
+
+  @override
+  String aiBusyBody(String time) {
+    return 'Many people are using the free AI coach today, so it pauses until $time. Reading, listening, keyword search, adhkar and your hifz reviews keep working.';
+  }
+
+  @override
   String aiLighterMode(String date) {
     return 'You\'re near this month\'s AI allowance, so answers use a lighter model until $date.';
   }
@@ -1313,4 +1343,59 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get benchSaveFailed =>
       'Couldn\'t save the recording. Check your connection and try again.';
+
+  @override
+  String get qiblaTitle => 'Qibla';
+
+  @override
+  String get qiblaHint => 'Find the direction of Makkah';
+
+  @override
+  String get qiblaFacing => 'You are facing the Qibla';
+
+  @override
+  String qiblaTurnRight(int deg) {
+    return 'Turn right $deg°';
+  }
+
+  @override
+  String qiblaTurnLeft(int deg) {
+    return 'Turn left $deg°';
+  }
+
+  @override
+  String qiblaNoSensor(int deg) {
+    return 'This phone has no compass. Face $deg° from north.';
+  }
+
+  @override
+  String qiblaBearing(int deg) {
+    return 'Qibla: $deg° from north';
+  }
+
+  @override
+  String qiblaDistance(int km) {
+    return '$km km to Makkah';
+  }
+
+  @override
+  String get qiblaCalibrate =>
+      'Keep the phone flat and away from metal. If the direction looks off, move the phone in a figure 8.';
+
+  @override
+  String get qiblaPrivacy => 'Your location stays on your phone.';
+
+  @override
+  String get qiblaLocationOff => 'Turn on location services to find the Qibla.';
+
+  @override
+  String get qiblaPermission =>
+      'Allow location access so we can work out the Qibla from where you are.';
+
+  @override
+  String get qiblaLocationError =>
+      'We couldn\'t get your location. Try again outdoors or near a window.';
+
+  @override
+  String get openSettings => 'Open settings';
 }

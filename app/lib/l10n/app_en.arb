@@ -41,7 +41,7 @@
   "goalRegular": "Regular",
   "goalSerious": "Serious",
   "goalIntense": "Intense",
-  "ayahsPerDay": "{n} ayahs/day",
+  "ayahsPerDay": "{n, plural, =1{1 ayah/day} other{{n} ayahs/day}}",
   "@ayahsPerDay": {
     "placeholders": {
       "n": {
@@ -140,7 +140,7 @@
   "searchQuran": "Search the Quran",
   "searchHint": "Search by meaning",
   "findSurah": "Find a surah",
-  "ayahCount": "{n} ayahs",
+  "ayahCount": "{n, plural, =1{1 ayah} other{{n} ayahs}}",
   "@ayahCount": {
     "placeholders": {
       "n": {
@@ -429,6 +429,18 @@
   "@aiBudgetTrial": {
     "placeholders": {
       "date": {
+        "type": "String"
+      }
+    }
+  },
+  "aiGuestTitle": "Create a free account to continue",
+  "aiGuestBody": "The AI coach works with a free account. It takes a few seconds, and your progress, streak and hifz plan stay with you.",
+  "createFreeAccount": "Create a free account",
+  "aiBusyTitle": "Free AI features are busy today",
+  "aiBusyBody": "Many people are using the free AI coach today, so it pauses until {time}. Reading, listening, keyword search, adhkar and your hifz reviews keep working.",
+  "@aiBusyBody": {
+    "placeholders": {
+      "time": {
         "type": "String"
       }
     }
@@ -800,5 +812,54 @@
   "benchAnother": "Record another",
   "benchDeleteAll": "Delete all my recordings",
   "benchDeleted": "Your recordings were deleted.",
-  "benchSaveFailed": "Couldn't save the recording. Check your connection and try again."
+  "benchSaveFailed": "Couldn't save the recording. Check your connection and try again.",
+  "qiblaTitle": "Qibla",
+  "qiblaHint": "Find the direction of Makkah",
+  "qiblaFacing": "You are facing the Qibla",
+  "qiblaTurnRight": "Turn right {deg}°",
+  "@qiblaTurnRight": {
+    "placeholders": {
+      "deg": {
+        "type": "int"
+      }
+    }
+  },
+  "qiblaTurnLeft": "Turn left {deg}°",
+  "@qiblaTurnLeft": {
+    "placeholders": {
+      "deg": {
+        "type": "int"
+      }
+    }
+  },
+  "qiblaNoSensor": "This phone has no compass. Face {deg}° from north.",
+  "@qiblaNoSensor": {
+    "placeholders": {
+      "deg": {
+        "type": "int"
+      }
+    }
+  },
+  "qiblaBearing": "Qibla: {deg}° from north",
+  "@qiblaBearing": {
+    "placeholders": {
+      "deg": {
+        "type": "int"
+      }
+    }
+  },
+  "qiblaDistance": "{km} km to Makkah",
+  "@qiblaDistance": {
+    "placeholders": {
+      "km": {
+        "type": "int"
+      }
+    }
+  },
+  "qiblaCalibrate": "Keep the phone flat and away from metal. If the direction looks off, move the phone in a figure 8.",
+  "qiblaPrivacy": "Your location stays on your phone.",
+  "qiblaLocationOff": "Turn on location services to find the Qibla.",
+  "qiblaPermission": "Allow location access so we can work out the Qibla from where you are.",
+  "qiblaLocationError": "We couldn't get your location. Try again outdoors or near a window.",
+  "openSettings": "Open settings"
 }

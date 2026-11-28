@@ -50,6 +50,14 @@ class AudioController extends Notifier<AudioState> {
         _accumulateListening();
       }
     }));
+    // At the end of the playlist just_audio keeps `playing == true`, so listening time would
+    // keep counting until the next pause (hours later) and inflate the "listen" goal and XP.
+    // Pause at the end and rewind, which also makes the play button start over.
+    _subs.add(_player.processingStateStream.listen((s) {
+      if (s == ProcessingState.completed) {
+        _player.pause().then((_) => _player.seek(Duration.zero, index: 0)).ignore();
+      }
+    }));
     ref.onDispose(() {
       for (final s in _subs) {
         s.cancel();

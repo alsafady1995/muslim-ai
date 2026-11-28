@@ -15,6 +15,7 @@ import '../features/onboarding/onboarding_screen.dart';
 import '../features/paywall/paywall_screen.dart';
 import '../features/profile/profile_screen.dart';
 import '../features/profile/settings_screen.dart';
+import '../features/qibla/qibla_screen.dart';
 import '../features/quran/reader_screen.dart';
 import '../features/quran/surah_list_screen.dart';
 import '../features/search/search_screen.dart';
@@ -39,7 +40,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       final inProgress = ref.read(sharedPrefsProvider).getBool(onboardingInProgressKey) ?? false;
       final loc = state.matchedLocation;
       final onboarding = loc == '/onboarding' || loc == '/sign-in';
-      // The onboarding Al-Fatiha check opens the coach and the paywall must stay reachable.
+      // The onboarding Al-Fatiha check opens the coach. The paywall is deliberately not reachable
+      // during onboarding (no ask for money before the user has had value).
       final allowedDuringOnboarding = onboarding || loc == '/coach';
       if (!signedIn && !onboarding) return '/onboarding';
       if (signedIn && inProgress && !allowedDuringOnboarding) return '/onboarding';
@@ -93,6 +95,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/settings', builder: (_, _) => const SettingsScreen()),
       if (AppConfig.benchmarkRecorder && !AppConfig.demoMode)
         GoRoute(path: '/benchmark', builder: (_, _) => const BenchmarkRecorderScreen()),
+      GoRoute(path: '/qibla', builder: (_, _) => const QiblaScreen()),
       GoRoute(
         path: '/paywall',
         pageBuilder: (_, s) => MaterialPage(

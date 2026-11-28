@@ -11,7 +11,7 @@ the "Where it goes" column says where to paste the result. Order = fastest path 
 | 2 | **Supabase project** | supabase.com → New project → region **Middle East (Bahrain) or EU (Frankfurt)**, Pro plan ($25/mo) recommended at launch. Settings → API: copy Project URL, anon/publishable key, service role key. Settings → Access tokens: create a token. | App: `env/prod.json` (`SUPABASE_URL`, `SUPABASE_ANON_KEY`). GitHub secrets: `SUPABASE_ACCESS_TOKEN`, `SUPABASE_PROJECT_REF`, `SUPABASE_DB_PASSWORD`. |
 | 3 | **Anthropic API key** | console.anthropic.com → API keys → Create. Add billing (prepaid credit). | `supabase secrets set ANTHROPIC_API_KEY=...` |
 | 4 | **Voyage AI key** (embeddings) | dash.voyageai.com → API keys. One-time ingest costs about $1–3. | `supabase secrets set VOYAGE_API_KEY=...` and local env for `scripts/ingest` |
-| 5 | **Google Cloud** (ASR service) | console.cloud.google.com → new project → enable Cloud Run + billing → run the `gcloud run deploy` command in `services/asr/README.md`. | `supabase secrets set ASR_SERVICE_URL=... ASR_SERVICE_TOKEN=...` |
+| 5 | **Modal** (ASR service) | **Deployed 2026-11-25** at `https://alsafady1995--asmi3ni-asr-web.us-east.modal.run` (healthz OK, Al-Fatiha transcribed); still to do: set a spend limit and the two Supabase secrets. To redeploy: modal.com → sign up (Starter plan, $30 free compute a month) → add a card and a spend limit → run the `modal deploy` steps in `services/asr/README.md`. (Google Cloud with a Saudi billing address requires a reseller contract with CNTXT, so it is no longer the default.) | `supabase secrets set ASR_SERVICE_URL=... ASR_SERVICE_TOKEN=...` |
 | 6 | **PostHog** | posthog.com → EU cloud → project API key. | App `POSTHOG_KEY`; secret `POSTHOG_API_KEY` |
 | 7 | **Sentry** | sentry.io → new Flutter project → DSN. | App `SENTRY_DSN` |
 
@@ -50,7 +50,7 @@ Apple: Subscription → Subscription Prices → Add pricing → pick the storefr
 
 | Tier | Model | Cost per answer* | Weekly Ask limit | Hard AI budget (all AI features) |
 |---|---|---|---|---|
-| Free | Claude Haiku 5.5 | ≈ $0.001 | 15 questions | $0.15 / month |
+| Free | Claude Haiku 5.5 | ≈ $0.001 | 15 questions | $0.05 / month (guests: onboarding check only), plus a $20/day pool for all free users |
 | Trial (7 days) | Claude Sonnet 5.5 | ≈ $0.02 | 100 questions (fair use) | $0.25 for the trial |
 | Premium | Claude Sonnet 5.5, then Haiku near the limit | ≈ $0.02 | 100 questions (fair use) | 50% of what the user paid |
 
@@ -69,8 +69,8 @@ All weekly limits are in `ARCHITECTURE.md` ("AI limits"); they renew every Frida
 
 After that, premium answers continue on Haiku until the budget is fully used, then AI pauses with a friendly
 message until the next monthly window. Tune with SQL, no release needed:
-`update ai_budget_settings set value = 0.15 where key = 'free_monthly_usd';` (keys: `cost_share`, `free_monthly_usd`,
-`trial_budget_usd`, `promo_monthly_usd`, `fallback_net_monthly_usd`, `core_share`, `annual_pace_multiple`). Watch `ai_spend` for how many users hit the cap.
+`update ai_budget_settings set value = 0.05 where key = 'free_monthly_usd';` (keys: `cost_share`, `free_monthly_usd`, `guest_monthly_usd`, `free_daily_pool_usd`,
+`trial_budget_usd`, `promo_monthly_usd`, `fallback_net_monthly_usd`, `core_share`, `annual_pace_multiple`). Watch `ai_spend` for how many users hit the cap, and `ai_free_pool` (`used_usd`, `refused`) for days the free pool filled up.
 
 Before launch, run the answer-quality eval described in `docs/` on Haiku. If it fails, raise the free model with
 `supabase secrets set CLAUDE_MODEL=claude-sonnet-5-5` and re-check this table.
@@ -87,17 +87,33 @@ Before launch, run the answer-quality eval described in `docs/` on Haiku. If it 
 | 25 | **RevenueCat offering:** make sure `default` lists `$rc_annual` first and both products are attached to entitlement `premium`. | The paywall shows whatever the offering returns. |
 | 26 | **PostHog dashboards** for the funnel in `docs/full-audit.md` §7 (onboarding → first recitation → day-3 value gate → paywall view → trial → paid). | All events are already sent; you only need to build the charts. |
 
-## 5b. Recitation accuracy benchmark (before public launch)
+## 5b. From the end-to-end verification (24 Nov 2026)
+
+| # | What | Why |
+|---|---|---|
+| 27 | **Apple: enable "Sign in with Apple" on the App ID `app.muslimai.mobile`**, then regenerate the match profile once: `cd app/ios && bundle exec fastlane match appstore --force` (needs the match repo). | The app now ships the Sign in with Apple entitlement (it was missing, so the Apple button failed on iOS). A profile without the capability fails the release build. |
+| 28 | **`GOOGLE_IOS_CLIENT_ID` must be in `APP_ENV_PROD_JSON`.** The iOS release job turns it into the URL scheme Google Sign-In needs and stops with an error if it is missing. For local iOS runs add the reversed id (`com.googleusercontent.apps.…`) to `CFBundleURLTypes` in `ios/Runner/Info.plist` yourself. | Without that URL scheme Google Sign-In aborts the app on iOS. |
+| 29 | **Supabase → Auth → Apple: "Client IDs" must list both the Services ID and the bundle id `app.muslimai.mobile`** (comma-separated). Google: list the Web, iOS and Android client ids. | Native iOS Apple tokens carry the bundle id as audience; Supabase rejects them otherwise. |
+| 30 | **Google: register the Play app-signing SHA-1 and the upload-key SHA-1** on the Android OAuth client. | Google Sign-In on Android fails with error 10 otherwise. |
+
+## 5c. Qibla (27 Nov 2026)
+
+| # | What | Why |
+|---|---|---|
+| 31 | **Khatma groups postponed (decided 27 Nov 2026).** Not in this release. The full feature (groups, messages, leaderboard, filter, report, block) is kept in commit `6e66a4c` on PR #16. Before shipping it later, decide who reviews reports within 24 hours (Apple guideline 1.2), then restore that commit's files. | Apple rejects apps with user messages unless reports are acted on within 24 hours. |
+| 32 | **App Privacy / Data safety:** Location is **not collected** (the Qibla bearing is computed on the phone). Nothing to add. | |
+
+## 5d. Recitation accuracy benchmark (before public launch)
 
 Everything we sell depends on the coach not calling a correct recitation wrong. Steps and launch gates:
 [`docs/accuracy-benchmark.md`](docs/accuracy-benchmark.md).
 
 | # | What | Why |
 |---|---|---|
-| 27 | **Build an internal TestFlight / Play test build with `--dart-define=BENCHMARK_RECORDER=true`** (after items 8–12). | Adds Settings → Accuracy recordings. Never in store builds. |
-| 28 | **Collect about 300 labelled clips from at least 30 people**: men, women, children with a parent, at least 30% non-native speakers, 60+ of Al-Fatiha, about 40% with deliberate mistakes. | The benchmark is only as good as its clips. |
-| 29 | **Run `deno task export` and `deno task run --sweep`** in `scripts/accuracy` (service role key + ASR service). | Gives the false-flag rate, mistakes caught and the best threshold. |
-| 30 | **Type Tarteel's results for about 50 of the same clips** into `tarteel.jsonl` and run with `--predictions`. | The only honest way to say "as accurate as Tarteel". |
+| 33 | **Build an internal TestFlight / Play test build with `--dart-define=BENCHMARK_RECORDER=true`** (after items 8–12). | Adds Settings → Accuracy recordings. Never in store builds. |
+| 34 | **Collect about 300 labelled clips from at least 30 people**: men, women, children with a parent, at least 30% non-native speakers, 60+ of Al-Fatiha, about 40% with deliberate mistakes. | The benchmark is only as good as its clips. |
+| 35 | **Run `deno task export` and `deno task run --sweep`** in `scripts/accuracy` (service role key + ASR service). | Gives the false-flag rate, mistakes caught and the best threshold. |
+| 36 | **Type Tarteel's results for about 50 of the same clips** into `tarteel.jsonl` and run with `--predictions`. | The only honest way to say "as accurate as Tarteel". |
 
 ## 6. Not verified in this build environment
 

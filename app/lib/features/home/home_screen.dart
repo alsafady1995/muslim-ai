@@ -209,6 +209,8 @@ class _TodayCard extends ConsumerWidget {
           ),
           if (cta != null && path != null)
             FilledButton(
+              // The theme makes filled buttons full width; inside this Row that is an infinite width.
+              style: FilledButton.styleFrom(minimumSize: const Size(0, 44)),
               onPressed: () async {
                 // Straight into the session: one tap from Home to the first card.
                 if ((action == NextAction.review || action == NextAction.learnNew) && queue != null && !queue.isEmpty) {
@@ -406,6 +408,7 @@ class _QuickActions extends StatelessWidget {
       (Icons.nights_stay, l10n.adhkar, adhkarId == 1 ? l10n.morningAdhkar : (adhkarId == 2 ? l10n.eveningAdhkar : l10n.sleepAdhkar), '/adhkar/$adhkarId'),
       (Icons.mic, l10n.reciteWithAi, l10n.aiCoachHint, '/coach?source=home_grid'),
       (Icons.auto_awesome, l10n.askTheQuran, l10n.askHint, '/ask'),
+      (Icons.explore_outlined, l10n.qiblaTitle, l10n.qiblaHint, '/qibla'),
     ];
     return GridView.count(
       crossAxisCount: 2,

@@ -18,7 +18,7 @@ t("onboardingSubtitle", "Recite with an AI coach, memorize with a smart plan, an
 t("getStarted", "Get started", "ابدأ الآن"); t("haveAccount", "I already have an account", "لدي حساب بالفعل")
 t("pickDailyGoal", "How much Quran a day?", "كم آية تقرأ يوميًا؟")
 t("goalCasual", "Casual", "خفيف"); t("goalRegular", "Regular", "منتظم"); t("goalSerious", "Serious", "جاد"); t("goalIntense", "Intense", "مكثف")
-t("ayahsPerDay", "{n} ayahs/day", "{n} آيات يوميًا", n="int")
+t("ayahsPerDay", "{n, plural, =1{1 ayah/day} other{{n} ayahs/day}}", "{n, plural, =1{آية يوميًا} =2{آيتان يوميًا} few{{n} آيات يوميًا} other{{n} آية يوميًا}}", n="int")
 t("remindersTitle", "Gentle reminders", "تذكيرات لطيفة")
 t("remindersBody", "We'll remind you of morning and evening adhkar and to keep your streak.", "سنذكّرك بأذكار الصباح والمساء وبالمحافظة على سلسلتك.")
 t("enableReminders", "Enable reminders", "تفعيل التذكيرات"); t("notNow", "Not now", "ليس الآن")
@@ -47,7 +47,7 @@ t("reciteWithAi", "Recite with AI", "رتّل مع الذكاء الاصطناع
 t("adhkar", "Adhkar", "الأذكار"); t("morningAdhkar", "Morning adhkar", "أذكار الصباح"); t("eveningAdhkar", "Evening adhkar", "أذكار المساء"); t("sleepAdhkar", "Sleep adhkar", "أذكار النوم")
 t("askTheQuran", "Ask the Quran", "اسأل القرآن"); t("askHint", "Guidance for life", "إرشاد لحياتك"); t("searchQuran", "Search the Quran", "البحث في القرآن"); t("searchHint", "Search by meaning", "ابحث بالمعنى")
 # quran
-t("findSurah", "Find a surah", "ابحث عن سورة"); t("ayahCount", "{n} ayahs", "{n} آية", n="int"); t("makki", "Makki", "مكية"); t("madani", "Madani", "مدنية")
+t("findSurah", "Find a surah", "ابحث عن سورة"); t("ayahCount", "{n, plural, =1{1 ayah} other{{n} ayahs}}", "{n, plural, =1{آية واحدة} =2{آيتان} few{{n} آيات} other{{n} آية}}", n="int"); t("makki", "Makki", "مكية"); t("madani", "Madani", "مدنية")
 t("ayahN", "Ayah {key}", "آية {key}", key="String"); t("speed", "Speed", "السرعة"); t("repeatRange", "Repeat", "تكرار")
 t("playFromHere", "Play from here", "تشغيل من هنا"); t("repeatAyah3", "Repeat this ayah (memorization)", "كرر هذه الآية (للحفظ)")
 t("quranRef", "Quran {key}", "القرآن {key}", key="String"); t("sharedFromApp", "Shared from Asmi3ni", "عبر تطبيق أسمِعني")
@@ -139,6 +139,11 @@ t("aiBudgetTitle", "This month's AI allowance is used up", "انتهى رصيد 
 t("aiBudgetPremium", "To keep Premium affordable for everyone, AI features pause until {date}. Reading, listening, keyword search, adhkar and your hifz reviews keep working as usual.", "حتى يبقى بريميوم بسعر في متناول الجميع، تتوقف ميزات الذكاء الاصطناعي حتى {date}. القراءة والاستماع والبحث بالكلمات والأذكار ومراجعة الحفظ تعمل كالمعتاد.", date="String")
 t("aiBudgetFree", "Free AI features renew on {date}. Premium includes a much larger allowance. Meanwhile, reading, listening and your hifz reviews keep working.", "تتجدد ميزات الذكاء الاصطناعي المجانية في {date}. يتضمن بريميوم رصيدًا أكبر بكثير. وحتى ذلك الحين تعمل القراءة والاستماع ومراجعة الحفظ كالمعتاد.", date="String")
 t("aiBudgetTrial", "You've used the AI allowance included in your free trial. It renews when your subscription starts on {date}.", "استهلكت رصيد الذكاء الاصطناعي المضمَّن في الفترة التجريبية. يتجدد عند بدء اشتراكك في {date}.", date="String")
+t("aiGuestTitle", "Create a free account to continue", "أنشئ حسابًا مجانيًا للمتابعة")
+t("aiGuestBody", "The AI coach works with a free account. It takes a few seconds, and your progress, streak and hifz plan stay with you.", "يعمل المدرّب الذكي مع حساب مجاني. يستغرق إنشاؤه ثوانيَ، ويبقى تقدّمك وسلسلتك وخطة حفظك كما هي.")
+t("createFreeAccount", "Create a free account", "إنشاء حساب مجاني")
+t("aiBusyTitle", "Free AI features are busy today", "ميزات الذكاء الاصطناعي المجانية مشغولة اليوم")
+t("aiBusyBody", "Many people are using the free AI coach today, so it pauses until {time}. Reading, listening, keyword search, adhkar and your hifz reviews keep working.", "يستخدم كثيرون المدرّب الذكي المجاني اليوم، لذا يتوقف مؤقتًا حتى {time}. القراءة والاستماع والبحث بالكلمات والأذكار ومراجعة الحفظ تعمل كالمعتاد.", time="String")
 t("aiLighterMode", "You're near this month's AI allowance, so answers use a lighter model until {date}.", "اقتربت من رصيد الذكاء الاصطناعي لهذه الفترة، لذا تُستخدم إجابات أخف حتى {date}.", date="String")
 
 # ---------------------------------------------------------------------------
@@ -272,6 +277,20 @@ t("benchDeleteAll", "Delete all my recordings", "احذف كل تسجيلاتي"
 t("benchDeleted", "Your recordings were deleted.", "تم حذف تسجيلاتك.")
 t("benchSaveFailed", "Couldn't save the recording. Check your connection and try again.", "تعذّر حفظ التسجيل. تحقّق من الاتصال وحاول مرة أخرى.")
 
+# qibla
+t("qiblaTitle", "Qibla", "القبلة"); t("qiblaHint", "Find the direction of Makkah", "اتجاه الكعبة من مكانك")
+t("qiblaFacing", "You are facing the Qibla", "أنت باتجاه القبلة")
+t("qiblaTurnRight", "Turn right {deg}°", "استدر يمينًا {deg}°", deg="int")
+t("qiblaTurnLeft", "Turn left {deg}°", "استدر يسارًا {deg}°", deg="int")
+t("qiblaNoSensor", "This phone has no compass. Face {deg}° from north.", "لا توجد بوصلة في هذا الهاتف. اتجه {deg}° من الشمال.", deg="int")
+t("qiblaBearing", "Qibla: {deg}° from north", "القبلة: {deg}° من الشمال", deg="int")
+t("qiblaDistance", "{km} km to Makkah", "{km} كم إلى مكة", km="int")
+t("qiblaCalibrate", "Keep the phone flat and away from metal. If the direction looks off, move the phone in a figure 8.", "ضع الهاتف مستويًا وبعيدًا عن المعادن. إذا بدا الاتجاه غير دقيق، حرّك الهاتف على شكل الرقم ٨.")
+t("qiblaPrivacy", "Your location stays on your phone.", "موقعك يبقى على هاتفك ولا يُرسل لأي جهة.")
+t("qiblaLocationOff", "Turn on location services to find the Qibla.", "فعّل خدمات الموقع لتحديد القبلة.")
+t("qiblaPermission", "Allow location access so we can work out the Qibla from where you are.", "اسمح بالوصول إلى الموقع حتى نحدّد القبلة من مكانك.")
+t("qiblaLocationError", "We couldn't get your location. Try again outdoors or near a window.", "تعذّر تحديد موقعك. حاول مرة أخرى في مكان مفتوح أو قرب نافذة.")
+t("openSettings", "Open settings", "فتح الإعدادات")
 # Removed: promised features that are not built, and price-led copy.
 for _k in ("benefitAnalytics", "benefitReciters", "benefitRecitation", "benefitHifz", "benefitAsk", "benefitSupport"):
     S.pop(_k, None)
