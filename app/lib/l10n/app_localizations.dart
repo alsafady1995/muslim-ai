@@ -2257,6 +2257,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{n} words to polish'**
   String weakWordsCardBody(int n);
+
+  /// No description provided for @qiblaTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Qibla'**
+  String get qiblaTitle;
+
+  /// No description provided for @qiblaHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Find the direction of Makkah'**
+  String get qiblaHint;
+
+  /// No description provided for @qiblaFacing.
+  ///
+  /// In en, this message translates to:
+  /// **'You are facing the Qibla'**
+  String get qiblaFacing;
+
+  /// No description provided for @qiblaTurnRight.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn right {deg}°'**
+  String qiblaTurnRight(int deg);
+
+  /// No description provided for @qiblaTurnLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn left {deg}°'**
+  String qiblaTurnLeft(int deg);
+
+  /// No description provided for @qiblaNoSensor.
+  ///
+  /// In en, this message translates to:
+  /// **'This phone has no compass. Face {deg}° from north.'**
+  String qiblaNoSensor(int deg);
+
+  /// No description provided for @qiblaBearing.
+  ///
+  /// In en, this message translates to:
+  /// **'Qibla: {deg}° from north'**
+  String qiblaBearing(int deg);
+
+  /// No description provided for @qiblaDistance.
+  ///
+  /// In en, this message translates to:
+  /// **'{km} km to Makkah'**
+  String qiblaDistance(int km);
+
+  /// No description provided for @qiblaCalibrate.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep the phone flat and away from metal. If the direction looks off, move the phone in a figure 8.'**
+  String get qiblaCalibrate;
+
+  /// No description provided for @qiblaPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Your location stays on your phone.'**
+  String get qiblaPrivacy;
+
+  /// No description provided for @qiblaLocationOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on location services to find the Qibla.'**
+  String get qiblaLocationOff;
+
+  /// No description provided for @qiblaPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow location access so we can work out the Qibla from where you are.'**
+  String get qiblaPermission;
+
+  /// No description provided for @qiblaLocationError.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t get your location. Try again outdoors or near a window.'**
+  String get qiblaLocationError;
+
+  /// No description provided for @openSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get openSettings;
 }
 
 class _AppLocalizationsDelegate

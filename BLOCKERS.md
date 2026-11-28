@@ -96,6 +96,13 @@ Before launch, run the answer-quality eval described in `docs/` on Haiku. If it 
 | 29 | **Supabase → Auth → Apple: "Client IDs" must list both the Services ID and the bundle id `app.muslimai.mobile`** (comma-separated). Google: list the Web, iOS and Android client ids. | Native iOS Apple tokens carry the bundle id as audience; Supabase rejects them otherwise. |
 | 30 | **Google: register the Play app-signing SHA-1 and the upload-key SHA-1** on the Android OAuth client. | Google Sign-In on Android fails with error 10 otherwise. |
 
+## 5c. Qibla (27 Nov 2026)
+
+| # | What | Why |
+|---|---|---|
+| 31 | **Khatma groups postponed (decided 27 Nov 2026).** Not in this release. The full feature (groups, messages, leaderboard, filter, report, block) is kept in commit `6e66a4c` on PR #16. Before shipping it later, decide who reviews reports within 24 hours (Apple guideline 1.2), then restore that commit's files. | Apple rejects apps with user messages unless reports are acted on within 24 hours. |
+| 32 | **App Privacy / Data safety:** Location is **not collected** (the Qibla bearing is computed on the phone). Nothing to add. | |
+
 ## 6. Not verified in this build environment
 
 

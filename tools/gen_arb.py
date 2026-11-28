@@ -250,6 +250,20 @@ t("resumePlan", "Resume", "استئناف")
 t("planPaused", "Paused · reviews continue", "متوقفة · المراجعة مستمرة")
 t("weakWordsCardBody", "{n} words to polish", "{n} كلمات تحتاج إتقانًا", n="int")
 
+# qibla
+t("qiblaTitle", "Qibla", "القبلة"); t("qiblaHint", "Find the direction of Makkah", "اتجاه الكعبة من مكانك")
+t("qiblaFacing", "You are facing the Qibla", "أنت باتجاه القبلة")
+t("qiblaTurnRight", "Turn right {deg}°", "استدر يمينًا {deg}°", deg="int")
+t("qiblaTurnLeft", "Turn left {deg}°", "استدر يسارًا {deg}°", deg="int")
+t("qiblaNoSensor", "This phone has no compass. Face {deg}° from north.", "لا توجد بوصلة في هذا الهاتف. اتجه {deg}° من الشمال.", deg="int")
+t("qiblaBearing", "Qibla: {deg}° from north", "القبلة: {deg}° من الشمال", deg="int")
+t("qiblaDistance", "{km} km to Makkah", "{km} كم إلى مكة", km="int")
+t("qiblaCalibrate", "Keep the phone flat and away from metal. If the direction looks off, move the phone in a figure 8.", "ضع الهاتف مستويًا وبعيدًا عن المعادن. إذا بدا الاتجاه غير دقيق، حرّك الهاتف على شكل الرقم ٨.")
+t("qiblaPrivacy", "Your location stays on your phone.", "موقعك يبقى على هاتفك ولا يُرسل لأي جهة.")
+t("qiblaLocationOff", "Turn on location services to find the Qibla.", "فعّل خدمات الموقع لتحديد القبلة.")
+t("qiblaPermission", "Allow location access so we can work out the Qibla from where you are.", "اسمح بالوصول إلى الموقع حتى نحدّد القبلة من مكانك.")
+t("qiblaLocationError", "We couldn't get your location. Try again outdoors or near a window.", "تعذّر تحديد موقعك. حاول مرة أخرى في مكان مفتوح أو قرب نافذة.")
+t("openSettings", "Open settings", "فتح الإعدادات")
 # Removed: promised features that are not built, and price-led copy.
 for _k in ("benefitAnalytics", "benefitReciters", "benefitRecitation", "benefitHifz", "benefitAsk", "benefitSupport"):
     S.pop(_k, None)

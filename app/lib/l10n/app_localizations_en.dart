@@ -1241,4 +1241,59 @@ class AppLocalizationsEn extends AppLocalizations {
   String weakWordsCardBody(int n) {
     return '$n words to polish';
   }
+
+  @override
+  String get qiblaTitle => 'Qibla';
+
+  @override
+  String get qiblaHint => 'Find the direction of Makkah';
+
+  @override
+  String get qiblaFacing => 'You are facing the Qibla';
+
+  @override
+  String qiblaTurnRight(int deg) {
+    return 'Turn right $deg°';
+  }
+
+  @override
+  String qiblaTurnLeft(int deg) {
+    return 'Turn left $deg°';
+  }
+
+  @override
+  String qiblaNoSensor(int deg) {
+    return 'This phone has no compass. Face $deg° from north.';
+  }
+
+  @override
+  String qiblaBearing(int deg) {
+    return 'Qibla: $deg° from north';
+  }
+
+  @override
+  String qiblaDistance(int km) {
+    return '$km km to Makkah';
+  }
+
+  @override
+  String get qiblaCalibrate =>
+      'Keep the phone flat and away from metal. If the direction looks off, move the phone in a figure 8.';
+
+  @override
+  String get qiblaPrivacy => 'Your location stays on your phone.';
+
+  @override
+  String get qiblaLocationOff => 'Turn on location services to find the Qibla.';
+
+  @override
+  String get qiblaPermission =>
+      'Allow location access so we can work out the Qibla from where you are.';
+
+  @override
+  String get qiblaLocationError =>
+      'We couldn\'t get your location. Try again outdoors or near a window.';
+
+  @override
+  String get openSettings => 'Open settings';
 }

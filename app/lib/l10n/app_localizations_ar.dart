@@ -1234,4 +1234,59 @@ class AppLocalizationsAr extends AppLocalizations {
   String weakWordsCardBody(int n) {
     return '$n كلمات تحتاج إتقانًا';
   }
+
+  @override
+  String get qiblaTitle => 'القبلة';
+
+  @override
+  String get qiblaHint => 'اتجاه الكعبة من مكانك';
+
+  @override
+  String get qiblaFacing => 'أنت باتجاه القبلة';
+
+  @override
+  String qiblaTurnRight(int deg) {
+    return 'استدر يمينًا $deg°';
+  }
+
+  @override
+  String qiblaTurnLeft(int deg) {
+    return 'استدر يسارًا $deg°';
+  }
+
+  @override
+  String qiblaNoSensor(int deg) {
+    return 'لا توجد بوصلة في هذا الهاتف. اتجه $deg° من الشمال.';
+  }
+
+  @override
+  String qiblaBearing(int deg) {
+    return 'القبلة: $deg° من الشمال';
+  }
+
+  @override
+  String qiblaDistance(int km) {
+    return '$km كم إلى مكة';
+  }
+
+  @override
+  String get qiblaCalibrate =>
+      'ضع الهاتف مستويًا وبعيدًا عن المعادن. إذا بدا الاتجاه غير دقيق، حرّك الهاتف على شكل الرقم ٨.';
+
+  @override
+  String get qiblaPrivacy => 'موقعك يبقى على هاتفك ولا يُرسل لأي جهة.';
+
+  @override
+  String get qiblaLocationOff => 'فعّل خدمات الموقع لتحديد القبلة.';
+
+  @override
+  String get qiblaPermission =>
+      'اسمح بالوصول إلى الموقع حتى نحدّد القبلة من مكانك.';
+
+  @override
+  String get qiblaLocationError =>
+      'تعذّر تحديد موقعك. حاول مرة أخرى في مكان مفتوح أو قرب نافذة.';
+
+  @override
+  String get openSettings => 'فتح الإعدادات';
 }

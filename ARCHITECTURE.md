@@ -35,6 +35,10 @@ Service-role only: `begin_ai_call`, `finish_ai_call`, `cancel_ai_call`, `match_c
 Profiles only accept IANA time zones (`Asia/Riyadh`); anything else (`AST`, `+03`) is replaced by a trigger, because
 Postgres reads those abbreviations with the wrong offset and every "today" would roll over hours early.
 
+## Qibla
+
+Computed on the device (great-circle bearing from `geolocator` + `flutter_compass`); the location never leaves the phone.
+
 ## Gamification rules
 
 - Level = floor(sqrt(xp / 50)) + 1.

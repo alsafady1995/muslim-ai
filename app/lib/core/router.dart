@@ -14,6 +14,7 @@ import '../features/onboarding/onboarding_screen.dart';
 import '../features/paywall/paywall_screen.dart';
 import '../features/profile/profile_screen.dart';
 import '../features/profile/settings_screen.dart';
+import '../features/qibla/qibla_screen.dart';
 import '../features/quran/reader_screen.dart';
 import '../features/quran/surah_list_screen.dart';
 import '../features/search/search_screen.dart';
@@ -90,6 +91,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/adhkar/:id', builder: (_, s) => AdhkarDetailScreen(categoryId: int.parse(s.pathParameters['id']!))),
       GoRoute(path: '/goals', builder: (_, _) => const GoalsScreen()),
       GoRoute(path: '/settings', builder: (_, _) => const SettingsScreen()),
+      GoRoute(path: '/qibla', builder: (_, _) => const QiblaScreen()),
       GoRoute(
         path: '/paywall',
         pageBuilder: (_, s) => MaterialPage(
