@@ -15,6 +15,8 @@ class Reminders {
   static const streakSaver = 4;
   static const dailyReading = 5;
   static const trialEnding = 10;
+  static const _groupCallBase = 1000;
+  static int _groupCallSeq = 0;
 
   static Future<void> init() async {
     if (_ready || kIsWeb) return; // no local notifications on web
@@ -35,7 +37,27 @@ class Reminders {
         ),
       ),
     );
+    // Channel for family-group calls (FCM messages name it in android.notification.channel_id).
+    await _plugin
+        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(const AndroidNotificationChannel('groups', 'Group calls', importance: Importance.high));
     _ready = true;
+  }
+
+  /// Shows a group call that arrived while the app is open (Android only shows FCM banners
+  /// in the background).
+  static Future<void> showGroupCall(String title, String body) async {
+    if (kIsWeb) return;
+    await init();
+    await _plugin.show(
+      id: _groupCallBase + (_groupCallSeq++ % 50),
+      title: title,
+      body: body,
+      notificationDetails: const NotificationDetails(
+        android: AndroidNotificationDetails('groups', 'Group calls', importance: Importance.high, priority: Priority.high),
+        iOS: DarwinNotificationDetails(),
+      ),
+    );
   }
 
   static Future<bool> requestPermission() async {

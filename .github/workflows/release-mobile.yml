@@ -52,6 +52,14 @@ jobs:
           /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:1 dict" \
             -c "Add :CFBundleURLTypes:1:CFBundleURLSchemes array" \
             -c "Add :CFBundleURLTypes:1:CFBundleURLSchemes:0 string $REV" ios/Runner/Info.plist
+      - name: Enable push notifications once Firebase is configured
+        # Needs the Push Notifications capability on the App ID and refreshed match profiles first
+        # (BLOCKERS.md item 35); without FIREBASE_IOS_APP_ID the app ships without push, as before.
+        run: |
+          if [ -n "$(jq -r '.FIREBASE_IOS_APP_ID // empty' env/prod.json)" ]; then
+            /usr/libexec/PlistBuddy -c "Add :aps-environment string production" ios/Runner/Runner.entitlements
+            /usr/libexec/PlistBuddy -c "Add :UIBackgroundModes:1 string remote-notification" ios/Runner/Info.plist
+          fi
       - run: flutter build ios --release --no-codesign --dart-define-from-file=env/prod.json --build-number=${{ github.run_number }}
       - name: Sign and upload to TestFlight
         env:

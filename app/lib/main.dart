@@ -10,9 +10,11 @@ import 'app.dart';
 import 'core/analytics.dart';
 import 'core/config.dart';
 import 'core/providers.dart';
+import 'demo/demo_groups.dart';
 import 'demo/demo_http.dart';
 import 'demo/demo_repositories.dart';
 import 'demo/demo_store.dart';
+import 'features/groups/groups_common.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +37,7 @@ Future<void> main() async {
         userRepoProvider.overrideWith((ref) => DemoUserRepository(ref.watch(supabaseProvider))),
         edgeApiProvider.overrideWith((ref) => DemoEdgeApi(ref.watch(supabaseProvider))),
         paymentProvider.overrideWith((ref) => DemoPaymentProvider()),
+        groupsRepoProvider.overrideWith((ref) => DemoGroupsRepository(ref.watch(supabaseProvider))),
       ],
       child: const MuslimAiApp(),
     ));

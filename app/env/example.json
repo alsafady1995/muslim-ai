@@ -11,5 +11,11 @@
   "GOOGLE_WEB_CLIENT_ID": "XXXX.apps.googleusercontent.com",
   "GOOGLE_IOS_CLIENT_ID": "XXXX.apps.googleusercontent.com",
   "PRIVACY_URL": "https://asmi3ni.com/privacy/",
-  "TERMS_URL": "https://asmi3ni.com/terms/"
+  "TERMS_URL": "https://asmi3ni.com/terms/",
+  "FIREBASE_PROJECT_ID": "asmi3ni-xxxxx",
+  "FIREBASE_SENDER_ID": "123456789012",
+  "FIREBASE_ANDROID_APP_ID": "1:123456789012:android:xxxxxxxx",
+  "FIREBASE_ANDROID_API_KEY": "AIzaXXXXXXXX",
+  "FIREBASE_IOS_APP_ID": "1:123456789012:ios:xxxxxxxx",
+  "FIREBASE_IOS_API_KEY": "AIzaXXXXXXXX"
 }

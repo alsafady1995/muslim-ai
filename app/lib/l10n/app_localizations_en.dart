@@ -1398,4 +1398,446 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get openSettings => 'Open settings';
+
+  @override
+  String get groupsTitle => 'Groups';
+
+  @override
+  String get groupsHint => 'Family and friends';
+
+  @override
+  String get groupsEmptyTitle => 'Compete in good deeds, together';
+
+  @override
+  String get groupsEmptyBody =>
+      'Create a private group for your family or friends: see everyone\'s achievements this week, complete a khatma together, and remind each other with one tap.';
+
+  @override
+  String get createGroup => 'Create a group';
+
+  @override
+  String get joinGroup => 'Join';
+
+  @override
+  String get joinWithCode => 'Join with a code';
+
+  @override
+  String get groupName => 'Group name';
+
+  @override
+  String get groupNameHint => 'e.g. Family';
+
+  @override
+  String get yourNameInGroup => 'Your name in the group';
+
+  @override
+  String groupMembersN(int n) {
+    return '$n members';
+  }
+
+  @override
+  String khatmasCompletedN(int n) {
+    return '$n khatmas completed';
+  }
+
+  @override
+  String myJuzList(String list) {
+    return 'My juz\': $list';
+  }
+
+  @override
+  String openCallsN(int n) {
+    return '$n new';
+  }
+
+  @override
+  String get tabCalls => 'Calls';
+
+  @override
+  String get tabKhatma => 'Khatma';
+
+  @override
+  String get tabBoard => 'This week';
+
+  @override
+  String khatmaNumber(int n) {
+    return 'Khatma $n';
+  }
+
+  @override
+  String khatmaFor(String reason) {
+    return 'This khatma is $reason';
+  }
+
+  @override
+  String get juzTapHint => 'Tap a juz\' to take it or mark it as read.';
+
+  @override
+  String get juzDone => 'Read';
+
+  @override
+  String get juzMine => 'Mine';
+
+  @override
+  String get juzTaken => 'Taken';
+
+  @override
+  String get juzOpen => 'Open';
+
+  @override
+  String juzN(int n) {
+    return 'Juz\' $n';
+  }
+
+  @override
+  String get juzMarkRead => 'I\'ve read it';
+
+  @override
+  String get juzClaim => 'I\'ll read it';
+
+  @override
+  String get juzRelease => 'Give it back';
+
+  @override
+  String get juzAssign => 'Assign to a member';
+
+  @override
+  String get juzUndo => 'Undo';
+
+  @override
+  String get khatmaCompleteTitle => 'The khatma is complete!';
+
+  @override
+  String get khatmaCompleteBody =>
+      'May Allah accept it from all of you. Everyone in the group has been told, and a new khatma has started.';
+
+  @override
+  String get inviteToGroup => 'Invite';
+
+  @override
+  String groupInviteMessage(String name, String code) {
+    return 'Join our group \"$name\" on Asmi3ni. Group code: $code';
+  }
+
+  @override
+  String get groupMembers => 'Members';
+
+  @override
+  String get groupOwner => 'Group admin';
+
+  @override
+  String get distributeJuz => 'Share open juz\' among members';
+
+  @override
+  String distributedN(int n) {
+    return '$n juz\' shared out';
+  }
+
+  @override
+  String get renameGroup => 'Rename group';
+
+  @override
+  String get changeMyName => 'Change my name';
+
+  @override
+  String get newInviteCode => 'New invite code';
+
+  @override
+  String newInviteCodeDone(String code) {
+    return 'New code: $code. The old one no longer works.';
+  }
+
+  @override
+  String get muteGroup => 'Mute notifications';
+
+  @override
+  String get unmuteGroup => 'Turn notifications on';
+
+  @override
+  String get leaveGroup => 'Leave group';
+
+  @override
+  String get leaveGroupConfirm =>
+      'Leave this group? Juz\' you haven\'t finished go back to the group.';
+
+  @override
+  String get removeFromGroup => 'Remove from group';
+
+  @override
+  String removeConfirm(String name) {
+    return 'Remove $name? They won\'t be able to rejoin with the code.';
+  }
+
+  @override
+  String get formerMember => 'Former member';
+
+  @override
+  String get sendCall => 'Send a call';
+
+  @override
+  String get callKhatma => 'Let\'s complete a khatma';
+
+  @override
+  String get callSalawat => 'Salawat on the Prophet ﷺ';
+
+  @override
+  String get callIstighfar => 'Istighfar together';
+
+  @override
+  String get callAdhkarMorning => 'Morning adhkar';
+
+  @override
+  String get callAdhkarEvening => 'Evening adhkar';
+
+  @override
+  String get callDua => 'Ask for dua';
+
+  @override
+  String feedKhatma(String name, String reason) {
+    return '$name: let\'s complete a khatma $reason';
+  }
+
+  @override
+  String feedSalawat(String name) {
+    return '$name: send salawat on the Prophet ﷺ';
+  }
+
+  @override
+  String feedIstighfar(String name) {
+    return '$name: let\'s say istighfar together';
+  }
+
+  @override
+  String feedAdhkarMorning(String name) {
+    return '$name: don\'t forget your morning adhkar';
+  }
+
+  @override
+  String feedAdhkarEvening(String name) {
+    return '$name: don\'t forget your evening adhkar';
+  }
+
+  @override
+  String feedDua(String name, String reason) {
+    return '$name: please make dua $reason';
+  }
+
+  @override
+  String feedKhatmaDone(String reason) {
+    return 'The khatma $reason is complete. May Allah accept it';
+  }
+
+  @override
+  String get reasonGeneral => 'with a general intention';
+
+  @override
+  String reasonDeceased(String name) {
+    return 'for the soul of $name';
+  }
+
+  @override
+  String get reasonDeceasedAny => 'for those we have lost';
+
+  @override
+  String reasonSick(String name) {
+    return 'for $name\'s recovery';
+  }
+
+  @override
+  String get reasonSickAny => 'for the sick';
+
+  @override
+  String reasonExam(String name) {
+    return 'for $name\'s success';
+  }
+
+  @override
+  String get reasonExamAny => 'for success in exams';
+
+  @override
+  String reasonTravel(String name) {
+    return 'for $name\'s safe travel';
+  }
+
+  @override
+  String get reasonTravelAny => 'for safe travels';
+
+  @override
+  String reasonNewborn(String name) {
+    return 'for blessings on baby $name';
+  }
+
+  @override
+  String get reasonNewbornAny => 'for blessings on the newborn';
+
+  @override
+  String reasonHardship(String name) {
+    return 'to ease $name\'s hardship';
+  }
+
+  @override
+  String get reasonHardshipAny => 'to ease hardship';
+
+  @override
+  String reasonRizq(String name) {
+    return 'for $name\'s provision';
+  }
+
+  @override
+  String get reasonRizqAny => 'for provision';
+
+  @override
+  String get reasonLabelGeneral => 'General intention';
+
+  @override
+  String get reasonLabelDeceased => 'For someone who passed away';
+
+  @override
+  String get reasonLabelSick => 'For someone who is ill';
+
+  @override
+  String get reasonLabelExam => 'For exam success';
+
+  @override
+  String get reasonLabelTravel => 'For safe travel';
+
+  @override
+  String get reasonLabelNewborn => 'For a newborn';
+
+  @override
+  String get reasonLabelHardship => 'To ease a hardship';
+
+  @override
+  String get reasonLabelRizq => 'For provision';
+
+  @override
+  String get callReasonTitle => 'What is it for?';
+
+  @override
+  String get dedicationName => 'Name (optional)';
+
+  @override
+  String get dedicationHint => 'e.g. my grandfather';
+
+  @override
+  String get callSend => 'Send to the group';
+
+  @override
+  String get callSent => 'Sent. Everyone in the group will be notified.';
+
+  @override
+  String get callDone => 'Done';
+
+  @override
+  String get callDoneMine => 'Done ✓';
+
+  @override
+  String callRespondersN(int n, int total) {
+    return '$n of $total done';
+  }
+
+  @override
+  String callSalawatTotal(int n) {
+    return '$n salawat so far';
+  }
+
+  @override
+  String callIstighfarTotal(int n) {
+    return '$n istighfar so far';
+  }
+
+  @override
+  String callMyCount(int n) {
+    return 'You: $n';
+  }
+
+  @override
+  String callKhatmaProgress(int n) {
+    return '$n of 30 juz\' read';
+  }
+
+  @override
+  String get callPickJuz => 'Pick a juz\'';
+
+  @override
+  String get callsEmpty => 'No calls yet. Send the first one!';
+
+  @override
+  String get callEnded => 'Ended';
+
+  @override
+  String get pendingCallsTitle => 'From your groups';
+
+  @override
+  String get boardRanked =>
+      'Ranked by points earned this week. Everyone starts again on Friday.';
+
+  @override
+  String boardChampion(String name) {
+    return 'Last week\'s top: $name 🏆';
+  }
+
+  @override
+  String boardLine(int ayahs, int adhkar, int hifz) {
+    return '$ayahs ayahs · $adhkar adhkar · $hifz hifz';
+  }
+
+  @override
+  String boardLine2(int streak, int juz, int calls) {
+    return '$streak-day streak · $juz juz\' · $calls calls';
+  }
+
+  @override
+  String pointsN(int n) {
+    return '$n pts';
+  }
+
+  @override
+  String get boardNote =>
+      'Only members of this group see this. Compete in good deeds, and keep your intention for Allah.';
+
+  @override
+  String get communityErrOffensive =>
+      'This contains words that aren\'t allowed. Please choose another.';
+
+  @override
+  String get communityErrContact =>
+      'Links, phone numbers and accounts aren\'t allowed.';
+
+  @override
+  String get communityErrTooLong => 'That\'s too long.';
+
+  @override
+  String get communityErrEmpty => 'Write something first.';
+
+  @override
+  String get communityErrSlowDown =>
+      'You\'ve sent a lot of calls today. Try again tomorrow.';
+
+  @override
+  String get communityErrCallTooSoon =>
+      'This call was just sent to the group. Try again in a little while.';
+
+  @override
+  String get communityErrKhatmaInProgress =>
+      'A khatma is already under way. Finish it first, then start the next one.';
+
+  @override
+  String get communityErrCallEnded => 'This call has ended.';
+
+  @override
+  String get communityErrInvalidCode => 'That code doesn\'t match a group.';
+
+  @override
+  String get communityErrGroupFull => 'This group is full.';
+
+  @override
+  String get communityErrTooManyGroups =>
+      'You\'re in the maximum number of groups.';
+
+  @override
+  String get communityErrJuzTaken => 'Someone else has this juz\'.';
+
+  @override
+  String get communityErrNotAllowed => 'Only the group admin can do that.';
 }
