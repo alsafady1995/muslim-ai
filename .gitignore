@@ -2,6 +2,7 @@
 *.env
 app/env/*.json
 !app/env/example.json
+!app/env/firebase.json
 node_modules/
 .DS_Store
 __pycache__/

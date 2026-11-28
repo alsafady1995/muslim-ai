@@ -12,6 +12,8 @@ import '../../core/providers.dart';
 import '../../core/theme.dart';
 import '../../core/widgets.dart';
 import '../../data/models.dart';
+import '../groups/call_widgets.dart';
+import '../groups/groups_common.dart';
 import '../hifz/hifz_review_screen.dart';
 import '../hifz/hifz_screen.dart' show hifzQueueProvider, hifzStatsProvider;
 
@@ -76,6 +78,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           return RefreshIndicator(
             onRefresh: () async {
               ref.invalidate(dashboardProvider);
+              ref.invalidate(pendingCallsProvider);
               ref.invalidate(hifzQueueProvider);
             },
             child: ListView(padding: const EdgeInsets.fromLTRB(16, 8, 16, 32), children: [
@@ -89,6 +92,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
                 const SizedBox(height: 12),
               ],
+              const _PendingCalls(),
               _TodayCard(d: d),
               const SizedBox(height: 12),
               _StreakCard(d: d),
@@ -408,6 +412,7 @@ class _QuickActions extends StatelessWidget {
       (Icons.nights_stay, l10n.adhkar, adhkarId == 1 ? l10n.morningAdhkar : (adhkarId == 2 ? l10n.eveningAdhkar : l10n.sleepAdhkar), '/adhkar/$adhkarId'),
       (Icons.mic, l10n.reciteWithAi, l10n.aiCoachHint, '/coach?source=home_grid'),
       (Icons.auto_awesome, l10n.askTheQuran, l10n.askHint, '/ask'),
+      (Icons.diversity_3_outlined, l10n.groupsTitle, l10n.groupsHint, '/groups'),
       (Icons.explore_outlined, l10n.qiblaTitle, l10n.qiblaHint, '/qibla'),
     ];
     return GridView.count(
@@ -478,5 +483,23 @@ class _WeekChart extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+/// Calls from my groups that I haven't answered yet (newest 3). Hidden when there are none.
+class _PendingCalls extends ConsumerWidget {
+  const _PendingCalls();
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final calls = ref.watch(pendingCallsProvider).value ?? const [];
+    if (calls.isEmpty) return const SizedBox.shrink();
+    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      SectionTitle(context.l10n.pendingCallsTitle, trailing: TextButton(
+        onPressed: () => context.push('/groups'),
+        child: Text(context.l10n.groupsTitle),
+      )),
+      for (final c in calls.take(3)) CallCard(call: c, showGroup: true),
+      const SizedBox(height: 12),
+    ]);
   }
 }

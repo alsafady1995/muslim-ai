@@ -6,9 +6,11 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'core/analytics.dart';
 import 'core/config.dart';
 import 'core/providers.dart';
+import 'core/push.dart';
 import 'core/router.dart';
 import 'core/theme.dart';
 import 'demo/demo_banner.dart';
+import 'features/groups/groups_common.dart';
 import 'l10n/app_localizations.dart';
 
 class MuslimAiApp extends ConsumerStatefulWidget {
@@ -21,6 +23,13 @@ class _MuslimAiAppState extends ConsumerState<MuslimAiApp> {
   @override
   void initState() {
     super.initState();
+    // Family-group calls: a tapped notification opens the group; one that arrives while the app
+    // is open refreshes the lists.
+    GroupPush.onOpenGroup = (id) => ref.read(routerProvider).push('/groups/$id');
+    GroupPush.onCallReceived = () {
+      ref.invalidate(pendingCallsProvider);
+      ref.invalidate(myGroupsProvider);
+    };
     // Keep analytics, error reporting and payments tied to the signed-in user.
     ref.listenManual(currentUserProvider, (prev, user) async {
       if (user == null || user.id == prev?.id) return;
@@ -34,6 +43,7 @@ class _MuslimAiAppState extends ConsumerState<MuslimAiApp> {
       await ref.read(paymentProvider).init(userId: user.id);
       await ref.read(paymentProvider).logIn(user.id);
       ref.invalidate(premiumProvider);
+      await GroupPush.sync(ref.read(groupsRepoProvider));
     }, fireImmediately: true);
   }
 

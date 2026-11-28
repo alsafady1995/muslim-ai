@@ -861,5 +861,388 @@
   "qiblaLocationOff": "Turn on location services to find the Qibla.",
   "qiblaPermission": "Allow location access so we can work out the Qibla from where you are.",
   "qiblaLocationError": "We couldn't get your location. Try again outdoors or near a window.",
-  "openSettings": "Open settings"
+  "openSettings": "Open settings",
+  "groupsTitle": "Groups",
+  "groupsHint": "Family and friends",
+  "groupsEmptyTitle": "Compete in good deeds, together",
+  "groupsEmptyBody": "Create a private group for your family or friends: see everyone's achievements this week, complete a khatma together, and remind each other with one tap.",
+  "createGroup": "Create a group",
+  "joinGroup": "Join",
+  "joinWithCode": "Join with a code",
+  "groupName": "Group name",
+  "groupNameHint": "e.g. Family",
+  "yourNameInGroup": "Your name in the group",
+  "groupMembersN": "{n} members",
+  "@groupMembersN": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "khatmasCompletedN": "{n} khatmas completed",
+  "@khatmasCompletedN": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "myJuzList": "My juz': {list}",
+  "@myJuzList": {
+    "placeholders": {
+      "list": {
+        "type": "String"
+      }
+    }
+  },
+  "openCallsN": "{n} new",
+  "@openCallsN": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "tabCalls": "Calls",
+  "tabKhatma": "Khatma",
+  "tabBoard": "This week",
+  "khatmaNumber": "Khatma {n}",
+  "@khatmaNumber": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "khatmaFor": "This khatma is {reason}",
+  "@khatmaFor": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "juzTapHint": "Tap a juz' to take it or mark it as read.",
+  "juzDone": "Read",
+  "juzMine": "Mine",
+  "juzTaken": "Taken",
+  "juzOpen": "Open",
+  "juzN": "Juz' {n}",
+  "@juzN": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "juzMarkRead": "I've read it",
+  "juzClaim": "I'll read it",
+  "juzRelease": "Give it back",
+  "juzAssign": "Assign to a member",
+  "juzUndo": "Undo",
+  "khatmaCompleteTitle": "The khatma is complete!",
+  "khatmaCompleteBody": "May Allah accept it from all of you. Everyone in the group has been told, and a new khatma has started.",
+  "inviteToGroup": "Invite",
+  "groupInviteMessage": "Join our group \"{name}\" on Asmi3ni. Group code: {code}",
+  "@groupInviteMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "groupMembers": "Members",
+  "groupOwner": "Group admin",
+  "distributeJuz": "Share open juz' among members",
+  "distributedN": "{n} juz' shared out",
+  "@distributedN": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "renameGroup": "Rename group",
+  "changeMyName": "Change my name",
+  "newInviteCode": "New invite code",
+  "newInviteCodeDone": "New code: {code}. The old one no longer works.",
+  "@newInviteCodeDone": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "muteGroup": "Mute notifications",
+  "unmuteGroup": "Turn notifications on",
+  "leaveGroup": "Leave group",
+  "leaveGroupConfirm": "Leave this group? Juz' you haven't finished go back to the group.",
+  "removeFromGroup": "Remove from group",
+  "removeConfirm": "Remove {name}? They won't be able to rejoin with the code.",
+  "@removeConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "formerMember": "Former member",
+  "sendCall": "Send a call",
+  "callKhatma": "Let's complete a khatma",
+  "callSalawat": "Salawat on the Prophet ﷺ",
+  "callIstighfar": "Istighfar together",
+  "callAdhkarMorning": "Morning adhkar",
+  "callAdhkarEvening": "Evening adhkar",
+  "callDua": "Ask for dua",
+  "feedKhatma": "{name}: let's complete a khatma {reason}",
+  "@feedKhatma": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "feedSalawat": "{name}: send salawat on the Prophet ﷺ",
+  "@feedSalawat": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "feedIstighfar": "{name}: let's say istighfar together",
+  "@feedIstighfar": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "feedAdhkarMorning": "{name}: don't forget your morning adhkar",
+  "@feedAdhkarMorning": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "feedAdhkarEvening": "{name}: don't forget your evening adhkar",
+  "@feedAdhkarEvening": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "feedDua": "{name}: please make dua {reason}",
+  "@feedDua": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "feedKhatmaDone": "The khatma {reason} is complete. May Allah accept it",
+  "@feedKhatmaDone": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "reasonGeneral": "with a general intention",
+  "reasonDeceased": "for the soul of {name}",
+  "@reasonDeceased": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "reasonDeceasedAny": "for those we have lost",
+  "reasonSick": "for {name}'s recovery",
+  "@reasonSick": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "reasonSickAny": "for the sick",
+  "reasonExam": "for {name}'s success",
+  "@reasonExam": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "reasonExamAny": "for success in exams",
+  "reasonTravel": "for {name}'s safe travel",
+  "@reasonTravel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "reasonTravelAny": "for safe travels",
+  "reasonNewborn": "for blessings on baby {name}",
+  "@reasonNewborn": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "reasonNewbornAny": "for blessings on the newborn",
+  "reasonHardship": "to ease {name}'s hardship",
+  "@reasonHardship": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "reasonHardshipAny": "to ease hardship",
+  "reasonRizq": "for {name}'s provision",
+  "@reasonRizq": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "reasonRizqAny": "for provision",
+  "reasonLabelGeneral": "General intention",
+  "reasonLabelDeceased": "For someone who passed away",
+  "reasonLabelSick": "For someone who is ill",
+  "reasonLabelExam": "For exam success",
+  "reasonLabelTravel": "For safe travel",
+  "reasonLabelNewborn": "For a newborn",
+  "reasonLabelHardship": "To ease a hardship",
+  "reasonLabelRizq": "For provision",
+  "callReasonTitle": "What is it for?",
+  "dedicationName": "Name (optional)",
+  "dedicationHint": "e.g. my grandfather",
+  "callSend": "Send to the group",
+  "callSent": "Sent. Everyone in the group will be notified.",
+  "callDone": "Done",
+  "callDoneMine": "Done ✓",
+  "callRespondersN": "{n} of {total} done",
+  "@callRespondersN": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "callSalawatTotal": "{n} salawat so far",
+  "@callSalawatTotal": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "callIstighfarTotal": "{n} istighfar so far",
+  "@callIstighfarTotal": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "callMyCount": "You: {n}",
+  "@callMyCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "callKhatmaProgress": "{n} of 30 juz' read",
+  "@callKhatmaProgress": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "callPickJuz": "Pick a juz'",
+  "callsEmpty": "No calls yet. Send the first one!",
+  "callEnded": "Ended",
+  "pendingCallsTitle": "From your groups",
+  "boardRanked": "Ranked by points earned this week. Everyone starts again on Friday.",
+  "boardChampion": "Last week's top: {name} 🏆",
+  "@boardChampion": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "boardLine": "{ayahs} ayahs · {adhkar} adhkar · {hifz} hifz",
+  "@boardLine": {
+    "placeholders": {
+      "ayahs": {
+        "type": "int"
+      },
+      "adhkar": {
+        "type": "int"
+      },
+      "hifz": {
+        "type": "int"
+      }
+    }
+  },
+  "boardLine2": "{streak}-day streak · {juz} juz' · {calls} calls",
+  "@boardLine2": {
+    "placeholders": {
+      "streak": {
+        "type": "int"
+      },
+      "juz": {
+        "type": "int"
+      },
+      "calls": {
+        "type": "int"
+      }
+    }
+  },
+  "pointsN": "{n} pts",
+  "@pointsN": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "boardNote": "Only members of this group see this. Compete in good deeds, and keep your intention for Allah.",
+  "communityErrOffensive": "This contains words that aren't allowed. Please choose another.",
+  "communityErrContact": "Links, phone numbers and accounts aren't allowed.",
+  "communityErrTooLong": "That's too long.",
+  "communityErrEmpty": "Write something first.",
+  "communityErrSlowDown": "You've sent a lot of calls today. Try again tomorrow.",
+  "communityErrCallTooSoon": "This call was just sent to the group. Try again in a little while.",
+  "communityErrKhatmaInProgress": "A khatma is already under way. Finish it first, then start the next one.",
+  "communityErrCallEnded": "This call has ended.",
+  "communityErrInvalidCode": "That code doesn't match a group.",
+  "communityErrGroupFull": "This group is full.",
+  "communityErrTooManyGroups": "You're in the maximum number of groups.",
+  "communityErrJuzTaken": "Someone else has this juz'.",
+  "communityErrNotAllowed": "Only the group admin can do that."
 }

@@ -8,6 +8,8 @@ import '../features/auth/sign_in_screen.dart';
 import '../features/benchmark/benchmark_recorder_screen.dart';
 import '../features/coach/coach_screen.dart';
 import '../features/goals/goals_screen.dart';
+import '../features/groups/group_screen.dart';
+import '../features/groups/groups_screen.dart';
 import '../features/hifz/hifz_screen.dart';
 import '../features/hifz/weak_words_screen.dart';
 import '../features/home/home_screen.dart';
@@ -96,6 +98,11 @@ final routerProvider = Provider<GoRouter>((ref) {
       if (AppConfig.benchmarkRecorder && !AppConfig.demoMode)
         GoRoute(path: '/benchmark', builder: (_, _) => const BenchmarkRecorderScreen()),
       GoRoute(path: '/qibla', builder: (_, _) => const QiblaScreen()),
+      GoRoute(path: '/groups', builder: (_, _) => const GroupsScreen()),
+      GoRoute(
+        path: '/groups/:id',
+        builder: (_, s) => GroupScreen(groupId: s.pathParameters['id']!, initialTab: s.uri.queryParameters['tab']),
+      ),
       GoRoute(
         path: '/paywall',
         pageBuilder: (_, s) => MaterialPage(

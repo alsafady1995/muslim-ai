@@ -10,10 +10,11 @@ Flutter app ──(supabase-js: Auth, PostgREST + RLS, RPC, Storage)──▶ Su
      │                                     └──▶ alignment + scoring ──▶ hifz SM-2 update, XP
      ├──▶ RevenueCat SDK (Apple IAP / Google Play) ──webhook──▶ revenuecat-webhook ──▶ subscriptions
      ├──▶ PostHog (product analytics)        └──▶ Sentry (crashes)
-     └──▶ local notifications (adhkar, hifz, streak reminders)
+     ├──▶ local notifications (adhkar, hifz, streak reminders)
+     └──(group-push edge function)──▶ FCM ──▶ family-group calls on members' phones
 ```
 
-## Data model (35 tables)
+## Data model (42 tables)
 
 Content (public read): `surahs`, `ayahs`, `ayah_words`, `translations`, `ayah_translations`, `tafsir_sources`,
 `ayah_tafsir`, `reciters`, `hadith_collections`, `hadiths`, `adhkar_categories`, `adhkar`, `content_embeddings`.
@@ -21,6 +22,9 @@ Content (public read): `surahs`, `ayahs`, `ayah_words`, `translations`, `ayah_tr
 User: `profiles`, `goals`, `daily_activity`, `xp_events`, `user_achievements`, `prayer_logs`, `adhkar_progress`,
 `reading_progress`, `bookmarks`, `hifz_plans`, `hifz_items`, `hifz_reviews`, `recitation_sessions`,
 `ai_conversations`, `ai_messages`, `ai_usage`, `subscriptions`, `referrals`.
+
+Groups: `khatma_groups`, `khatma_members`, `khatma_bans`, `khatma_parts`, `group_calls`, `group_call_responses`,
+`push_tokens`, `banned_terms` (name filter).
 
 Config: `xp_rules`, `achievements`, `plan_limits`. Audit: `billing_events`.
 
@@ -34,6 +38,32 @@ Service-role only: `begin_ai_call`, `finish_ai_call`, `cancel_ai_call`, `match_c
 
 Profiles only accept IANA time zones (`Asia/Riyadh`); anything else (`AST`, `+03`) is replaced by a trigger, because
 Postgres reads those abbreviations with the wrong offset and every "today" would roll over hours early.
+
+## Family groups
+
+Private, invite-only groups (8-character code, up to 20 members, 10 groups per user). No chat: members talk through
+**preset calls** (`send_group_call`): a khatma with a reason from a fixed list (for the soul of, for the recovery of,
+exams, travel, a newborn, hardship, provision, or a general intention) plus an optional ≤ 30-character name,
+salawat, istighfar, morning / evening adhkar and dua. The same kind can be sent once per 30 minutes per group, and
+10 calls a day per sender. Salawat and istighfar add up a group counter; the others are a single "done". Calls last
+24 hours; a khatma call lasts 30 days and gives the current khatma its intention (only before anyone has read a juz').
+
+Khatma: 30 `khatma_parts` per round; members claim a juz', the admin can assign or share them out, and when all 30
+are read the next round starts and the server posts a `khatma_done` call. Reading a group juz' gives no XP (it
+can't be verified).
+
+Weekly board (`get_group_board`): each member's XP, ayahs, adhkar and hifz (new + reviews) since Friday 00:00 in their
+own time zone, plus streak, juz' this khatma and calls answered; ranked by XP, with last week's top member.
+
+Push: the app registers its FCM token (`register_push_token`) after the user creates or joins a group, sends a call,
+then calls the `group-push` edge function with the call id. `_group_call_push_targets()` (service role) checks that
+the caller sent it, marks it pushed (once) and returns the other unmuted members' tokens; the function renders the
+text in each member's language (`_shared/group_push.ts`) and sends through FCM HTTP v1. Without `FCM_SERVICE_ACCOUNT`
+it does nothing and calls only show in the app (Home card + group screen).
+
+The only typed text is the group name, a member's name and the dedication name, all through
+`_community_text_check()` (offensive terms with Arabic normalisation, links, phone numbers, handles). The admin can
+rename the group and remove (and ban) a member.
 
 ## Qibla
 

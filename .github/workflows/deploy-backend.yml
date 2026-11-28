@@ -22,7 +22,7 @@ jobs:
         run: supabase db push --remote --yes
       - name: Deploy edge functions
         run: |
-          for fn in ask-quran assistant quran-search recitation-analyze delete-account; do
+          for fn in ask-quran assistant quran-search recitation-analyze delete-account group-push; do
             supabase functions deploy "$fn" --project-ref "$PROJECT_REF" --yes
           done
           supabase functions deploy revenuecat-webhook --no-verify-jwt --project-ref "$PROJECT_REF" --yes

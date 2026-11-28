@@ -96,12 +96,13 @@ Before launch, run the answer-quality eval described in `docs/` on Haiku. If it 
 | 29 | **Supabase → Auth → Apple: "Client IDs" must list both the Services ID and the bundle id `app.muslimai.mobile`** (comma-separated). Google: list the Web, iOS and Android client ids. | Native iOS Apple tokens carry the bundle id as audience; Supabase rejects them otherwise. |
 | 30 | **Google: register the Play app-signing SHA-1 and the upload-key SHA-1** on the Android OAuth client. | Google Sign-In on Android fails with error 10 otherwise. |
 
-## 5c. Qibla (27 Nov 2026)
+## 5c. Qibla and family groups
 
 | # | What | Why |
 |---|---|---|
-| 31 | **Khatma groups postponed (decided 27 Nov 2026).** Not in this release. The full feature (groups, messages, leaderboard, filter, report, block) is kept in commit `6e66a4c` on PR #16. Before shipping it later, decide who reviews reports within 24 hours (Apple guideline 1.2), then restore that commit's files. | Apple rejects apps with user messages unless reports are acted on within 24 hours. |
-| 32 | **App Privacy / Data safety:** Location is **not collected** (the Qibla bearing is computed on the phone). Nothing to add. | |
+| 31 | **Family groups ship without chat (decided 28 Nov 2026).** Groups have preset calls only (khatma with a reason, salawat, istighfar, adhkar, dua), a shared khatma and a weekly board. The only typed text is the group name, a member's name and an optional short dedication name, all filtered on the server; the admin can remove a member. Free-text messages, report and block stay postponed (commit `6e66a4c` on PR #16) until someone reviews reports within 24 hours. | Apple guideline 1.2 asks for report + 24 h review only when users can post content to each other. |
+| 32 | **App Privacy / Data safety:** Location is **not collected** (the Qibla bearing is computed on the phone). Add **"Other user content"** (group and member names) and **"Device ID / push token"**, linked to the user, used for app functionality. | Groups store names and an FCM token. The policy on asmi3ni.com lists both. |
+| 35 | **Push notifications for group calls (Firebase).** Done on 2026-11-28: Firebase project `asmi3ni` (Analytics and Gemini off) with the Android and iOS apps; the public Android client config is committed in `app/env/firebase.json` and merged under `env/prod.json` by the release workflow. Still to do: 1) ~~`FCM_SERVICE_ACCOUNT` Supabase secret~~ set on 2026-11-28, so Android push works once this PR is deployed. 2) iPhone: developer.apple.com → Keys → new key with **Apple Push Notifications service** → upload the .p8 in Firebase → Project settings → Cloud Messaging → APNs. 3) Identifiers → `app.muslimai.mobile` → enable **Push Notifications**, then refresh the match profiles once locally: `cd app/ios && bundle exec fastlane match appstore --force`. 4) Only then add `"FIREBASE_IOS_APP_ID": "1:747251364772:ios:ab65f1bae3012dd99f0731"` and `"FIREBASE_IOS_API_KEY": "AIzaSyDIYYgmOskU701Te6psHW7cJGeW3ONaqQY"` to `app/env/firebase.json`. | Until the iPhone steps are done, iPhone members only see a call when they open the app. The iOS release adds the push entitlement automatically once `FIREBASE_IOS_APP_ID` is set, so step 3 must come first or signing fails. |
 
 ## 5d. Recitation accuracy benchmark (before public launch)
 

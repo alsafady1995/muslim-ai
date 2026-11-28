@@ -2527,6 +2527,732 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Open settings'**
   String get openSettings;
+
+  /// No description provided for @groupsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Groups'**
+  String get groupsTitle;
+
+  /// No description provided for @groupsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Family and friends'**
+  String get groupsHint;
+
+  /// No description provided for @groupsEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Compete in good deeds, together'**
+  String get groupsEmptyTitle;
+
+  /// No description provided for @groupsEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a private group for your family or friends: see everyone\'s achievements this week, complete a khatma together, and remind each other with one tap.'**
+  String get groupsEmptyBody;
+
+  /// No description provided for @createGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a group'**
+  String get createGroup;
+
+  /// No description provided for @joinGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Join'**
+  String get joinGroup;
+
+  /// No description provided for @joinWithCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Join with a code'**
+  String get joinWithCode;
+
+  /// No description provided for @groupName.
+  ///
+  /// In en, this message translates to:
+  /// **'Group name'**
+  String get groupName;
+
+  /// No description provided for @groupNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Family'**
+  String get groupNameHint;
+
+  /// No description provided for @yourNameInGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Your name in the group'**
+  String get yourNameInGroup;
+
+  /// No description provided for @groupMembersN.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} members'**
+  String groupMembersN(int n);
+
+  /// No description provided for @khatmasCompletedN.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} khatmas completed'**
+  String khatmasCompletedN(int n);
+
+  /// No description provided for @myJuzList.
+  ///
+  /// In en, this message translates to:
+  /// **'My juz\': {list}'**
+  String myJuzList(String list);
+
+  /// No description provided for @openCallsN.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} new'**
+  String openCallsN(int n);
+
+  /// No description provided for @tabCalls.
+  ///
+  /// In en, this message translates to:
+  /// **'Calls'**
+  String get tabCalls;
+
+  /// No description provided for @tabKhatma.
+  ///
+  /// In en, this message translates to:
+  /// **'Khatma'**
+  String get tabKhatma;
+
+  /// No description provided for @tabBoard.
+  ///
+  /// In en, this message translates to:
+  /// **'This week'**
+  String get tabBoard;
+
+  /// No description provided for @khatmaNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Khatma {n}'**
+  String khatmaNumber(int n);
+
+  /// No description provided for @khatmaFor.
+  ///
+  /// In en, this message translates to:
+  /// **'This khatma is {reason}'**
+  String khatmaFor(String reason);
+
+  /// No description provided for @juzTapHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap a juz\' to take it or mark it as read.'**
+  String get juzTapHint;
+
+  /// No description provided for @juzDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Read'**
+  String get juzDone;
+
+  /// No description provided for @juzMine.
+  ///
+  /// In en, this message translates to:
+  /// **'Mine'**
+  String get juzMine;
+
+  /// No description provided for @juzTaken.
+  ///
+  /// In en, this message translates to:
+  /// **'Taken'**
+  String get juzTaken;
+
+  /// No description provided for @juzOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get juzOpen;
+
+  /// No description provided for @juzN.
+  ///
+  /// In en, this message translates to:
+  /// **'Juz\' {n}'**
+  String juzN(int n);
+
+  /// No description provided for @juzMarkRead.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'ve read it'**
+  String get juzMarkRead;
+
+  /// No description provided for @juzClaim.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'ll read it'**
+  String get juzClaim;
+
+  /// No description provided for @juzRelease.
+  ///
+  /// In en, this message translates to:
+  /// **'Give it back'**
+  String get juzRelease;
+
+  /// No description provided for @juzAssign.
+  ///
+  /// In en, this message translates to:
+  /// **'Assign to a member'**
+  String get juzAssign;
+
+  /// No description provided for @juzUndo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get juzUndo;
+
+  /// No description provided for @khatmaCompleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The khatma is complete!'**
+  String get khatmaCompleteTitle;
+
+  /// No description provided for @khatmaCompleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'May Allah accept it from all of you. Everyone in the group has been told, and a new khatma has started.'**
+  String get khatmaCompleteBody;
+
+  /// No description provided for @inviteToGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite'**
+  String get inviteToGroup;
+
+  /// No description provided for @groupInviteMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Join our group \"{name}\" on Asmi3ni. Group code: {code}'**
+  String groupInviteMessage(String name, String code);
+
+  /// No description provided for @groupMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'Members'**
+  String get groupMembers;
+
+  /// No description provided for @groupOwner.
+  ///
+  /// In en, this message translates to:
+  /// **'Group admin'**
+  String get groupOwner;
+
+  /// No description provided for @distributeJuz.
+  ///
+  /// In en, this message translates to:
+  /// **'Share open juz\' among members'**
+  String get distributeJuz;
+
+  /// No description provided for @distributedN.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} juz\' shared out'**
+  String distributedN(int n);
+
+  /// No description provided for @renameGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename group'**
+  String get renameGroup;
+
+  /// No description provided for @changeMyName.
+  ///
+  /// In en, this message translates to:
+  /// **'Change my name'**
+  String get changeMyName;
+
+  /// No description provided for @newInviteCode.
+  ///
+  /// In en, this message translates to:
+  /// **'New invite code'**
+  String get newInviteCode;
+
+  /// No description provided for @newInviteCodeDone.
+  ///
+  /// In en, this message translates to:
+  /// **'New code: {code}. The old one no longer works.'**
+  String newInviteCodeDone(String code);
+
+  /// No description provided for @muteGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Mute notifications'**
+  String get muteGroup;
+
+  /// No description provided for @unmuteGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn notifications on'**
+  String get unmuteGroup;
+
+  /// No description provided for @leaveGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave group'**
+  String get leaveGroup;
+
+  /// No description provided for @leaveGroupConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave this group? Juz\' you haven\'t finished go back to the group.'**
+  String get leaveGroupConfirm;
+
+  /// No description provided for @removeFromGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from group'**
+  String get removeFromGroup;
+
+  /// No description provided for @removeConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove {name}? They won\'t be able to rejoin with the code.'**
+  String removeConfirm(String name);
+
+  /// No description provided for @formerMember.
+  ///
+  /// In en, this message translates to:
+  /// **'Former member'**
+  String get formerMember;
+
+  /// No description provided for @sendCall.
+  ///
+  /// In en, this message translates to:
+  /// **'Send a call'**
+  String get sendCall;
+
+  /// No description provided for @callKhatma.
+  ///
+  /// In en, this message translates to:
+  /// **'Let\'s complete a khatma'**
+  String get callKhatma;
+
+  /// No description provided for @callSalawat.
+  ///
+  /// In en, this message translates to:
+  /// **'Salawat on the Prophet ﷺ'**
+  String get callSalawat;
+
+  /// No description provided for @callIstighfar.
+  ///
+  /// In en, this message translates to:
+  /// **'Istighfar together'**
+  String get callIstighfar;
+
+  /// No description provided for @callAdhkarMorning.
+  ///
+  /// In en, this message translates to:
+  /// **'Morning adhkar'**
+  String get callAdhkarMorning;
+
+  /// No description provided for @callAdhkarEvening.
+  ///
+  /// In en, this message translates to:
+  /// **'Evening adhkar'**
+  String get callAdhkarEvening;
+
+  /// No description provided for @callDua.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask for dua'**
+  String get callDua;
+
+  /// No description provided for @feedKhatma.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}: let\'s complete a khatma {reason}'**
+  String feedKhatma(String name, String reason);
+
+  /// No description provided for @feedSalawat.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}: send salawat on the Prophet ﷺ'**
+  String feedSalawat(String name);
+
+  /// No description provided for @feedIstighfar.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}: let\'s say istighfar together'**
+  String feedIstighfar(String name);
+
+  /// No description provided for @feedAdhkarMorning.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}: don\'t forget your morning adhkar'**
+  String feedAdhkarMorning(String name);
+
+  /// No description provided for @feedAdhkarEvening.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}: don\'t forget your evening adhkar'**
+  String feedAdhkarEvening(String name);
+
+  /// No description provided for @feedDua.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}: please make dua {reason}'**
+  String feedDua(String name, String reason);
+
+  /// No description provided for @feedKhatmaDone.
+  ///
+  /// In en, this message translates to:
+  /// **'The khatma {reason} is complete. May Allah accept it'**
+  String feedKhatmaDone(String reason);
+
+  /// No description provided for @reasonGeneral.
+  ///
+  /// In en, this message translates to:
+  /// **'with a general intention'**
+  String get reasonGeneral;
+
+  /// No description provided for @reasonDeceased.
+  ///
+  /// In en, this message translates to:
+  /// **'for the soul of {name}'**
+  String reasonDeceased(String name);
+
+  /// No description provided for @reasonDeceasedAny.
+  ///
+  /// In en, this message translates to:
+  /// **'for those we have lost'**
+  String get reasonDeceasedAny;
+
+  /// No description provided for @reasonSick.
+  ///
+  /// In en, this message translates to:
+  /// **'for {name}\'s recovery'**
+  String reasonSick(String name);
+
+  /// No description provided for @reasonSickAny.
+  ///
+  /// In en, this message translates to:
+  /// **'for the sick'**
+  String get reasonSickAny;
+
+  /// No description provided for @reasonExam.
+  ///
+  /// In en, this message translates to:
+  /// **'for {name}\'s success'**
+  String reasonExam(String name);
+
+  /// No description provided for @reasonExamAny.
+  ///
+  /// In en, this message translates to:
+  /// **'for success in exams'**
+  String get reasonExamAny;
+
+  /// No description provided for @reasonTravel.
+  ///
+  /// In en, this message translates to:
+  /// **'for {name}\'s safe travel'**
+  String reasonTravel(String name);
+
+  /// No description provided for @reasonTravelAny.
+  ///
+  /// In en, this message translates to:
+  /// **'for safe travels'**
+  String get reasonTravelAny;
+
+  /// No description provided for @reasonNewborn.
+  ///
+  /// In en, this message translates to:
+  /// **'for blessings on baby {name}'**
+  String reasonNewborn(String name);
+
+  /// No description provided for @reasonNewbornAny.
+  ///
+  /// In en, this message translates to:
+  /// **'for blessings on the newborn'**
+  String get reasonNewbornAny;
+
+  /// No description provided for @reasonHardship.
+  ///
+  /// In en, this message translates to:
+  /// **'to ease {name}\'s hardship'**
+  String reasonHardship(String name);
+
+  /// No description provided for @reasonHardshipAny.
+  ///
+  /// In en, this message translates to:
+  /// **'to ease hardship'**
+  String get reasonHardshipAny;
+
+  /// No description provided for @reasonRizq.
+  ///
+  /// In en, this message translates to:
+  /// **'for {name}\'s provision'**
+  String reasonRizq(String name);
+
+  /// No description provided for @reasonRizqAny.
+  ///
+  /// In en, this message translates to:
+  /// **'for provision'**
+  String get reasonRizqAny;
+
+  /// No description provided for @reasonLabelGeneral.
+  ///
+  /// In en, this message translates to:
+  /// **'General intention'**
+  String get reasonLabelGeneral;
+
+  /// No description provided for @reasonLabelDeceased.
+  ///
+  /// In en, this message translates to:
+  /// **'For someone who passed away'**
+  String get reasonLabelDeceased;
+
+  /// No description provided for @reasonLabelSick.
+  ///
+  /// In en, this message translates to:
+  /// **'For someone who is ill'**
+  String get reasonLabelSick;
+
+  /// No description provided for @reasonLabelExam.
+  ///
+  /// In en, this message translates to:
+  /// **'For exam success'**
+  String get reasonLabelExam;
+
+  /// No description provided for @reasonLabelTravel.
+  ///
+  /// In en, this message translates to:
+  /// **'For safe travel'**
+  String get reasonLabelTravel;
+
+  /// No description provided for @reasonLabelNewborn.
+  ///
+  /// In en, this message translates to:
+  /// **'For a newborn'**
+  String get reasonLabelNewborn;
+
+  /// No description provided for @reasonLabelHardship.
+  ///
+  /// In en, this message translates to:
+  /// **'To ease a hardship'**
+  String get reasonLabelHardship;
+
+  /// No description provided for @reasonLabelRizq.
+  ///
+  /// In en, this message translates to:
+  /// **'For provision'**
+  String get reasonLabelRizq;
+
+  /// No description provided for @callReasonTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What is it for?'**
+  String get callReasonTitle;
+
+  /// No description provided for @dedicationName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name (optional)'**
+  String get dedicationName;
+
+  /// No description provided for @dedicationHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. my grandfather'**
+  String get dedicationHint;
+
+  /// No description provided for @callSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send to the group'**
+  String get callSend;
+
+  /// No description provided for @callSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent. Everyone in the group will be notified.'**
+  String get callSent;
+
+  /// No description provided for @callDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get callDone;
+
+  /// No description provided for @callDoneMine.
+  ///
+  /// In en, this message translates to:
+  /// **'Done ✓'**
+  String get callDoneMine;
+
+  /// No description provided for @callRespondersN.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} of {total} done'**
+  String callRespondersN(int n, int total);
+
+  /// No description provided for @callSalawatTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} salawat so far'**
+  String callSalawatTotal(int n);
+
+  /// No description provided for @callIstighfarTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} istighfar so far'**
+  String callIstighfarTotal(int n);
+
+  /// No description provided for @callMyCount.
+  ///
+  /// In en, this message translates to:
+  /// **'You: {n}'**
+  String callMyCount(int n);
+
+  /// No description provided for @callKhatmaProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} of 30 juz\' read'**
+  String callKhatmaProgress(int n);
+
+  /// No description provided for @callPickJuz.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a juz\''**
+  String get callPickJuz;
+
+  /// No description provided for @callsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No calls yet. Send the first one!'**
+  String get callsEmpty;
+
+  /// No description provided for @callEnded.
+  ///
+  /// In en, this message translates to:
+  /// **'Ended'**
+  String get callEnded;
+
+  /// No description provided for @pendingCallsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'From your groups'**
+  String get pendingCallsTitle;
+
+  /// No description provided for @boardRanked.
+  ///
+  /// In en, this message translates to:
+  /// **'Ranked by points earned this week. Everyone starts again on Friday.'**
+  String get boardRanked;
+
+  /// No description provided for @boardChampion.
+  ///
+  /// In en, this message translates to:
+  /// **'Last week\'s top: {name} 🏆'**
+  String boardChampion(String name);
+
+  /// No description provided for @boardLine.
+  ///
+  /// In en, this message translates to:
+  /// **'{ayahs} ayahs · {adhkar} adhkar · {hifz} hifz'**
+  String boardLine(int ayahs, int adhkar, int hifz);
+
+  /// No description provided for @boardLine2.
+  ///
+  /// In en, this message translates to:
+  /// **'{streak}-day streak · {juz} juz\' · {calls} calls'**
+  String boardLine2(int streak, int juz, int calls);
+
+  /// No description provided for @pointsN.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} pts'**
+  String pointsN(int n);
+
+  /// No description provided for @boardNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Only members of this group see this. Compete in good deeds, and keep your intention for Allah.'**
+  String get boardNote;
+
+  /// No description provided for @communityErrOffensive.
+  ///
+  /// In en, this message translates to:
+  /// **'This contains words that aren\'t allowed. Please choose another.'**
+  String get communityErrOffensive;
+
+  /// No description provided for @communityErrContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Links, phone numbers and accounts aren\'t allowed.'**
+  String get communityErrContact;
+
+  /// No description provided for @communityErrTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'That\'s too long.'**
+  String get communityErrTooLong;
+
+  /// No description provided for @communityErrEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Write something first.'**
+  String get communityErrEmpty;
+
+  /// No description provided for @communityErrSlowDown.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve sent a lot of calls today. Try again tomorrow.'**
+  String get communityErrSlowDown;
+
+  /// No description provided for @communityErrCallTooSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'This call was just sent to the group. Try again in a little while.'**
+  String get communityErrCallTooSoon;
+
+  /// No description provided for @communityErrKhatmaInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'A khatma is already under way. Finish it first, then start the next one.'**
+  String get communityErrKhatmaInProgress;
+
+  /// No description provided for @communityErrCallEnded.
+  ///
+  /// In en, this message translates to:
+  /// **'This call has ended.'**
+  String get communityErrCallEnded;
+
+  /// No description provided for @communityErrInvalidCode.
+  ///
+  /// In en, this message translates to:
+  /// **'That code doesn\'t match a group.'**
+  String get communityErrInvalidCode;
+
+  /// No description provided for @communityErrGroupFull.
+  ///
+  /// In en, this message translates to:
+  /// **'This group is full.'**
+  String get communityErrGroupFull;
+
+  /// No description provided for @communityErrTooManyGroups.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re in the maximum number of groups.'**
+  String get communityErrTooManyGroups;
+
+  /// No description provided for @communityErrJuzTaken.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone else has this juz\'.'**
+  String get communityErrJuzTaken;
+
+  /// No description provided for @communityErrNotAllowed.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the group admin can do that.'**
+  String get communityErrNotAllowed;
 }
 
 class _AppLocalizationsDelegate

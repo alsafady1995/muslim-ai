@@ -14,6 +14,13 @@ class AppConfig {
   static const googleIosClientId = String.fromEnvironment('GOOGLE_IOS_CLIENT_ID');
   static const environment = String.fromEnvironment('APP_ENV', defaultValue: 'dev');
   static const privacyUrl = String.fromEnvironment('PRIVACY_URL', defaultValue: 'https://asmi3ni.com/privacy/');
+  /// Firebase Cloud Messaging for family-group calls (BLOCKERS.md item 35). Empty = no push.
+  static const firebaseProjectId = String.fromEnvironment('FIREBASE_PROJECT_ID');
+  static const firebaseSenderId = String.fromEnvironment('FIREBASE_SENDER_ID');
+  static const firebaseAndroidAppId = String.fromEnvironment('FIREBASE_ANDROID_APP_ID');
+  static const firebaseAndroidApiKey = String.fromEnvironment('FIREBASE_ANDROID_API_KEY');
+  static const firebaseIosAppId = String.fromEnvironment('FIREBASE_IOS_APP_ID');
+  static const firebaseIosApiKey = String.fromEnvironment('FIREBASE_IOS_API_KEY');
   static const termsUrl = String.fromEnvironment('TERMS_URL', defaultValue: 'https://asmi3ni.com/terms/');
 
   /// Web preview with no backend: auth, AI and payments are simulated (lib/demo/).
