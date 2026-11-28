@@ -89,3 +89,12 @@ whose subscription expired; the paywall shows whatever the offering returns.
 2. Buy the annual plan in sandbox → Home shows the trial end date → a notification is scheduled 2 days before it.
 3. In Supabase: `select status, period_type, net_revenue_usd from subscriptions order by updated_at desc limit 5;`
    should show the sandbox purchase with `period_type = 'trial'`.
+
+## Sign-in setup (done 24 Nov 2026)
+
+- **Google Cloud project** `Asmi3ni` (id `fleet-source-515713-j2`), OAuth consent screen *In production*, external, links to asmi3ni.com.
+  - Web client (used by Supabase and `GOOGLE_WEB_CLIENT_ID`): `163661467299-3qssu423853vuir4cddnlnk6h8pm9r8s.apps.googleusercontent.com`
+  - iOS client (`GOOGLE_IOS_CLIENT_ID`, bundle `app.muslimai.mobile`): `163661467299-g5q51lluisb4to8uj2hln4st2u1fp5c0.apps.googleusercontent.com`
+  - Still to do: Android client with the Play app-signing and upload-key SHA-1 (after the app exists in Play Console); add its id to Supabase Google "Client IDs".
+- **Supabase Auth**: anonymous sign-ins and manual linking on (the onboarding needs them); Apple on with Client IDs `app.muslimai.mobile` (add the Services ID later if web sign-in is wanted); Google on with the web and iOS client ids, nonce check skipped (iOS).
+- **GitHub secret `APP_ENV_PROD_JSON`** created with the Supabase URL + publishable key, Google ids, legal URLs. RevenueCat public keys, PostHog key and Sentry DSN are empty: replace the whole secret once those exist (the secret cannot be read back, so paste the full JSON from `app/env/example.json` with real values).
